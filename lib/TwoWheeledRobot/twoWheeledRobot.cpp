@@ -200,11 +200,36 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
   }
 }
 
+// Check wheel rotation angles/data
+void TwoWheeledRobot::test(float dt) {
+  bool isStopped = false;
+  int vel = 15;
+
+  while(true) {
+    switch(getSerialData()) {
+      case('r'):
+        goForward(vel, vel);
+        break;
+
+      case('s'):
+        stopMoving();
+        isStopped = true;
+        break;
+    }
+
+    if(!isStopped) {
+      // Где-то взять угол поворота
+      
+    }
+
+    delay(dt);
+  }
+}
 
 // ==== manual control ==== //
 void TwoWheeledRobot::manualControl(float dt)
 {
-  int vel = 60;
+  int vel = 30;
 
 
   while(true)

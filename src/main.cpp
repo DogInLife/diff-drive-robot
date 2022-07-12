@@ -2,7 +2,7 @@
 #include "twoWheeledRobot.h"
 #include "constants.h"
 
-byte dt = 30;
+byte dt = 100;
 
 void setup() {
   

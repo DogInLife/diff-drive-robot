@@ -10,12 +10,12 @@ import cv2
 sys.path.append('/opt/ros/kinetic/lib/python2.7/dist-packages')
 '''
 
-s = serial.Serial()
-s.baudrate = 9600
-s.port = '/dev/ttyUSB0'   # for Raspberry
+ser = serial.Serial()
+ser.baudrate = 9600
+ser.port = '/dev/ttyUSB0'   # for Raspberry
 # s.port = '/dev/ttyACM0'     # for Linux
-s.timeout = 0.5
-s.open()
+ser.timeout = 0.5
+ser.open()
 
 # ========================
 # socket.SOCK_STREAM - TCP
@@ -37,9 +37,21 @@ print("Connected to: ", addr)
 
 
 while True:
-    data = conn.recv(1)
-    print(data)
-    if (data == b'\x03'):
+    ser_in = conn.recv(1) # what is sent to serial
+    print(ser_in)
+    if (ser_in == b'\x03'):
         break
-    s.write(data)
+    ser.write(ser_in)
+
+    # if (ser.in_waiting > 0):
+    ser_out = ser.read(ser.in_waiting).decode('ascii') # what is received from serial
+    print(ser_out)
+
 conn.close()
+
+
+
+
+
+
+
