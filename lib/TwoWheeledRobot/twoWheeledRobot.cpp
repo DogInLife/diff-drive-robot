@@ -200,14 +200,18 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
   }
 }
 
-// Check wheel rotation angles/data
-void TwoWheeledRobot::test(float dt) {
+// Вывод углов поворота колёс
+void TwoWheeledRobot::rot_test(float dt) {
   bool isStopped = false;
   int vel = 15;
+
+  float rotAngleL = 0.0;
+  float rotAngleR = 0.0;
 
   while(true) {
     switch(getSerialData()) {
       case('r'):
+        isStopped = false;
         goForward(vel, vel);
         break;
 
@@ -215,11 +219,17 @@ void TwoWheeledRobot::test(float dt) {
         stopMoving();
         isStopped = true;
         break;
+
+      default:
+        break;
     }
 
     if(!isStopped) {
       // Где-то взять угол поворота
-      
+      rotAngleL = motorBlockL->getRotAngle();
+      rotAngleR = motorBlockR->getRotAngle();
+      String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3);
+      Serial.println(msg);
     }
 
     delay(dt);

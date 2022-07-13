@@ -13,7 +13,8 @@ void setup() {
   robot.tunePID(5.3, 4.8, 0);
 
   // robot.serialControl();
-  robot.manualControl(dt);
+  // robot.manualControl(dt);
+  robot.rot_test(dt);
 
   // float xGoal = 1;
   // float yGoal = 1;
