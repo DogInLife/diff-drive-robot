@@ -43,7 +43,6 @@ while True:
         if (data == b'\x03'):
             ser.write(b's')
             break
-
         ser.write(data) # send to serial (arduino)
 
     ser_recv = ser.read(ser.in_waiting).decode('ascii') # what is received from serial
