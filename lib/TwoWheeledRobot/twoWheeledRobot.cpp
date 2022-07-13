@@ -231,7 +231,7 @@ void TwoWheeledRobot::rot_test(float dt)
       default:
         break;
     }
-
+    /*
     if(!isStopped)
     {
       // Где-то взять угол поворота
@@ -240,6 +240,11 @@ void TwoWheeledRobot::rot_test(float dt)
       String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3);
       Serial.println(msg);
     }
+    */
+    rotAngleL = motorBlockL->getRotAngle();
+    rotAngleR = motorBlockR->getRotAngle();
+    String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3);
+    Serial.println(msg);
 
     delay(dt);
   }

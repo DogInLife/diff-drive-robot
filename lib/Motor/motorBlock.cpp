@@ -71,9 +71,10 @@ float MotorBlock::getRadiusWheels()
 // ############ Угол, на который повернулось колесо ###############
 float MotorBlock::getRotAngle()
 {
-    float ovTurn_curr = encoder->getOverallTurn();
+    float ovTurn_curr = encoder->getOverallTurn(); // число пройденных делений
 
-    return ovTurn_curr;
+    return ovTurn_curr * 360.0 / 4096.0; // градусы
+    // return ovTurn_curr * 2 * 3.141593 / 4096.0 // радианы
 }
 // ################################################################
 
