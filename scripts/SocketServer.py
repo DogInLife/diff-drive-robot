@@ -37,15 +37,16 @@ print("Connected to: ", addr)
 
 
 while True:
-    ser_in = conn.recv(1) # what is sent to serial
-    print(ser_in)
-    if (ser_in == b'\x03'):
-        break
-    ser.write(ser_in)
+    data = conn.recv(1) # data from socket client
+    if not data == b'~':
+        print(data)
+        if (data == b'\x03'):
+            break
+        ser.write(data) # send to serial (arduino)
 
-    # if (ser.in_waiting > 0):
-    ser_out = ser.read(ser.in_waiting).decode('ascii') # what is received from serial
-    print(ser_out)
+    ser_recv = ser.read(ser.in_waiting).decode('ascii') # what is received from serial
+    if ser_recv:
+        print(ser_recv)
 
 conn.close()
 
