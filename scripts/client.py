@@ -21,11 +21,11 @@ vel = 30
 
 def getKey():
     tty.setraw(sys.stdin.fileno())
-    rlist, _, _ = select.select([sys.stdin], [], [], None)
+    rlist, _, _ = select.select([sys.stdin], [], [], 0.05)
     if rlist:
         key = sys.stdin.read(1)
     else:
-        key = ''
+        key = '~'
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
@@ -44,16 +44,17 @@ if __name__=="__main__":
             print(key)
             if key:
                 sck.sendall(str.encode(key))
-
             if(key == '\x03'): # ctrl+c
                 break
+
+            '''
             if(key == 'e'):
                 vel += 5
                 print("Current speed: ", vel)
             if(key == 'q'):
                 vel -= 5
                 print("Current speed: ", vel)
-
+            '''
 
     except Exception as e:
         print(e)
