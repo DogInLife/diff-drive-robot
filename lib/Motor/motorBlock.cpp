@@ -68,14 +68,14 @@ float MotorBlock::getRadiusWheels()
 }
 
 
-// ============ Угол, на который повернулось колесо ===============
+// ############ Угол, на который повернулось колесо ###############
 float MotorBlock::getRotAngle()
 {
     float ovTurn_curr = encoder->getOverallTurn();
 
     return ovTurn_curr;
 }
-// ============
+// ################################################################
 
 
 float MotorBlock::getTraveledDistance()

@@ -41,8 +41,8 @@ if __name__=="__main__":
     try:
         while True:
             key = getKey()
-            print(key)
-            if key:
+            if not key == '~':
+                print(key)
                 sck.sendall(str.encode(key))
             if(key == '\x03'): # ctrl+c
                 break

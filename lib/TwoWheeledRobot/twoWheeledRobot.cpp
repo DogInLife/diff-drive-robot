@@ -200,19 +200,27 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
   }
 }
 
-// Вывод углов поворота колёс
-void TwoWheeledRobot::rot_test(float dt) {
-  bool isStopped = false;
+// ############## Вывод углов поворота колёс ###############
+void TwoWheeledRobot::rot_test(float dt)
+{
+  bool isStopped = true;
   int vel = 15;
 
   float rotAngleL = 0.0;
   float rotAngleR = 0.0;
 
-  while(true) {
-    switch(getSerialData()) {
-      case('r'):
+  while(true)
+  {
+    switch(getSerialData())
+    {
+      case('w'):
         isStopped = false;
         goForward(vel, vel);
+        break;
+
+      case('x'):
+        isStopped = false;
+        goForward(-vel, -vel);
         break;
 
       case('s'):
@@ -224,7 +232,8 @@ void TwoWheeledRobot::rot_test(float dt) {
         break;
     }
 
-    if(!isStopped) {
+    if(!isStopped)
+    {
       // Где-то взять угол поворота
       rotAngleL = motorBlockL->getRotAngle();
       rotAngleR = motorBlockR->getRotAngle();
@@ -235,12 +244,13 @@ void TwoWheeledRobot::rot_test(float dt) {
     delay(dt);
   }
 }
+// ##########################################################
+
 
 // ==== manual control ==== //
 void TwoWheeledRobot::manualControl(float dt)
 {
   int vel = 30;
-
 
   while(true)
   {
