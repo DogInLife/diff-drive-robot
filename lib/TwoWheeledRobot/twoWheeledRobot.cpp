@@ -1,7 +1,6 @@
 #include "twoWheeledRobot.h"
 #include "constants.h"
 
-
 TwoWheeledRobot::TwoWheeledRobot()
   :reachedGoal(0), 
   PIN_CURRENT_SENSOR(A12),
@@ -208,6 +207,9 @@ void TwoWheeledRobot::rot_test(float dt)
 
   float rotAngleL = 0.0;
   float rotAngleR = 0.0;
+  
+  int t = 0;
+  clock_t start = clock();
 
   while(true)
   {
@@ -241,9 +243,10 @@ void TwoWheeledRobot::rot_test(float dt)
       Serial.println(msg);
     }
     */
+    t = clock() - start;
     rotAngleL = motorBlockL->getRotAngle();
     rotAngleR = motorBlockR->getRotAngle();
-    String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3);
+    String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
     Serial.println(msg);
 
     delay(dt);
