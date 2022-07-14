@@ -204,7 +204,7 @@ void TwoWheeledRobot::rot_test(float dt)
 {
   bool isReady = false;
   bool isMoving = false;
-  int vel = 30;
+  int vel = 15;
 
   float rotAngleL = 0.0;
   float rotAngleR = 0.0;
