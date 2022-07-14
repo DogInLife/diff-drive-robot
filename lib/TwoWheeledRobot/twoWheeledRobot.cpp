@@ -257,6 +257,8 @@ void TwoWheeledRobot::rot_test(float dt)
       rotAngleL = motorBlockL->getRotAngle();
       rotAngleR = motorBlockR->getRotAngle();
       t = millis() - start;
+      String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
+      Serial.println(msg);
       // String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
       // Serial.println(msg);
       // if(t > 2000) 
@@ -268,13 +270,18 @@ void TwoWheeledRobot::rot_test(float dt)
 
       if(abs(rotAngleL + rotAngleR) / 2.0 > 360.0)
       {
+        Serial.println("Stopping");
         stopMoving();
+
+        rotAngleL = motorBlockL->getRotAngle();
+        rotAngleR = motorBlockR->getRotAngle();
+        t = millis() - start;
+        String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
+        Serial.println(msg);
+
         isMoving = false;
         isReady = false;
       }
-
-      String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
-      Serial.println(msg);
     }
 
     delay(dt);
