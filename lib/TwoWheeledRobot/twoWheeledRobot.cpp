@@ -240,13 +240,13 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
         goForward(vel, vel);
         break;
 
-      case('x'):
-        // isStopped = false;
-        isReady = true;
-        isMoving = true;
-        start = millis();
-        goForward(-vel, -vel);
-        break;
+      // case('x'):
+      //   // isStopped = false;
+      //   isReady = true;
+      //   isMoving = true;
+      //   start = millis();
+      //   goForward(-vel, -vel);
+      //   break;
 
       case('s'):
         stopMoving();
@@ -276,8 +276,8 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       dqR = (qR_curr - qR_prev) * 1000 / (t_curr - t_prev);
       // String msg_vel = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(rotVel_des, 3);
       // Serial.println(msg_vel);
-      dqL_err = dq_des - dqL;
-      dqR_err = dq_des - dqR;
+      dqL_err = dqL - dq_des;
+      dqR_err = dqR - dq_des;
 
       String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
       Serial.println(msg_err);
