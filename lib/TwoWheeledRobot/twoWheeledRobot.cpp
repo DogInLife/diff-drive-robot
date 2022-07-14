@@ -206,10 +206,17 @@ void TwoWheeledRobot::rot_test(float dt)
   bool isMoving = false;
   int vel = 15;
 
-  float rotAngleL = 0.0;
-  float rotAngleR = 0.0;
+  float rotAngleL_curr = 0.0;
+  float rotAngleR_curr = 0.0;
+  int t_curr = 0;
 
-  int t = 0;
+  float rotAngleL_prev = 0.0;
+  float rotAngleR_prev = 0.0;
+  int t_prev = 0;
+
+  float rotVelL = 0.0;
+  float rotVelR = 0.0;
+
   uint32_t start;
 
   while(true)
@@ -254,11 +261,17 @@ void TwoWheeledRobot::rot_test(float dt)
 
     if(isMoving && isReady)
     {
-      rotAngleL = motorBlockL->getRotAngle();
-      rotAngleR = motorBlockR->getRotAngle();
+      rotAngleL_curr = motorBlockL->getRotAngle();
+      rotAngleR_curr = motorBlockR->getRotAngle();
       t = millis() - start;
-      String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
-      Serial.println(msg);
+      String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr);
+      Serial.println(msg_ang);
+      
+      rotVelL = (rotAngleL_curr - rotAngleL_prev) / (t_curr - t_prev);
+      rotVelL = (rotAngleR_curr - rotAngleR_prev) / (t_curr - t_prev);
+      String msg_vel = "Vel L: " + String(rotVelL, 3) + " Vel R: " + String(rotVelR, 3);
+      Serial.println(msg_vel);
+
       // String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
       // Serial.println(msg);
       // if(t > 2000) 
@@ -268,20 +281,25 @@ void TwoWheeledRobot::rot_test(float dt)
       //   isReady = false;
       // }
 
-      if(abs(rotAngleL + rotAngleR) / 2.0 >= 360.0)
+      if(abs(rotAngleL_curr + rotAngleR_curr) / 2.0 >= 360.0)
       {
         Serial.println("Stopping");
         stopMoving();
 
-        rotAngleL = motorBlockL->getRotAngle();
-        rotAngleR = motorBlockR->getRotAngle();
+        rotAngleL_curr = motorBlockL->getRotAngle();
+        rotAngleR_curr = motorBlockR->getRotAngle();
         t = millis() - start;
-        String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
-        Serial.println(msg);
+        String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr);
+        Serial.println(msg_ang);
 
         isMoving = false;
         isReady = false;
       }
+
+      rotAngleL_prev = rotAngleL_curr;
+      rotAngleR_prev = rotAngleR_curr;
+      t_prev = t_curr;
+
     }
 
     delay(dt);
