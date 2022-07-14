@@ -287,7 +287,7 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       //   isReady = false;
       // }
 
-      if(abs(rotAngleL_curr + rotAngleR_curr) / 2.0 >= 360.0)
+      if(rotAngle_des >= 720.0)
       {
         Serial.println("Stopping");
         stopMoving();
