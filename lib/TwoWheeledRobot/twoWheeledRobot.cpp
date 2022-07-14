@@ -263,7 +263,7 @@ void TwoWheeledRobot::rot_test(float dt)
     {
       rotAngleL_curr = motorBlockL->getRotAngle();
       rotAngleR_curr = motorBlockR->getRotAngle();
-      t = millis() - start;
+      t_curr = millis() - start;
       String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr);
       Serial.println(msg_ang);
       
