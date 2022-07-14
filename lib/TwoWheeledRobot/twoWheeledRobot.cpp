@@ -200,7 +200,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 }
 
 // ############## Вывод углов поворота колёс ###############
-void TwoWheeledRobot::rot_test(int vel, float dt)
+void TwoWheeledRobot::rot_test(int vel, byte dt)
 {
   bool isReady = false;
   bool isMoving = false;
