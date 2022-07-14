@@ -206,19 +206,25 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
   bool isMoving = false;
   //int vel = 15;
 
-  float rotAngleL_curr = 0.0;
-  float rotAngleR_curr = 0.0;
-  int t_curr = 0;
+  float qL_curr = 0.0; // текущий измеренный угол поворота левого колеса
+  float qR_curr = 0.0; // текущий измеренный угол повората правого колеса
+  int t_curr = 0; // текущий момент времени
 
-  float rotAngleL_prev = 0.0;
-  float rotAngleR_prev = 0.0;
-  int t_prev = 0;
+  float qL_prev = 0.0; // предыдущий измеренный угол поворота левого колеса
+  float qR_prev = 0.0; // предыдущий измеренный угол поворота правого колеса
+  int t_prev = 0; // предыдущий момент времени
 
-  float rotVelL = 0.0;
-  float rotVelR = 0.0;
+  float dqL = 0.0; // скорость вращения левого колеса
+  float dqR = 0.0; // скорость вращения правого колеса
 
-  float rotVel_des = vel * 6.0;
-  float rotAngle_des;
+  float q_des; // желаемый угол поворота колеса [град]
+  float dq_des = vel * 6.0; // желаемая скорость вращения колеса [град / сек]
+
+  // ошибки
+  float qL_err = 0.0;
+  float qR_err = 0.0;
+  float dqL_err = 0.0;
+  float dqR_err = 0.0;
 
   uint32_t start;
 
@@ -252,58 +258,47 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       default:
         break;
     }
-    /*
-    if(!isStopped)
-    {
-      // Где-то взять угол поворота
-      rotAngleL = motorBlockL->getRotAngle();
-      rotAngleR = motorBlockR->getRotAngle();
-      String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3);
-      Serial.println(msg);
-    } */
 
     if(isMoving && isReady)
     {
-      rotAngleL_curr = motorBlockL->getRotAngle();
-      rotAngleR_curr = motorBlockR->getRotAngle();
+      qL_curr = motorBlockL->getRotAngle();
+      qR_curr = motorBlockR->getRotAngle();
       t_curr = millis() - start;
 
-      rotAngle_des = rotVel_des * t_curr / 1000.0;
-
-      String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(rotAngle_des, 3);
-      Serial.println(msg_ang);
+      q_des = dq_des * t_curr / 1000.0;
       
-      rotVelL = (rotAngleL_curr - rotAngleL_prev) * 1000 / (t_curr - t_prev);
-      rotVelR = (rotAngleR_curr - rotAngleR_prev) * 1000 / (t_curr - t_prev);
-      String msg_vel = "Vel L: " + String(rotVelL, 3) + " Vel R: " + String(rotVelR, 3) + " Desired velocity: " + String(rotVel_des, 3);
-      Serial.println(msg_vel);
+      qL_err = q_des - qL_curr;
+      qR_err = q_des - qR_curr
+      // String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
+      // Serial.println(msg_ang);
+      
+      dqL = (qL_curr - qL_prev) * 1000 / (t_curr - t_prev);
+      dqR = (qR_curr - qR_prev) * 1000 / (t_curr - t_prev);
+      // String msg_vel = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(rotVel_des, 3);
+      // Serial.println(msg_vel);
+      dqL_err = dq_des - dqL;
+      dqR_err = dq_des - dqR;
 
-      // String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
-      // Serial.println(msg);
-      // if(t > 2000) 
-      // {
-      //   stopMoving();
-      //   isMoving = false;
-      //   isReady = false;
-      // }
+      String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + "  ==//== dqL: " String(dqL_err, 3) + " dqR: " String(dqR_err, 3);
+      Serial.println(msg_err);
 
-      if(rotAngle_des >= 720.0)
+      if(q_des >= 720.0)
       {
         Serial.println("Stopping");
         stopMoving();
 
-        rotAngleL_curr = motorBlockL->getRotAngle();
-        rotAngleR_curr = motorBlockR->getRotAngle();
+        qL_curr = motorBlockL->getRotAngle();
+        qR_curr = motorBlockR->getRotAngle();
         t_curr = millis() - start;
-        String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr);
+        String msg_ang = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr);
         Serial.println(msg_ang);
 
         isMoving = false;
         isReady = false;
       }
 
-      rotAngleL_prev = rotAngleL_curr;
-      rotAngleR_prev = rotAngleR_curr;
+      qL_prev = qL_curr;
+      qR_prev = qR_curr;
       t_prev = t_curr;
 
     }
