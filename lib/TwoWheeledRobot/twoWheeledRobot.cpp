@@ -282,6 +282,12 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
       Serial.println(msg_err);
 
+      uL = 0.9*dqL_err;
+      uR = 0.9*dqR_err;
+
+      motorBlockL->setVelocity(vel-uL, vel.maxWheel, newMinRahge);
+      motorBlockR->setVelocity(vel-uR, vel.maxWheel, newMinRahge);
+
       if(q_des >= 720.0)
       {
         Serial.println("Stopping");
