@@ -267,8 +267,8 @@ void TwoWheeledRobot::rot_test(float dt)
       String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr);
       Serial.println(msg_ang);
       
-      rotVelL = (rotAngleL_curr - rotAngleL_prev) / (t_curr - t_prev);
-      rotVelL = (rotAngleR_curr - rotAngleR_prev) / (t_curr - t_prev);
+      rotVelL = (rotAngleL_curr - rotAngleL_prev) * 1000 / (t_curr - t_prev);
+      rotVelR = (rotAngleR_curr - rotAngleR_prev) * 1000 / (t_curr - t_prev);
       String msg_vel = "Vel L: " + String(rotVelL, 3) + " Vel R: " + String(rotVelR, 3);
       Serial.println(msg_vel);
 
