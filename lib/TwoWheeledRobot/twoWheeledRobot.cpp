@@ -209,7 +209,7 @@ void TwoWheeledRobot::rot_test(float dt)
   float rotAngleR = 0.0;
   
   int t = 0;
-  uint32_t = millis();
+  uint32_t start = millis();
 
   while(true)
   {
