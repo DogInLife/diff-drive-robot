@@ -200,11 +200,11 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 }
 
 // ############## Вывод углов поворота колёс ###############
-void TwoWheeledRobot::rot_test(float dt)
+void TwoWheeledRobot::rot_test(int vel, float dt)
 {
   bool isReady = false;
   bool isMoving = false;
-  int vel = 15;
+  //int vel = 15;
 
   float rotAngleL_curr = 0.0;
   float rotAngleR_curr = 0.0;
@@ -216,6 +216,9 @@ void TwoWheeledRobot::rot_test(float dt)
 
   float rotVelL = 0.0;
   float rotVelR = 0.0;
+
+  float rotVel_des = vel * 6.0;
+  float rotAngle_des;
 
   uint32_t start;
 
@@ -264,12 +267,15 @@ void TwoWheeledRobot::rot_test(float dt)
       rotAngleL_curr = motorBlockL->getRotAngle();
       rotAngleR_curr = motorBlockR->getRotAngle();
       t_curr = millis() - start;
-      String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr);
+
+      rotAngle_des = rotVel_des * t / 1000.0;
+
+      String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(rotAngle_des, 3);
       Serial.println(msg_ang);
       
       rotVelL = (rotAngleL_curr - rotAngleL_prev) * 1000 / (t_curr - t_prev);
       rotVelR = (rotAngleR_curr - rotAngleR_prev) * 1000 / (t_curr - t_prev);
-      String msg_vel = "Vel L: " + String(rotVelL, 3) + " Vel R: " + String(rotVelR, 3);
+      String msg_vel = "Vel L: " + String(rotVelL, 3) + " Vel R: " + String(rotVelR, 3) + " Desired velocity: " + String(rotVel_des, 3);
       Serial.println(msg_vel);
 
       // String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);

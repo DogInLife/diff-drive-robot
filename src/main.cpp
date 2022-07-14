@@ -3,6 +3,7 @@
 #include "constants.h"
 
 byte dt = 50;
+int vel = 15;
 
 void setup() {
   
@@ -14,7 +15,7 @@ void setup() {
 
   // robot.serialControl();
   // robot.manualControl(dt);
-  robot.rot_test(dt);
+  robot.rot_test(vel, dt);
 
   // float xGoal = 1;
   // float yGoal = 1;
