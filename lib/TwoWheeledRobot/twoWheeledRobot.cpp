@@ -259,12 +259,11 @@ void TwoWheeledRobot::rot_test(float dt)
       rotAngleR = motorBlockR->getRotAngle();
       String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
       Serial.println(msg);
-      if (t > 1000) 
+      if (t > 4000) 
       {
         stopMoving();
         isMoving = false;
         isReady = false;
-        break;
       }
     }
 
