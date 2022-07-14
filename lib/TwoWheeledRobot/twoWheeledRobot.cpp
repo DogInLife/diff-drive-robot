@@ -202,32 +202,41 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 // ############## Вывод углов поворота колёс ###############
 void TwoWheeledRobot::rot_test(float dt)
 {
-  bool isStopped = true;
+  bool isReady = false;
+  bool isMoving = false;
   int vel = 15;
 
   float rotAngleL = 0.0;
   float rotAngleR = 0.0;
-  
+
   int t = 0;
-  uint32_t start = millis();
+  uint32_t start;
 
   while(true)
   {
     switch(getSerialData())
     {
       case('w'):
-        isStopped = false;
+        // isStopped = false;
+        isReady = true;
+        isMoving = true;
+        start = millis();
         goForward(vel, vel);
         break;
 
       case('x'):
-        isStopped = false;
+        // isStopped = false;
+        isReady = true;
+        isMoving = true;
+        start = millis();
         goForward(-vel, -vel);
         break;
 
       case('s'):
         stopMoving();
-        isStopped = true;
+        //isStopped = true;
+        isReady = false;
+        isMoving = false;
         break;
 
       default:
@@ -241,13 +250,23 @@ void TwoWheeledRobot::rot_test(float dt)
       rotAngleR = motorBlockR->getRotAngle();
       String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3);
       Serial.println(msg);
+    } */
+
+    if(isMoving && isReady)
+    {
+      t = millis() - start;
+      rotAngleL = motorBlockL->getRotAngle();
+      rotAngleR = motorBlockR->getRotAngle();
+      String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
+      Serial.println(msg);
+      if (t > 1000) 
+      {
+        stopMoving();
+        isMoving = false;
+        isReady = false;
+        break;
+      }
     }
-    */
-    t = millis() - start;
-    rotAngleL = motorBlockL->getRotAngle();
-    rotAngleR = motorBlockR->getRotAngle();
-    String msg = "L: " + String(rotAngleL, 3) + " R: " + String(rotAngleR, 3) + " Time: " + String(t);
-    Serial.println(msg);
 
     delay(dt);
   }
