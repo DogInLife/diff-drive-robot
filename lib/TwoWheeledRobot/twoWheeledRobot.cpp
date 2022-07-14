@@ -268,7 +268,7 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       q_des = dq_des * t_curr / 1000.0;
       
       qL_err = q_des - qL_curr;
-      qR_err = q_des - qR_curr
+      qR_err = q_des - qR_curr;
       // String msg_ang = "L: " + String(rotAngleL_curr, 3) + " R: " + String(rotAngleR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
       // Serial.println(msg_ang);
       
