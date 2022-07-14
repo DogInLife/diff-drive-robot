@@ -73,7 +73,7 @@ float MotorBlock::getRotAngle()
 {
     float ovTurn_curr = encoder->getOverallTurn(); // число пройденных делений
 
-    return ovTurn_curr * 360.0 / 4096.0; // градусы
+    return ovTurn_curr * 360.0 / 4095.0; // градусы
     // return ovTurn_curr * 2 * 3.141593 / 4096.0 // радианы
 }
 // ################################################################
