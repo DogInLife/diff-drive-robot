@@ -303,7 +303,7 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       String msg_u = "u_dqL: " + String(u_dqL, 3) + " u_dqR: " + String(u_dqR, 3) + " u_velL: " + String(u_velL) + " u_velR: " + String(u_velR);
       Serial.println(msg_u);
 
-      // goForward(u_velL, u_velR);
+      goForward(u_velL, u_velR);
 
       if(q_des >= 720.0)
       {
