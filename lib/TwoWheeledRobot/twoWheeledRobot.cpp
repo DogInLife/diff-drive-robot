@@ -18,7 +18,8 @@ TwoWheeledRobot::~TwoWheeledRobot()
 {
   delete motorBlockL;
   delete motorBlockR;
-  delete pid;
+  delete pidL;
+  delete pidR;
 }
 
 void TwoWheeledRobot::createWheels(float wheelRadius, float baseLength, float maxVel)
