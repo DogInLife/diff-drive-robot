@@ -231,8 +231,8 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
   float u_dqR = 0.0;
 
   // скоррекированные значения [об/мин]
-  int u_velL;
-  int u_velR;
+  float u_velL;
+  float u_velR;
 
   uint32_t start;
 
