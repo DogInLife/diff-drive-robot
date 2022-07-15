@@ -305,7 +305,7 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
 
       goForward(u_velL, u_velR);
 
-      if(q_des >= 720.0)
+      if(q_des >= 1440.0)
       {
         Serial.println("Stopping");
         stopMoving();
