@@ -319,8 +319,8 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
 
       // goForward(u_velL, u_velR);
 
-      motorBlockL->setVelocity(u_velL, vel.maxWheel, newMinRange);
-      motorBlockR->setVelocity(u_velR, vel.maxWheel, newMinRange);
+      // motorBlockL->setVelocity(u_velL, vel.maxWheel, newMinRange);
+      // motorBlockR->setVelocity(u_velR, vel.maxWheel, newMinRange);
 
       if(q_des >= 1430.0)
       {
