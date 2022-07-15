@@ -2,7 +2,7 @@
 #include "twoWheeledRobot.h"
 #include "constants.h"
 
-byte del = 25; // задержка
+byte del = 50; // задержка
 int whl_vel = 30; // скорость колеса [об/мин]
 
 void setup() {
