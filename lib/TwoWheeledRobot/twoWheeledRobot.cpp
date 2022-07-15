@@ -313,7 +313,7 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
       int pwmL = map(u_velL, 0, 150, 0, 255);
       int pwmR = map(u_velR, 0, 150, 0, 255);
 
-      String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR)
+      String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR);
 
       Serial.println(msg_pwm);
 
