@@ -283,7 +283,7 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       
       dqL = (qL_curr - qL_prev) * 1000 / (t_curr - t_prev);
       dqR = (qR_curr - qR_prev) * 1000 / (t_curr - t_prev);
-      String msg_vel = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
+      String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
       Serial.println(msg_dq);
 
 
