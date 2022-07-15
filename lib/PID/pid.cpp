@@ -10,12 +10,14 @@ PID::~PID(){}
 float PID::computeControl(float err, float dt)
 {
     errDot = err - errOld;
-    errSum = err + errSum;
+    errSum = errSum + err;
 
-    float u = Kp*err + Ki*errSum*dt + Kd*errOld/dt;
+    float u = Kp*err + Ki*errSum*dt + Kd*errDot/dt;
     errOld = err;
     return u;
 }
+
+
 
 float PID::computeAngleError(float thetaGoal, float theta)
 {

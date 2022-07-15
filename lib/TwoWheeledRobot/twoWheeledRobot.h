@@ -13,7 +13,8 @@ class TwoWheeledRobot
 private:
     MotorBlock* motorBlockL;
     MotorBlock* motorBlockR;
-    PID* pid;
+    PID* pidL;
+    PID* pidR;
     Velocity vel;
     Position pos;
 
@@ -21,7 +22,7 @@ private:
     byte PIN_CURRENT_SENSOR;
 
     bool reachedGoal;
-    int newMinRahge; // Для функции map в setVelocity
+    int newMinRange; // Для функции map в setVelocity
     byte inByte;
 
 public:
@@ -37,7 +38,7 @@ public:
     float getRadiusWheels();
     byte getSerialData();
     
-    void tunePID(float Kp, float Ki, float Kd);
+    void tunePID(float KpL, float KiL, float KdL, float KpR, float KiR, float KdR);
     
 // ========= behavior ===========
     void serialControl();
