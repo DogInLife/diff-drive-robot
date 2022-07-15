@@ -276,22 +276,23 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
 
       q_des = dq_des * t_curr / 1000.0;
       
-      qL_err = q_des - qL_curr;
-      qR_err = q_des - qR_curr;
-      String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
-      Serial.println(msg_q);
+      // String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
+      // Serial.println(msg_q);
       
       dqL = (qL_curr - qL_prev) * 1000 / (t_curr - t_prev);
       dqR = (qR_curr - qR_prev) * 1000 / (t_curr - t_prev);
-      String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
-      Serial.println(msg_dq);
+      // String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
+      // Serial.println(msg_dq);
 
+
+      qL_err = q_des - qL_curr;
+      qR_err = q_des - qR_curr;
 
       dqL_err = dq_des - dqL;
       dqR_err = dq_des - dqR;
 
-      // String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
-      // Serial.println(msg_err);
+      String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
+      Serial.println(msg_err);
 
       // u_dqL = 0.5*dqL_err;
       // u_dqR = 0.5*dqR_err;
