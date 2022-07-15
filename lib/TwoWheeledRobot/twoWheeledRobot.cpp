@@ -294,8 +294,8 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
       Serial.println(msg_err);
 
-      u_dqL = 0.75*dqL_err;
-      u_dqR = 0.75*dqR_err; 
+      u_dqL = 0.25*dqL_err;
+      u_dqR = 0.25*dqR_err; 
 
       u_velL = (dq_des + u_dqL) / 6.0;
       u_velR = (dq_des + u_dqR) / 6.0;
@@ -303,7 +303,7 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       String msg_u = "u_dqL: " + String(u_dqL, 3) + " u_dqR: " + String(u_dqR, 3) + " u_velL: " + String(u_velL, 3) + " u_velR: " + String(u_velR, 3);
       Serial.println(msg_u);
 
-      // goForward(u_velL, u_velR);
+      goForward(u_velL, u_velR);
 
       if(q_des >= 1440.0)
       {
