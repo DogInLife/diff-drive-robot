@@ -230,7 +230,7 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
   float u_dqL = 0.0;
   float u_dqR = 0.0;
 
-  // скоррекированные значения
+  // скоррекированные значения [об/мин]
   int u_velL;
   int u_velR;
 
@@ -294,11 +294,13 @@ void TwoWheeledRobot::rot_test(int vel, byte dt)
       String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
       Serial.println(msg_err);
 
-      // u_dqL = 0.5*dqL_err;
-      // u_dqR = 0.5*dqR_err;
+      u_dqL = 0.5*dqL_err;
+      u_dqR = 0.5*dqR_err; 
 
-      // u_velL = int((dqL + u_dqL) / 6.0);
-      // u_velR = int((dqR + u_dqR) / 6.0);
+      u_velL = int((dqL + u_dqL) / 6.0);
+      u_velR = int((dqR + u_dqR) / 6.0);
+
+      String msg_u = "u_dqL: " + String(u_dqL, 3) + " u_dqR: " + String(u_dqR, 3) + " u_velL: " + String(u_velL) + " u_velR: " + String(u_velR) 
 
       // goForward(u_velL, u_velR);
 
