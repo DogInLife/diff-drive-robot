@@ -3,7 +3,7 @@
 #include "constants.h"
 
 byte dt = 50;
-int vel = 15;
+int vel = 30;
 
 void setup() {
   
