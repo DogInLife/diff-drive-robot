@@ -249,7 +249,7 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
         // isStopped = false;
         isReady = true;
         isMoving = true;
-        start = millis();
+        // start = millis();
         goForward(whl_vel, whl_vel);
         break;
 
@@ -271,6 +271,8 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
       default:
         break;
     }
+    
+    start = millis();
 
     if(isMoving && isReady)
     {
@@ -301,8 +303,8 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
       String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
       Serial.println(msg_err);
 
-      u_dqL = dqL_err;
-      u_dqR = dqR_err; 
+      u_dqL = 0.75*dqL_err;
+      u_dqR = 0.75*dqR_err; 
 
       u_velL = (dq_des + u_dqL) / 6.0;
       u_velR = (dq_des + u_dqR) / 6.0;
@@ -319,8 +321,8 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
 
       // goForward(u_velL, u_velR);
 
-      motorBlockL->setVelocity(u_velL, vel.maxWheel, newMinRange);
-      motorBlockR->setVelocity(u_velR, vel.maxWheel, newMinRange);
+      //motorBlockL->setVelocity(u_velL, vel.maxWheel, newMinRange);
+      //motorBlockR->setVelocity(u_velR, vel.maxWheel, newMinRange);
 
       if(q_des >= 1430.0)
       {
