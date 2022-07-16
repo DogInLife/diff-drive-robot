@@ -255,7 +255,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
         isReady = true;
         isMoving = true;
         start = millis();
-        goForward(dq_des, dq_des);
+        goForward(whl_vel_des, whl_vel_des);
         break;
 
       // case('x'):
@@ -300,8 +300,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       qL_err = q_des - qL_curr;
       qR_err = q_des - qR_curr;
 
-      dqL_err = dq_des - dqL;
-      dqR_err = dq_des - dqR;
+      // dqL_err = dq_des - dqL;
+      // dqR_err = dq_des - dqR;
 
       String msg_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3); //+ " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
       Serial.println(msg_err);
@@ -309,17 +309,17 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       // u_dqL = 0.75*dqL_err;
       // u_dqR = 0.75*dqR_err; 
 
-      uL = 0.5*qL_err;
-      uR = 0.5*qR_err;
+      uL = 1.0*qL_err;
+      uR = 1.0*qR_err;
 
-      whl_velL = (dq_des / 6.0) + uL;
-      whl_velR = (dq_des / 6.0) + uR;
+      whl_velL = (whl_vel_des / 6.0) + uL;
+      whl_velR = (whl_vel_des / 6.0) + uR;
 
       String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
       Serial.println(msg_u);
 
-      int pwmL = map(abs(velL), 0, 150, 0, 255);
-      int pwmR = map(abs(velR), 0, 150, 0, 255);
+      int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
+      int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
 
       String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR);
 
