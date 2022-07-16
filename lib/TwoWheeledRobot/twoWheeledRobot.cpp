@@ -314,8 +314,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       // u_dqL = 0.75*dqL_err;
       // u_dqR = 0.75*dqR_err; 
 
-      uL = 10.0*qL_err;
-      uR = 10.0*qR_err;
+      uL = 1.0*qL_err;
+      uR = 1.0*qR_err;
 
       whl_velL = dq_des + uL;
       whl_velR = dq_des + uR;
@@ -333,8 +333,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 
       // goForward(u_velL, u_velR);
 
-      //motorBlockL->setVelocity(u_velL, vel.maxWheel, newMinRange);
-      //motorBlockR->setVelocity(u_velR, vel.maxWheel, newMinRange);
+      motorBlockL->setVelocity(whl_velL, vel.maxWheel, newMinRange);
+      motorBlockR->setVelocity(whl_velR, vel.maxWheel, newMinRange);
 
       if(q_des >= 3.97)
       {
