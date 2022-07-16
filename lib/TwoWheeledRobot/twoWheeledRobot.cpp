@@ -314,7 +314,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       // u_dqL = 0.75*dqL_err;
       // u_dqR = 0.75*dqR_err; 
 
-      uL = 10.0*qL_err;
+      uL = 12.0*qL_err;
       uR = 10.0*qR_err;
 
       whl_velL = dq_des + uL;
