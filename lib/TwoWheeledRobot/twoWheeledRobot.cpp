@@ -285,15 +285,17 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 
       t_curr = millis() - start;
 
-      q_des = whl_vel_des * t_curr / 60000.0;
-      
+      q_des = dq_des * t_curr / 60000.0; // желаемый угол [об]
+
       String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
       Serial.println(msg_q);
       
-      dt = (t_curr - t_prev) / 60000.0;
+      dt = (t_curr - t_prev) / 60000.0; // промежуток между замерами [мин]
 
+      // оценка измеренной скорости вращения колёс [об/мин]
       dqL = (qL_curr - qL_prev) / dt;
       dqR = (qR_curr - qR_prev) / dt;
+
       String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
       Serial.println(msg_dq);
 
@@ -304,8 +306,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       // dqL_err = dq_des - dqL;
       // dqR_err = dq_des - dqR;
 
-      String msg_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3); //+ " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
-      Serial.println(msg_err);
+      // String msg_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3); //+ " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
+      // Serial.println(msg_err);
 
       // u_dqL = 0.75*dqL_err;
       // u_dqR = 0.75*dqR_err; 
