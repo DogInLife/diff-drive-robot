@@ -31,7 +31,7 @@ void setup() {
   KiR = 1000.0;
   KdR = 0.5;
   
-  robot.tunePID(KpL, KiL, KdL, KpR, KiR, KdR);
+  robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
   //robot.tunePID(20.0, 0.0, 0.05, /*_*/ 25.0, 0.0, 0.05); // (pL, iL, dL, pR, iR, dR)
 
   // robot.serialControl();

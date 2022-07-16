@@ -15,6 +15,7 @@ private:
     MotorBlock* motorBlockR;
     PID* pidL;
     PID* pidR;
+    PID* pid;
     Velocity vel;
     Position pos;
 
@@ -38,7 +39,8 @@ public:
     float getRadiusWheels();
     byte getSerialData();
     
-    void tunePID(float KpL, float KiL, float KdL, float KpR, float KiR, float KdR);
+    void tuneWhlPID(float KpL, float KiL, float KdL, float KpR, float KiR, float KdR);
+    void tunePID(float Kp, float Ki, float Kd);
     
 // ========= behavior ===========
     void serialControl();

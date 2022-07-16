@@ -11,6 +11,7 @@ TwoWheeledRobot::TwoWheeledRobot()
   motorBlockR = new MotorBlock();
   pidL = new PID();
   pidR = new PID();
+  pid = new PID();
   pinMode(PIN_CURRENT_SENSOR, LOW);
 }
 
@@ -49,7 +50,7 @@ void TwoWheeledRobot::setDriverPins(byte driverPinPWM_R, byte driverPin_R2, byte
   motorBlockR->setDriverPin(driverPin_R1, driverPin_R2, driverPinPWM_R);
 }
 
-void TwoWheeledRobot::tunePID(float KpL, float KiL, float KdL, float KpR, float KiR, float KdR)
+void TwoWheeledRobot::tuneWhlPID(float KpL, float KiL, float KdL, float KpR, float KiR, float KdR)
 {
    pidL->setCoefficient(KpL, KiL, KdL);
    pidR->setCoefficient(KpR, KiR, KdR);
@@ -109,82 +110,82 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 
   while(!reachedGoal)
   {
-    // err = pid->computeAngleError(pos.thetaGoal, pos.theta);
+    err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     
-    // vel.ang = pid->computeControl(err, dt/1000);
-    // vel.lin = vel.computeLinearSpeed();
+    vel.ang = pid->computeControl(err, dt/1000);
+    vel.lin = vel.computeLinearSpeed();
 
 
-    // //Расчет скоростей для каждого двигателя
-    // float velR = (2*vel.lin + vel.ang*L)/(2*R);
-    // float velL = (2*vel.lin - vel.ang*L)/(2*R);
+    //Расчет скоростей для каждого двигателя
+    float velR = (2*vel.lin + vel.ang*L)/(2*R);
+    float velL = (2*vel.lin - vel.ang*L)/(2*R);
 
-    // motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
-    // motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
+    motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
+    motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 
-    // float distWheelL = motorBlockL->getTraveledDistance();
-    // float distWheelR = motorBlockR->getTraveledDistance();
-    // float distWheelC = (distWheelR+distWheelL) / 2;
+    float distWheelL = motorBlockL->getTraveledDistance();
+    float distWheelR = motorBlockR->getTraveledDistance();
+    float distWheelC = (distWheelR+distWheelL) / 2;
 
-    // pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
+    pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
  
 
-    // if((abs(pos.x-xGoal) < 0.03) && (abs(pos.y-yGoal) < 0.03))
-    // {
-    //   Serial.println("You have reached your goal");
-    //   Serial.print("err_X: "); Serial.print(pos.x-xGoal, 3);
-    //   Serial.print("  err_Y: "); Serial.println(pos.y-yGoal, 3);
-    //   reachedGoal = true;
-    // }
+    if((abs(pos.x-xGoal) < 0.03) && (abs(pos.y-yGoal) < 0.03))
+    {
+      Serial.println("You have reached your goal");
+      Serial.print("err_X: "); Serial.print(pos.x-xGoal, 3);
+      Serial.print("  err_Y: "); Serial.println(pos.y-yGoal, 3);
+      reachedGoal = true;
+    }
 
 
-    // if(reachedGoal)
-    // {
-    //   stopMoving();
-    //   break;
-    // }
+    if(reachedGoal)
+    {
+      stopMoving();
+      break;
+    }
     
-    // if (DEBUG_PLOT){
-    //   Serial.print("$");
-    //   Serial.print(pos.x, 3);Serial.print(" ");Serial.print(pos.y, 3);
-    //   Serial.println(";");
-    // }
-    // if (DEBUG){
-    //   Serial.print("err: "); Serial.println(err, 3);
-    // }
-    // if (DEBUG){
-    //   Serial.print("$"); Serial.print(err); Serial.println(";");
-    // }
-    // if (DEBUG){
-    //   Serial.print("angVel: "); Serial.print(vel.ang);
-    //   Serial.print("  linVel: "); Serial.println(vel.lin);
-    // }
-    // if (DEBUG){
-    //   Serial.print("velL: "); Serial.print(velL);
-    //   Serial.print("  velR: "); Serial.println(velR);
-    // }
-    // if (DEBUG){
-    //   Serial.print("distWheelL: "); Serial.print(distWheelL, 3);
-    //   Serial.print("  distWheelR: "); Serial.print(distWheelR, 3);
-    //   Serial.print("  distWheelC: "); Serial.println(distWheelC, 3);
-    // }
-    // if (DEBUG){
-    //   Serial.print("X: "); Serial.print(pos.x, 3);
-    //   Serial.print("  Y: "); Serial.print(pos.y, 3);
-    //   Serial.print("  Th: "); Serial.println(pos.theta, 3);
-    //   Serial.println("  -------  ");
-    // }
+    if (DEBUG_PLOT){
+      Serial.print("$");
+      Serial.print(pos.x, 3);Serial.print(" ");Serial.print(pos.y, 3);
+      Serial.println(";");
+    }
+    if (DEBUG){
+      Serial.print("err: "); Serial.println(err, 3);
+    }
+    if (DEBUG){
+      Serial.print("$"); Serial.print(err); Serial.println(";");
+    }
+    if (DEBUG){
+      Serial.print("angVel: "); Serial.print(vel.ang);
+      Serial.print("  linVel: "); Serial.println(vel.lin);
+    }
+    if (DEBUG){
+      Serial.print("velL: "); Serial.print(velL);
+      Serial.print("  velR: "); Serial.println(velR);
+    }
+    if (DEBUG){
+      Serial.print("distWheelL: "); Serial.print(distWheelL, 3);
+      Serial.print("  distWheelR: "); Serial.print(distWheelR, 3);
+      Serial.print("  distWheelC: "); Serial.println(distWheelC, 3);
+    }
+    if (DEBUG){
+      Serial.print("X: "); Serial.print(pos.x, 3);
+      Serial.print("  Y: "); Serial.print(pos.y, 3);
+      Serial.print("  Th: "); Serial.println(pos.theta, 3);
+      Serial.println("  -------  ");
+    }
     
-    // Serial.println(checkCurrent(PIN_CURRENT_SENSOR));
-    // Serial.println(i);
+    Serial.println(checkCurrent(PIN_CURRENT_SENSOR));
+    Serial.println(i);
     
-    // if (i>7){
-    //   if(checkCurrent(PIN_CURRENT_SENSOR)>550)
-    //   {
-    //     stopMoving();
-    //     break;
-    //   }
-    // }
+    if (i>7){
+      if(checkCurrent(PIN_CURRENT_SENSOR)>550)
+      {
+        stopMoving();
+        break;
+      }
+    }
 
   
     switch(getSerialData())
@@ -198,7 +199,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
       break;
     }
 
-    delay(dt);
+    delay(del);
   }
 }
 
@@ -207,7 +208,6 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 {
   bool isReady = false;
   bool isMoving = false;
-  //int vel = 15;
 
   float qL_curr = 0.0; // текущий измеренный угол поворота левого колеса
   float qR_curr = 0.0; // текущий измеренный угол повората правого колеса
@@ -221,19 +221,11 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
   float dqR = 0.0; // скорость вращения правого колеса
 
   float q_des; // желаемый угол поворота колеса [град]
-  //float dq_des = whl_vel_des * 6.0; // желаемая скорость вращения колеса [град / сек]
   float dq_des = whl_vel_des; // желаемая скорость вращения колёс [об/мин]
 
   // ошибки
   float qL_err = 0.0;
   float qR_err = 0.0;
-  float dqL_err = 0.0;
-  float dqR_err = 0.0;
-
-  // управляющие воздействия
-  // скорости (???)
-  //float u_dqL = 0.0;
-  //float u_dqR = 0.0;
 
   float uL = 0.0;
   float uR = 0.0;
@@ -251,24 +243,21 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
     switch(getSerialData())
     {
       case('w'):
-        // isStopped = false;
         isReady = true;
         isMoving = true;
         start = millis();
         goForward(whl_vel_des, whl_vel_des);
         break;
 
-      // case('x'):
-      //   // isStopped = false;
-      //   isReady = true;
-      //   isMoving = true;
-      //   start = millis();
-      //   goForward(-vel, -vel);
-      //   break;
+      case('x'):
+        isReady = true;
+        isMoving = true;
+        start = millis();
+        goForward(-whl_vel_des, -whl_vel_des);
+        break;
 
       case('s'):
         stopMoving();
-        //isStopped = true;
         isReady = false;
         isMoving = false;
         break;
@@ -286,18 +275,12 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
       t_curr = millis() - start;
 
       q_des = dq_des * t_curr / 60000.0; // желаемый угол [об]
-
-      // String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
-      // Serial.println(msg_q);
       
       dt = (t_curr - t_prev) / 60000.0; // промежуток между замерами [мин]
 
       // оценка измеренной скорости вращения колёс [об/мин]
       dqL = (qL_curr - qL_prev) / dt;
       dqR = (qR_curr - qR_prev) / dt;
-      // String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
-      // Serial.println(msg_dq);
-
 
       qL_err = q_des - qL_curr;
       qR_err = q_des - qR_curr;
@@ -307,12 +290,6 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 
       String msg_q_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3) + " dt: " + String(dt, 4);
       Serial.println(msg_q_err); 
-      // String msg_dq_err = "dqL_err: " + String(dqL_err, 3) + " dqR_err: " + String(dqR_err, 3);
-      // Serial.println(msg_dq_err);
-
-      // Вычисление управляющего воздействия
-      // uL = 10.0*qL_err;
-      // uR = 12.5*qR_err;
 
       uL = pidL->computeControl(qL_err, dt);
       uR = pidR->computeControl(qR_err, dt);
@@ -337,7 +314,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
         goForward(whl_velL, whl_velR);
       }
 
-      if(q_des >= 9.975)
+      if(abs(q_des) >= 9.975)
       {
         Serial.println("Stopping");
         stopMoving();
