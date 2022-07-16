@@ -221,7 +221,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
   float dqR = 0.0; // скорость вращения правого колеса
 
   float q_des; // желаемый угол поворота колеса [град]
-  float dq_des = whl_vel_des; // желаемая скорость вращения колёс [об/мин]
+  float dq_des; // желаемая скорость вращения колёс [об/мин]
 
   // ошибки
   float qL_err = 0.0;
@@ -248,14 +248,16 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
         isReady = true;
         isMoving = true;
         start = millis();
-        goForward(whl_vel_des, whl_vel_des);
+        dq_des = whl_vel_des;
+        goForward(dq_des, dq_des);
         break;
 
       case('x'):
         isReady = true;
         isMoving = true;
         start = millis();
-        goForward(-whl_vel_des, -whl_vel_des);
+        dq_des = -whl_vel_des;
+        goForward(dq_des, dq_des);
         break;
 
       case('s'):
