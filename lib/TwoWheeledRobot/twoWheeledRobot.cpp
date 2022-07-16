@@ -57,7 +57,7 @@ void TwoWheeledRobot::tuneWhlPID(float KpL, float KiL, float KdL, float KpR, flo
    pidR->setCoefficient(KpR, KiR, KdR);
 }
 
-void TwoWheeledRobot::tinePID(float Kp, float Ki, float Kd)
+void TwoWheeledRobot::tunePID(float Kp, float Ki, float Kd)
 {
   pid->setCoefficient(Kp, Ki, Kd);
 }
