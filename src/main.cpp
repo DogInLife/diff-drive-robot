@@ -21,15 +21,15 @@ void setup() {
   robot.setDriverPins(DRIVER_PWM_PIN_A, DRIVER_IN_A2, DRIVER_IN_A1 , DRIVER_IN_B1, DRIVER_IN_B2,  DRIVER_PWM_PIN_B);
   // robot.tunePID(5.3, 4.8, 0);
 
-  //KpL = 30.0;
+  KpL = 30.0;
   KiL = 1000.0;
-  //KdL = 0.5;
+  KdL = 0.5;
 // ================  П Р О В Е Р Ь  ============
 // ================     Ф Л А Г     ============
 // ================      D E B      ============
-  //KpR = 35.0;
+  KpR = 35.0;
   KiR = 1000.0;
-  //KdR = 0.5;
+  KdR = 0.5;
   
   robot.tunePID(KpL, KiL, KdL, KpR, KiR, KdR);
   //robot.tunePID(20.0, 0.0, 0.05, /*_*/ 25.0, 0.0, 0.05); // (pL, iL, dL, pR, iR, dR)
