@@ -320,14 +320,14 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       whl_velL = dq_des + uL;
       whl_velR = dq_des + uR;
 
-      String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
-      Serial.println(msg_u);
+      // String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
+      // Serial.println(msg_u);
 
-      int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
-      int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
-      int pwm_des = map(abs(whl_vel_des), 0, 150, 0, 255);
-      String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
-      Serial.println(msg_pwm);
+      // int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
+      // int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
+      // int pwm_des = map(abs(whl_vel_des), 0, 150, 0, 255);
+      // String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
+      // Serial.println(msg_pwm);
 
       goForward(whl_velL, whl_velR);
 
