@@ -35,8 +35,8 @@ void setup() {
   //robot.tunePID(20.0, 0.0, 0.05, /*_*/ 25.0, 0.0, 0.05); // (pL, iL, dL, pR, iR, dR)
 
   // robot.serialControl();
-  robot.manualControl(del);
-  // robot.rot_test(whl_vel_des, del, deb); // ########################
+  //robot.manualControl(del);
+  robot.rot_test(whl_vel_des, del, deb); // ########################
 
   // float xGoal = 1;
   // float yGoal = 1;
