@@ -308,8 +308,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 
       String msg_q_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3);
       Serial.println(msg_q_err); 
-      String msg_dq_err = "dqL_err: " + String(dqL_err, 3) + " dqR_err: " + String(dqR_err, 3);
-      Serial.println(msg_dq_err);
+      // String msg_dq_err = "dqL_err: " + String(dqL_err, 3) + " dqR_err: " + String(dqR_err, 3);
+      // Serial.println(msg_dq_err);
 
       // u_dqL = 0.75*dqL_err;
       // u_dqR = 0.75*dqR_err; 
@@ -320,8 +320,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       whl_velL = dq_des + uL;
       whl_velR = dq_des + uR;
 
-      // String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
-      // Serial.println(msg_u);
+      String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
+      Serial.println(msg_u);
 
       // int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
       // int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
