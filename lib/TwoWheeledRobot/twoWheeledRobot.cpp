@@ -330,7 +330,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       //motorBlockL->setVelocity(u_velL, vel.maxWheel, newMinRange);
       //motorBlockR->setVelocity(u_velR, vel.maxWheel, newMinRange);
 
-      if(q_des >= 1430.0)
+      if(q_des >= 3.97)
       {
         Serial.println("Stopping");
         stopMoving();
