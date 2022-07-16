@@ -4,6 +4,7 @@
 
 byte del = 50; // задержка
 int whl_vel_des = 60; // скорость колеса [об/мин]
+bool deb = true; // флаг типа дебаггинга
 
 void setup() {
   
@@ -16,7 +17,7 @@ void setup() {
 
   // robot.serialControl();
   // robot.manualControl(dt);
-  robot.rot_test(whl_vel_des, del);
+  robot.rot_test(whl_vel_des, del, deb);
 
   // float xGoal = 1;
   // float yGoal = 1;
