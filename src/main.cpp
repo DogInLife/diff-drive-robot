@@ -3,7 +3,7 @@
 #include "constants.h"
 
 byte del = 50; // задержка
-int whl_vel_des = 60; // скорость колеса [об/мин]
+int whl_vel_des = 30; // скорость колеса [об/мин]
 
 void setup() {
   
