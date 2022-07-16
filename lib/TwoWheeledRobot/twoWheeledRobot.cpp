@@ -308,7 +308,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 
         int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
         int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
-        int pwm_des = map(abs(whl_vel_des), 0, 150, 0, 255);
+        int pwm_des = map(abs(dq_des), 0, 150, 0, 255);
         String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
         Serial.println(msg_pwm);
       } 
