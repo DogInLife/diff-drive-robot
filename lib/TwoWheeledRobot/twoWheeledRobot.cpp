@@ -329,7 +329,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 
       String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
 
-      // Serial.println(msg_pwm);
+      Serial.println(msg_pwm);
 
       // goForward(u_velL, u_velR);
 

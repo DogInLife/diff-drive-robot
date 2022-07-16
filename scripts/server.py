@@ -40,7 +40,7 @@ while True:
     data = conn.recv(1) # data from socket client
     if not data == b'~':
         print(data)
-        if (data == b'\x03'):
+        if (data == b'\x18'): # Ctrl + x
             ser.write(b's')
             break
         ser.write(data) # send to serial (arduino)
