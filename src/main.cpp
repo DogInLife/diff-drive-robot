@@ -4,7 +4,7 @@
 
 byte del = 50; // задержка
 int whl_vel_des = 60; // скорость колеса [об/мин]
-bool deb = true; // флаг типа дебаггинга
+bool deb = false; // флаг типа дебаггинга
 
 void setup() {
   
