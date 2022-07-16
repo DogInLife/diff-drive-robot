@@ -315,7 +315,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       whl_velL = (dq_des / 6.0) + uL;
       whl_velR = (dq_des / 6.0) + uR;
 
-      String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " velL: " + String(velL, 3) + " velR: " + String(velR, 3);
+      String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
       Serial.println(msg_u);
 
       int pwmL = map(abs(velL), 0, 150, 0, 255);
