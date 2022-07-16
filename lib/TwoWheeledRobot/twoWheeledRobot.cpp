@@ -287,8 +287,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 
       q_des = dq_des * t_curr / 60000.0; // желаемый угол [об]
 
-      String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
-      Serial.println(msg_q);
+      // String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
+      // Serial.println(msg_q);
       
       dt = (t_curr - t_prev) / 60000.0; // промежуток между замерами [мин]
 
@@ -296,18 +296,20 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       dqL = (qL_curr - qL_prev) / dt;
       dqR = (qR_curr - qR_prev) / dt;
 
-      String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
-      Serial.println(msg_dq);
+      // String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
+      // Serial.println(msg_dq);
 
 
       qL_err = q_des - qL_curr;
       qR_err = q_des - qR_curr;
 
-      // dqL_err = dq_des - dqL;
-      // dqR_err = dq_des - dqR;
+      dqL_err = dq_des - dqL;
+      dqR_err = dq_des - dqR;
 
-      // String msg_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3); //+ " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
-      // Serial.println(msg_err);
+      String msg_q_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3);
+      Serial.println(msg_q_err); 
+      String msg_dq_err = "dqL_err: " + String(dqL_err, 3) + " dqR_err: " + String(dqR_err, 3);
+      Serial.println(msg_err);
 
       // u_dqL = 0.75*dqL_err;
       // u_dqR = 0.75*dqR_err; 
@@ -315,8 +317,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       uL = 1.0*qL_err;
       uR = 1.0*qR_err;
 
-      whl_velL = (dq_des / 6.0) + uL;
-      whl_velR = (dq_des / 6.0) + uR;
+      whl_velL = dq_des + uL;
+      whl_velR = dq_des + uR;
 
       // String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
       // Serial.println(msg_u);
