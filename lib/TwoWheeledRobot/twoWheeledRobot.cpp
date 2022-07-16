@@ -176,16 +176,16 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
       Serial.println("  -------  ");
     }
     
-    Serial.println(checkCurrent(PIN_CURRENT_SENSOR));
-    Serial.println(i);
+    // Serial.println(checkCurrent(PIN_CURRENT_SENSOR));
+    // Serial.println(i);
     
-    if (i>7){
-      if(checkCurrent(PIN_CURRENT_SENSOR)>550)
-      {
-        stopMoving();
-        break;
-      }
-    }
+    // if (i>7){
+    //   if(checkCurrent(PIN_CURRENT_SENSOR)>550)
+    //   {
+    //     stopMoving();
+    //     break;
+    //   }
+    // }
 
   
     switch(getSerialData())
@@ -199,7 +199,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
       break;
     }
 
-    delay(del);
+    delay(dt);
   }
 }
 
@@ -226,6 +226,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
   // ошибки
   float qL_err = 0.0;
   float qR_err = 0.0;
+  float dqL_err = 0.0;
+  float dqR_err = 0.0;
 
   float uL = 0.0;
   float uR = 0.0;
