@@ -331,10 +331,10 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 
       Serial.println(msg_pwm);
 
-      // goForward(u_velL, u_velR);
+      goForward(whl_velL, whl_velR);
 
-      motorBlockL->setVelocity(whl_velL, vel.maxWheel, newMinRange);
-      motorBlockR->setVelocity(whl_velR, vel.maxWheel, newMinRange);
+      // motorBlockL->setVelocity(whl_velL, vel.maxWheel, newMinRange);
+      // motorBlockR->setVelocity(whl_velR, vel.maxWheel, newMinRange);
 
       if(q_des >= 3.97)
       {
