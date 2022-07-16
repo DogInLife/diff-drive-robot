@@ -310,8 +310,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       // String msg_dq_err = "dqL_err: " + String(dqL_err, 3) + " dqR_err: " + String(dqR_err, 3);
       // Serial.println(msg_dq_err);
 
-      uL = qL_err;
-      uR = qR_err;
+      uL = 10.0*qL_err;
+      uR = 12.5*qR_err;
 
       whl_velL = dq_des + uL;
       whl_velR = dq_des + uR;
