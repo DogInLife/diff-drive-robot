@@ -337,7 +337,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
         goForward(whl_velL, whl_velR);
       }
 
-      if(q_des >= 3.99)
+      if(q_des >= 3.975)
       {
         Serial.println("Stopping");
         stopMoving();
