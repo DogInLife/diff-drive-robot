@@ -4,7 +4,7 @@
 
 byte del = 50; // задержка
 int whl_vel_des = 30; // скорость колеса [об/мин]
-bool deb = false; // флаг типа дебаггинга
+bool deb = true; // флаг типа дебаггинга
 
 float KpL;
 float KiL;
@@ -23,13 +23,13 @@ void setup() {
 
   KpL = 30.0;
   KiL = 0.0;
-  KdL = 0.4;
+  KdL = 1.0;
 // ================  П Р О В Е Р Ь  ============
 // ================     Ф Л А Г     ============
 // ================      D E B      ============
-  KpR = 30.0;
+  KpR = 35.0;
   KiR = 0.0;
-  KdR = 0.4;
+  KdR = 1.0;
   
   robot.tunePID(KpL, KiL, KdL, KpR, KiR, KdR);
   //robot.tunePID(20.0, 0.0, 0.05, /*_*/ 25.0, 0.0, 0.05); // (pL, iL, dL, pR, iR, dR)
