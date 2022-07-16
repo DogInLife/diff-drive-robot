@@ -9,8 +9,8 @@ PID::~PID(){}
 
 float PID::computeControl(float err, float dt)
 {
-    errDot = err - errOld;
-    errSum = errSum + err;
+    errDot = err - errOld; // дельта соседних измерений
+    errSum = errSum + err; // суммарная ошибка за всё время
 
     float u = Kp*err + Ki*errSum*dt + Kd*errDot/dt;
     errOld = err;
