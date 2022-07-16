@@ -45,7 +45,7 @@ public:
     void goToGoal(float x_d, float y_d, float dt);
     void manualControl(float dt);
 
-    void rot_test(int vel, byte dt); // ####################################
+    void rot_test(int whl_vel_des, byte del); // ####################################
 
     void goForward(int velL, int velR);
     void turnLeft(int velL, int velR);

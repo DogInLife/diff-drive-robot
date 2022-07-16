@@ -3,7 +3,7 @@
 #include "constants.h"
 
 byte del = 50; // задержка
-int whl_vel = 30; // скорость колеса [об/мин]
+int whl_vel_des = 30; // скорость колеса [об/мин]
 
 void setup() {
   
@@ -16,7 +16,7 @@ void setup() {
 
   // robot.serialControl();
   // robot.manualControl(dt);
-  robot.rot_test(whl_vel, del);
+  robot.rot_test(whl_vel_des, del);
 
   // float xGoal = 1;
   // float yGoal = 1;

@@ -203,7 +203,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 }
 
 // ############## Прямолинейное движение в пид-контроллером углов поворота колёс ###############
-void TwoWheeledRobot::rot_test(int whl_vel, byte del)
+void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 {
   bool isReady = false;
   bool isMoving = false;
@@ -221,7 +221,8 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
   float dqR = 0.0; // скорость вращения правого колеса
 
   float q_des; // желаемый угол поворота колеса [град]
-  float dq_des = whl_vel * 6.0; // желаемая скорость вращения колеса [град / сек]
+  //float dq_des = whl_vel_des * 6.0; // желаемая скорость вращения колеса [град / сек]
+  float dq_des = whl_vel_des; // желаемая скорость вращения колёс [об/мин]
 
   // ошибки
   float qL_err = 0.0;
@@ -230,14 +231,18 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
   float dqR_err = 0.0;
 
   // управляющие воздействия
-  float u_dqL = 0.0;
-  float u_dqR = 0.0;
+  // скорости (???)
+  //float u_dqL = 0.0;
+  //float u_dqR = 0.0;
+
+  float uL = 0.0;
+  float uR = 0.0;
 
   // скоррекированные значения [об/мин]
-  float u_velL;
-  float u_velR;
+  float whl_velL;
+  float whl_velR;
 
-  int dt = 0;
+  float dt = 0.0; // измерительный промежуток [мин]
 
   uint32_t start;
 
@@ -249,8 +254,8 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
         // isStopped = false;
         isReady = true;
         isMoving = true;
-        // start = millis();
-        goForward(whl_vel, whl_vel);
+        start = millis();
+        goForward(dq_des, dq_des);
         break;
 
       // case('x'):
@@ -271,8 +276,6 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
       default:
         break;
     }
-    
-    start = millis();
 
     if(isMoving && isReady)
     {
@@ -281,15 +284,15 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
 
       t_curr = millis() - start;
 
-      q_des = dq_des * t_curr / 1000.0;
+      q_des = dq_des * t_curr / 60000.0;
       
       // String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
       // Serial.println(msg_q);
       
-      dt = t_curr - t_prev;
+      dt = (t_curr - t_prev) / 60000.0;
 
-      dqL = (qL_curr - qL_prev) * 1000.0 / dt;
-      dqR = (qR_curr - qR_prev) * 1000.0 / dt;
+      // dqL = (qL_curr - qL_prev) * 1000.0 / dt;
+      // dqR = (qR_curr - qR_prev) * 1000.0 / dt;
       // String msg_dq = "Vel L: " + String(dqL, 3) + " Vel R: " + String(dqR, 3) + " Desired velocity: " + String(dq_des, 3);
       // Serial.println(msg_dq);
 
@@ -300,20 +303,23 @@ void TwoWheeledRobot::rot_test(int whl_vel, byte del)
       dqL_err = dq_des - dqL;
       dqR_err = dq_des - dqR;
 
-      String msg_err = "qL: " + String(qL_err, 3) + " qR: " + String(qR_err, 3) + " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
+      String msg_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3); //+ " ==//== dqL: " + String(dqL_err, 3) + " dqR: " + String(dqR_err, 3);
       Serial.println(msg_err);
 
-      u_dqL = 0.75*dqL_err;
-      u_dqR = 0.75*dqR_err; 
+      // u_dqL = 0.75*dqL_err;
+      // u_dqR = 0.75*dqR_err; 
 
-      u_velL = (dq_des + u_dqL) / 6.0;
-      u_velR = (dq_des + u_dqR) / 6.0;
+      uL = 0.5*qL_err;
+      uR = 0.5*qR_err;
 
-      String msg_u = "u_dqL: " + String(u_dqL, 3) + " u_dqR: " + String(u_dqR, 3) + " u_velL: " + String(u_velL, 3) + " u_velR: " + String(u_velR, 3);
+      whl_velL = (dq_des / 6.0) + uL;
+      whl_velR = (dq_des / 6.0) + uR;
+
+      String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " velL: " + String(velL, 3) + " velR: " + String(velR, 3);
       Serial.println(msg_u);
 
-      int pwmL = map(abs(u_velL), 0, 150, 0, 255);
-      int pwmR = map(abs(u_velR), 0, 150, 0, 255);
+      int pwmL = map(abs(velL), 0, 150, 0, 255);
+      int pwmR = map(abs(velR), 0, 150, 0, 255);
 
       String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR);
 
