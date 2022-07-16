@@ -284,7 +284,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
 
       t_curr = millis() - start;
 
-      q_des = dq_des * t_curr / 60000.0;
+      q_des = whl_vel_des * t_curr / 60000.0;
       
       // String msg_q = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr) + " Desired angle: " + String(q_des, 3);
       // Serial.println(msg_q);
@@ -312,8 +312,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del)
       uL = 1.0*qL_err;
       uR = 1.0*qR_err;
 
-      whl_velL = (whl_vel_des / 6.0) + uL;
-      whl_velR = (whl_vel_des / 6.0) + uR;
+      whl_velL = (dq_des / 6.0) + uL;
+      whl_velR = (dq_des / 6.0) + uR;
 
       String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
       Serial.println(msg_u);
