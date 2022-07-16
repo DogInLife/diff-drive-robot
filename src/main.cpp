@@ -15,7 +15,7 @@ void setup() {
   // robot.tunePID(5.3, 4.8, 0);
 
   // ========== П Р О В Е Р Ь   Ф Л А Г   D E B   !!! =============
-  robot.tunePID(20.0, 0.0, 0.2, /*_*/ 25.0, 0.0, 0.2); // (pL, iL, dL, pR, iR, dR)
+  robot.tunePID(20.0, 0.0, 0.1, /*_*/ 25.0, 0.0, 0.1); // (pL, iL, dL, pR, iR, dR)
 
   // robot.serialControl();
   // robot.manualControl(dt);
