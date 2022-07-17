@@ -121,6 +121,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
 
+    String msh_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
+    Serial.println(msg_vel);
+
 
     //Расчет скоростей для каждого двигателя
     float velR = (2*vel.lin + vel.ang*L)/(2*R);
