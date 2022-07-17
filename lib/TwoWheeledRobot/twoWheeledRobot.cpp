@@ -209,7 +209,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
     {
       case('s'):
         stopMoving();
-      break;
+        break;
       case('r'):
         stopMoving();
         break;
