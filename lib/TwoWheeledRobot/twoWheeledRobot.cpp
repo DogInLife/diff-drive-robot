@@ -134,6 +134,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
     float distWheelC = (distWheelR+distWheelL) / 2;
 
     pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
+
+    String msg_pos = "X pos: " + String(pos.x, 3) + " Y pos: " + String(pos.y);
+    Serial.println(msg_pos);
  
 
     if((abs(pos.x-xGoal) < 0.03) && (abs(pos.y-yGoal) < 0.03))
