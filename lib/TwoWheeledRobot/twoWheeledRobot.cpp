@@ -4,7 +4,7 @@
 TwoWheeledRobot::TwoWheeledRobot()
   :reachedGoal(false), 
   PIN_CURRENT_SENSOR(A12),
-  inByte(0), newMinRange(51) //newMinRange(0)
+  inByte(0), newMinRange(150) //newMinRange(0)
 {
   Serial.begin(9600);
   motorBlockL = new MotorBlock();
