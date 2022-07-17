@@ -129,8 +129,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
     float velR = (2*vel.lin + vel.ang*L)/(2*R);
     float velL = (2*vel.lin - vel.ang*L)/(2*R);
 
-    // motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
-    // motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
+    motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
+    motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 
     float distWheelL = motorBlockL->getTraveledDistance();
     float distWheelR = motorBlockR->getTraveledDistance();
