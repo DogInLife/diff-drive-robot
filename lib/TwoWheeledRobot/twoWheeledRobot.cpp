@@ -128,11 +128,11 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 
 
     //Расчет скоростей для каждого двигателя
-    float velR = (2*vel.lin + vel.ang*L) / (2*R);
-    float velL = (2*vel.lin - vel.ang*L) / (2*R);
+    float velR = (2*vel.lin + vel.ang*L)/(2*R);
+    float velL = (2*vel.lin - vel.ang*L)/(2*R);
 
-    String msg_whl_vel = "L Vel: " + String(velL, 3) + " R Vel: " + String(velR, 3);
-    Serial.println(msg_whl_vel);
+    // String msg_whl_vel = "L Vel: " + String(velL, 3) + " R Vel: " + String(velR, 3);
+    // Serial.println(msg_whl_vel);
 
     motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
     motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
@@ -209,7 +209,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
     {
       case('s'):
         stopMoving();
-        break;
+      break;
       case('r'):
         stopMoving();
         break;
