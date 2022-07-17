@@ -92,7 +92,7 @@ void TwoWheeledRobot::serialControl()
           break;
         case ('g'):
           Serial.println("========= GO GO GO =========");
-          goToGoal(1,1, 50);
+          goToGoal(1, 0, 50);
           break;
       }
   }
