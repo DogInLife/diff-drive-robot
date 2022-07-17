@@ -363,7 +363,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 // ==== manual control ==== //
 void TwoWheeledRobot::manualControl(float dt)
 {
-  int vel = 30;
+  int vel = 60;
 
   while(true)
   {
