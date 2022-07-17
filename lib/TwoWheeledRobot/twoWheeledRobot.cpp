@@ -126,8 +126,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 
 
     //Расчет скоростей для каждого двигателя
-    float velR = (2*vel.lin + vel.ang*L)/(2*R);
-    float velL = (2*vel.lin - vel.ang*L)/(2*R);
+    float velR = (2*vel.lin + vel.ang*L) * 60.0 / (2*R * 2*3.141593);
+    float velL = (2*vel.lin - vel.ang*L) * 60.0 / (2*R * 2*3.141593);
 
     motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
     motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
