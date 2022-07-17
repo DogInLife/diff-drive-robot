@@ -30,8 +30,8 @@ void TwoWheeledRobot::createWheels(float wheelRadius, float baseLength, float ma
   motorBlockR->createWheel(wheelRadius);
   this->baseLength = baseLength;
   // vel.max = 6.28/60*wheelRadius*maxVel;
-  vel.maxWheel = maxVel;
-  vel.maxRobot = maxVel * wheelRadius;
+  vel.maxWheel = maxVel; // макс. скорость вращения колёс [об/мин]
+  vel.maxRobot = maxVel * wheelRadius * 2.0 * 3.141593 / 60.0; // макс. линейная скорость робота [м/с]
   if (DEBUG){
     Serial.print("vel.max: "); Serial.println(vel.maxWheel);
   }
@@ -129,8 +129,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
     float velR = (2*vel.lin + vel.ang*L)/(2*R);
     float velL = (2*vel.lin - vel.ang*L)/(2*R);
 
-    motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
-    motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
+    // motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
+    // motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 
     float distWheelL = motorBlockL->getTraveledDistance();
     float distWheelR = motorBlockR->getTraveledDistance();
