@@ -127,7 +127,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
 
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
-void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isGoal, float dt)
+void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt)
 {
 
   reachedGoal = false;
