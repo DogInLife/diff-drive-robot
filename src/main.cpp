@@ -22,15 +22,15 @@ void setup() {
   //robot.tunePID(5.3, 4.8, 0);
   //robot.tunePID(20.0, 8.0, 0.0);
 
-  KpL = 80.0;
-  KiL = 1000.0;
-  KdL = 0.4;
+  KpL = 75.0;
+  KiL = 1500.0;
+  KdL = 0.5;
 // ================  П Р О В Е Р Ь  ============
 // ================     Ф Л А Г     ============
 // ================      D E B      ============
-  KpR = 80.0;
-  KiR = 1000.0;
-  KdR = 0.4;
+  KpR = 75.0;
+  KiR = 1500.0;
+  KdR = 0.5;
   
   robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
   //robot.tunePID(20.0, 0.0, 0.05, /*_*/ 25.0, 0.0, 0.05); // (pL, iL, dL, pR, iR, dR)
