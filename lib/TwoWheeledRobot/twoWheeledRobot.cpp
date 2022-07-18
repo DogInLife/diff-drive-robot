@@ -153,6 +153,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
+    Serial.println("Error: " + String(err, 3));
     
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
