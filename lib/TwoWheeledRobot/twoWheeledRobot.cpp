@@ -4,7 +4,7 @@
 TwoWheeledRobot::TwoWheeledRobot()
   :reachedGoal(false), globalStop(false),
   PIN_CURRENT_SENSOR(A12),
-  inByte(0), newMinRange(102) //newMinRange(0)
+  inByte(0), newMinRange(51) //newMinRange(0)
 {
   Serial.begin(9600);
   motorBlockL = new MotorBlock();
@@ -172,7 +172,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
     pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
 
-    String msg_pos = "X pos: " + String(pos.x, 3) + " Y pos: " + String(pos.y);
+    String msg_pos = "X pos: " + String(pos.x, 3) + " Y pos: " + String(pos.y, 3);
     Serial.println(msg_pos);
  
 
