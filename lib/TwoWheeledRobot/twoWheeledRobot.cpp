@@ -115,7 +115,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
   bool isFinish = false;
 
   float dPhi = 2.0*3.141593 / ptsNum;
-  for(int i=0; i <= ptsNum; i++)
+  for(int i=1; i <= ptsNum; i++)
   {
     if(i == ptsNum) { isFinish = true; }
     x = x0 + radius * sin(dPhi*i);
