@@ -2,7 +2,7 @@
 #include "constants.h"
 
 TwoWheeledRobot::TwoWheeledRobot()
-  :reachedGoal(false), 
+  :reachedGoal(false), globalStop(false),
   PIN_CURRENT_SENSOR(A12),
   inByte(0), newMinRange(150) //newMinRange(0)
 {
@@ -122,6 +122,11 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
     goToGoal(x, y, isFinish, 50);
+    if(globalStop) 
+    { 
+      Serial.println(" ==== GLOBAL STOP ==== ");
+      break; 
+    }
   }
 }
 
@@ -236,7 +241,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     {
       case('s'):
         stopMoving();
-        reachedGoal = true;
+        globalStop = true;
       break;
 
       case('r'):

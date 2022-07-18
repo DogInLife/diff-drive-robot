@@ -24,6 +24,7 @@ private:
     byte PIN_CURRENT_SENSOR;
 
     bool reachedGoal;
+    bool globalStop;
     int newMinRange; // Для функции map в setVelocity
     byte inByte;
 
