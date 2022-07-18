@@ -112,16 +112,16 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
   float x;
   float y;
 
-  bool isGoal = false;
+  bool isFinish = false;
 
   float dPhi = 2.0*3.141593 / ptsNum;
   for(int i=0; i <= ptsNum; i++)
   {
-    if(i == ptsNum) { isGoal = true; }
+    if(i == ptsNum) { isFinish = true; }
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isGoal, 50);
+    goToGoal(x, y, isFinish, 50);
   }
 }
 
@@ -129,6 +129,9 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isGoal, float dt)
 {
+
+  reachedGoal = false;
+
   //Расчет угла, на котором расположена целевая точка
   pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
   if (DEBUG){
@@ -179,7 +182,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isGoal, float dt)
 
     if(reachedGoal)
     {
-      if(isGoal)
+      if(isFinish)
       {
         stopMoving();
         break;

@@ -46,7 +46,7 @@ public:
 // ========= behavior ===========
     void serialControl();
     void goCircle(float radius, int ptsNum);
-    void goToGoal(float x_d, float y_d, bool isGoal, float dt);
+    void goToGoal(float x_d, float y_d, bool isFinish, float dt);
     void manualControl(float dt);
 
     void rot_test(int whl_vel_des, byte del, bool deb); // ####################################
