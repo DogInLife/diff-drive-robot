@@ -98,7 +98,7 @@ void TwoWheeledRobot::serialControl()
         
         case ('t'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(1.0, 8);
+          goCircle(1.0, 16);
           break;
       }
   }
@@ -178,7 +178,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     Serial.println(msg_pos);
  
 
-    if((abs(pos.x-xGoal) < 0.15) && (abs(pos.y-yGoal) < 0.15))
+    if((abs(pos.x-xGoal) < 0.05) && (abs(pos.y-yGoal) < 0.05))
     {
       Serial.println("You have reached your goal");
       Serial.print("err_X: "); Serial.print(pos.x-xGoal, 3);
