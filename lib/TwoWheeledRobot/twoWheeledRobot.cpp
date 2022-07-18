@@ -90,9 +90,15 @@ void TwoWheeledRobot::serialControl()
           Serial.println("=== You are using manual control ===");
           manualControl(50);
           break;
+
         case ('g'):
           Serial.println("========= GO GO GO =========");
           goToGoal(1, 0, 50);
+          break;
+        
+        case ('t'):
+          Serial.println("====== Circle trajectory values ======");
+          goCircle(1.0, 8);
           break;
       }
   }

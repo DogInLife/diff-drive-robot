@@ -34,8 +34,8 @@ void setup() {
   robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
   //robot.tunePID(20.0, 0.0, 0.05, /*_*/ 25.0, 0.0, 0.05); // (pL, iL, dL, pR, iR, dR)
 
-  //robot.serialControl();
-  robot.goCircle(1.0, 8);
+  robot.serialControl();
+  //robot.goCircle(1.0, 8);
   //robot.manualControl(del);
   //robot.rot_test(whl_vel_des, del, deb); // ########################
 
