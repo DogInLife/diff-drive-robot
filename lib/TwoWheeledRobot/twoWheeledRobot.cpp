@@ -93,7 +93,7 @@ void TwoWheeledRobot::serialControl()
 
         case ('g'):
           Serial.println("========= GO GO GO =========");
-          //goToGoal(1, 0, 50);
+          goToGoal(1, 0, true, 50);
           break;
         
         case ('t'):
@@ -237,8 +237,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
       case('s'):
         stopMoving();
         reachedGoal = true;
-        isFinish = true;
       break;
+
       case('r'):
         stopMoving();
         break;
