@@ -20,7 +20,7 @@ void setup() {
   robot.setEncoderPins(ENCODER_PIN_L, ENCODER_PIN_R);
   robot.setDriverPins(DRIVER_PWM_PIN_A, DRIVER_IN_A2, DRIVER_IN_A1 , DRIVER_IN_B1, DRIVER_IN_B2,  DRIVER_PWM_PIN_B);
   //robot.tunePID(5.3, 4.8, 0);
-  robot.tunePID(1.2, 1.4, 0);
+  robot.tunePID(5.2, 1.4, 0.5);
 
   KpL = 27.5;
   KiL = 1000.0;
