@@ -103,7 +103,7 @@ void TwoWheeledRobot::serialControl()
 
         case ('r'):
           Serial.println(" ===== Rotation test ===== ");
-          rot_test(60, 50, false);
+          rot_test(90, 50, false);
           break;
       }
   }
