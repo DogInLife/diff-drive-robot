@@ -150,10 +150,10 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
   while(!reachedGoal && !globalStop)
   {
-    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+    // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
-    Serial.println("Error: " + String(err, 3));
+    Serial.println("Err theta: " + String(err, 3));
     
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
@@ -181,7 +181,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
     if((abs(pos.x-xGoal) < 0.10) && (abs(pos.y-yGoal) < 0.10))
     {
-      Serial.println("You have reached your goal");
+      Serial.println("PT REACHED");
       Serial.print("err_X: "); Serial.print(pos.x-xGoal, 3);
       Serial.print("  err_Y: "); Serial.println(pos.y-yGoal, 3);
       reachedGoal = true;
