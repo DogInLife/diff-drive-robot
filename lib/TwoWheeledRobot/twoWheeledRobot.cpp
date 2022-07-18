@@ -237,6 +237,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
       case('s'):
         stopMoving();
         reachedGoal = true;
+        isFinish = true;
       break;
       case('r'):
         stopMoving();
