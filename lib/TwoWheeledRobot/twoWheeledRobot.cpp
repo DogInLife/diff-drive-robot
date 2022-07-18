@@ -104,7 +104,7 @@ void TwoWheeledRobot::serialControl()
   }
 }
 
-void TwoWheeledRobot::goCircle(float radius, int ptsNum):
+void TwoWheeledRobot::goCircle(float radius, int ptsNum)
 {
   float x0 = 0.0;
   float y0 = 0.0;
