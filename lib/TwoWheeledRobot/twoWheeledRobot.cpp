@@ -113,10 +113,12 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum):
   float y;
 
   float dPhi = 2.0*3.141593 / ptsNum;
-  for(int i=0; i <= ptsNum; i++):
+  for(int i=0; i <= ptsNum; i++)
+  {
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
+  }
 }
 
 // ====================== robot behavior ===================== //
