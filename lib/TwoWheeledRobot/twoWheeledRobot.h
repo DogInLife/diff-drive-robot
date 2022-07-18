@@ -6,6 +6,7 @@
 #include "pid.h"
 #include "velocity.h"
 #include "position.h"
+#include "math.h"
 
 
 class TwoWheeledRobot
@@ -44,6 +45,7 @@ public:
     
 // ========= behavior ===========
     void serialControl();
+    void goCircle(float radius, int ptsNum);
     void goToGoal(float x_d, float y_d, float dt);
     void manualControl(float dt);
 
