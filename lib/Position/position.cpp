@@ -24,5 +24,5 @@ void Position::computeCurentPose(float D_L, float D_R, float D_C, float L)
     x = D_C * cos_th;   
     y = D_C * sin_th;
     theta = (D_R-D_L)/L;
-    thetaGoal = atan2(yGoal - y, xGoal - x);
+    thetaGoal = atan2(yGoal-y, xGoal-x);
 }
