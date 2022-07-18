@@ -148,7 +148,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
   float err = 0;
   
 
-  while(!reachedGoal)
+  while(!reachedGoal && !globalStop)
   {
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     
