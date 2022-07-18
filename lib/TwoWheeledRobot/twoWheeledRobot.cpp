@@ -112,6 +112,8 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
   float x;
   float y;
 
+  bool isGoal = false;
+
   float dPhi = 2.0*3.141593 / ptsNum;
   for(int i=0; i <= ptsNum; i++)
   {
@@ -124,7 +126,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
 
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
-void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
+void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isGoal, float dt)
 {
   //Расчет угла, на котором расположена целевая точка
   pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
@@ -144,8 +146,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
 
-    String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
-    Serial.println(msg_vel);
+    // String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
+    // Serial.println(msg_vel);
 
 
     //Расчет скоростей для каждого двигателя
@@ -176,8 +178,11 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, float dt)
 
     if(reachedGoal)
     {
-      stopMoving();
-      break;
+      if(isFinal)
+      {
+        stopMoving();
+        break;
+      }
     }
     
     if (DEBUG_PLOT){
