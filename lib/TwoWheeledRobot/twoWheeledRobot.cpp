@@ -150,6 +150,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
   while(!reachedGoal && !globalStop)
   {
+    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     
     vel.ang = pid->computeControl(err, dt/1000);
@@ -417,10 +419,10 @@ void TwoWheeledRobot::manualControl(float dt)
         stopMoving();
       break;
       case ('d'):
-        turnRight(vel, 0);
+        turnRight(vel, -vel);
       break;
       case ('a'):
-        turnLeft(0, vel);
+        turnLeft(-vel, vel);
       break;
       case ('e'):
         // turnRight(100, -50);

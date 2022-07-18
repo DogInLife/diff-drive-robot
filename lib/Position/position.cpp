@@ -10,7 +10,7 @@ void Position::computeCurentPose(float D_L, float D_R, float D_C, float L)
 {   
     float cos_th = 0.0;
     float sin_th = 0.0;
-    if (theta == 3.1415/2)
+    if (theta == 3.141593/2)
         cos_th = 0.0;
     else
         cos_th = cos(theta);
