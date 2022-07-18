@@ -100,6 +100,11 @@ void TwoWheeledRobot::serialControl()
           Serial.println("====== Circle trajectory ======");
           goCircle(1.0, 16);
           break;
+
+        case ('r'):
+          Serial.println(" ===== Rotation test ===== ");
+          rot_test(60, 50, false);
+          break;
       }
   }
 }

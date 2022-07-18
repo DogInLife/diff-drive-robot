@@ -7,7 +7,7 @@
 #define WHEEL_RADIUS 0.045  //m
 #define BASE_LENGTH 0.285   //m
 
-#define MAX_VELOCITY 60  // об/мин у двигателей
+#define MAX_VELOCITY 150  // об/мин у двигателей
 
 // Номера пинов на I2С мультиплексоре для энкодеров
 #define ENCODER_PIN_R 2
