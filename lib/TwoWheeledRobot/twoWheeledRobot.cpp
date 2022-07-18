@@ -437,14 +437,15 @@ void TwoWheeledRobot::manualControl(float dt)
       break;
     }
 
-    // float distWheelL = motorBlockL->getTraveledDistance();
-    // float distWheelR = motorBlockR->getTraveledDistance();
-    // float distWheelC = (distWheelR + distWheelL) / 2;
+    float distWheelL = motorBlockL->getTraveledDistance();
+    float distWheelR = motorBlockR->getTraveledDistance();
+    float distWheelC = (distWheelR + distWheelL) / 2;
 
-    // pos.computeCurentPose(distWheelL, distWheelR, distWheelC, baseLength);
+    pos.computeCurentPose(distWheelL, distWheelR, distWheelC, baseLength);
 
-    // String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3);
-    // Serial.println(msg_enc);
+    String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3);
+    Serial.println(msg_enc);
+    
     delay(dt);
   }
 }
