@@ -443,9 +443,9 @@ void TwoWheeledRobot::manualControl(float dt)
 
     pos.computeCurentPose(distWheelL, distWheelR, distWheelC, baseLength);
 
-    String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3);
+    String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3) + " " + String(pos.theta);
     Serial.println(msg_enc);
-    
+
     delay(dt);
   }
 }
