@@ -6,6 +6,8 @@ byte del = 50; // задержка
 int whl_vel_des = 60; // скорость колеса [об/мин]
 bool deb = false; // флаг типа дебаггинга
 
+//float R = 0.5;
+
 float KpL = 0.0;
 float KiL = 0.0;
 float KdL = 0.0;

@@ -267,7 +267,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 {
 
   float radius = getRadiusWheels();
-  float R = 1.0;
+  float R = 0.5;
   float L = baseLength;
 
   if(deb)
