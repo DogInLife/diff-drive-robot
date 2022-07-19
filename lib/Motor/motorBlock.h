@@ -38,6 +38,7 @@ public:
     float getRadiusWheels();
     float getTraveledDistance();
     float getRotAngle(); // #############
+    float getDeltaAngle(); // ############
     
 };
 #endif // MOTOR_H

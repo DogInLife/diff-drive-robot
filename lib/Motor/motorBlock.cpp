@@ -79,23 +79,50 @@ float MotorBlock::getRotAngle()
 }
 // ################################################################
 
+float MotorBlock::getDeltaAngle() // угол поворота колеса за время между определением позиции робота
+{
+    float ovAng_prev = encoder->overallTurnEnc_k0; // число пройденных делений в предыдущий момент
+    float ovAng_curr = encoder->getOverallTurn(); // число пройденных делений в текущий момент
+    float deltaTurn = (ovAng_curr - ovAng_prev) / 4095.0; // переход от делений к оборотам
 
-float MotorBlock::getTraveledDistance()
-{   
-    float ovTurn_k0 = encoder->overallTurnEnc_k0;
-    float ovTurn_k1 = encoder->getOverallTurn();
-    float R = getRadiusWheels();
-
-
-    // Расчет пройденного расстояния колесом
-    distanceTraveled_k1 = distanceTraveled_k0 + 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
-    // distanceTraveled_k1 = 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
-
-    // Обновление значений
-    distanceTraveled_k0 = distanceTraveled_k1; // по пройденному расстоянию
-    encoder->overallTurnEnc_k0 = ovTurn_k1;    // по абсолютному улглу энкодера
-
-    return distanceTraveled_k1;
+    return 2.0*3.141593*deltaTurn; // радианы
 }
+
+
+// float MotorBlock::getTraveledDistance()
+// {   
+//     float ovTurn_k0 = encoder->overallTurnEnc_k0;
+//     float ovTurn_k1 = encoder->getOverallTurn();
+//     float R = getRadiusWheels();
+
+
+//     // Расчет пройденного расстояния колесом
+//     distanceTraveled_k1 = distanceTraveled_k0 + 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
+//     // distanceTraveled_k1 = 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
+
+//     // Обновление значений
+//     distanceTraveled_k0 = distanceTraveled_k1; // по пройденному расстоянию
+//     encoder->overallTurnEnc_k0 = ovTurn_k1;    // по абсолютному улглу энкодера
+
+//     return distanceTraveled_k1;
+// }
+
+// float MotorBlock::getTraveledDistance()
+// {   
+//     float ovTurn_k0 = encoder->overallTurnEnc_k0;
+//     float ovTurn_k1 = encoder->getOverallTurn();
+//     float R = getRadiusWheels();
+
+
+//     // Расчет пройденного расстояния колесом
+//     //distanceTraveled_k1 = distanceTraveled_k0 + 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
+//     deltaDist = 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
+
+//     // Обновление значений
+//     //distanceTraveled_k0 = distanceTraveled_k1; // по пройденному расстоянию
+//     encoder->overallTurnEnc_k0 = ovTurn_k1;    // по абсолютному улглу энкодера
+
+//     return deltaDist;
+// }
 
 

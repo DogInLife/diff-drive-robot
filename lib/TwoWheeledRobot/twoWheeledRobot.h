@@ -45,9 +45,9 @@ public:
     void tunePID(float Kp, float Ki, float Kd);
     
 // ========= behavior ===========
-    void serialControl();
-    void goCircle(float radius, int ptsNum);
-    void goToGoal(float x_d, float y_d, bool isFinish, float dt);
+    void serialControl(bool deb);
+    void goCircle(float radius, int ptsNum, bool deb);
+    void goToGoal(float x_d, float y_d, bool isFinish, float dt, bool deb);
     void manualControl(float dt);
 
     void rot_test(int whl_vel_des, byte del, bool deb); // ####################################

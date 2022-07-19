@@ -31,7 +31,7 @@ void TwoWheeledRobot::createWheels(float wheelRadius, float baseLength, float ma
   this->baseLength = baseLength;
   // vel.max = 6.28/60*wheelRadius*maxVel;
   vel.maxWheel = maxVel; // макс. скорость вращения колёс [об/мин]
-  vel.maxRobot = maxVel * wheelRadius; //* 2.0 * 3.141593 / 60.0; // макс. линейная скорость робота [м/с]
+  vel.maxRobot = maxVel * 2.0 * 3.141593 * wheelRadius / 60.0; // макс. линейная скорость робота [м/с]
   if (DEBUG){
     Serial.print("vel.max: "); Serial.println(vel.maxWheel);
   }
@@ -79,7 +79,7 @@ byte TwoWheeledRobot::getSerialData()
 // }
 
 
-void TwoWheeledRobot::serialControl()
+void TwoWheeledRobot::serialControl(bool deb)
 {
   while (true)
   {
@@ -93,23 +93,23 @@ void TwoWheeledRobot::serialControl()
 
         case ('g'):
           Serial.println("========= GO GO GO =========");
-          goToGoal(1, 1, true, 50);
+          goToGoal(1, 1, true, 50, deb);
           break;
         
         case ('t'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(1.0, 16);
+          goCircle(0.5, 16, deb);
           break;
 
         case ('r'):
           Serial.println(" ===== Rotation test ===== ");
-          rot_test(90, 50, false);
+          rot_test(90, 50, deb);
           break;
       }
   }
 }
 
-void TwoWheeledRobot::goCircle(float radius, int ptsNum)
+void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 {
   float x0 = 0.0;
   float y0 = 0.0;
@@ -126,7 +126,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isFinish, 50);
+    goToGoal(x, y, isFinish, 50, deb);
     if(globalStop) 
     { 
       Serial.println(" ==== GLOBAL STOP ==== ");
@@ -137,25 +137,34 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum)
 
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
-void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt)
+void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt, bool deb)
 {
 
   reachedGoal = false;
 
+  // поворот колёс за время между оценкой положения робота
+  float deltaAngL;
+  float deltaAngR;
+
+  // скорректированные скорости колёс
+  float velL;
+  float velR;
+
   //Расчет угла, на котором расположена целевая точка
   pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+
   if (DEBUG){
     Serial.print("pos.thetaGoal: "); Serial.println(pos.thetaGoal); // ----- TEST
   }
 
-  float R = getRadiusWheels();
+  float r = getRadiusWheels();
   float L = baseLength;
-  float err = 0;
+  float err = 0.0;
   
 
   while(!reachedGoal && !globalStop)
   {
-    // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     Serial.println("Err theta: " + String(err, 3));
@@ -163,22 +172,28 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
 
-    // String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
-    // Serial.println(msg_vel);
+    String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
+    Serial.println(msg_vel);
 
+    //Расчет скоростей для каждого двигателя в об/мин
+    velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
+    velR = ((2.0 * vel.lin + vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
 
-    //Расчет скоростей для каждого двигателя
-    float velR = (2*vel.lin + vel.ang*L)/(2*R);
-    float velL = (2*vel.lin - vel.ang*L)/(2*R);
+    // motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
+    // motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 
-    motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
-    motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
+    if(!deb)
+    {
+      goForward(velL, velR);
+    }
 
-    float distWheelL = motorBlockL->getTraveledDistance();
-    float distWheelR = motorBlockR->getTraveledDistance();
-    float distWheelC = (distWheelR+distWheelL) / 2;
+    //float distWheelL = motorBlockL->getTraveledDistance();
+    //float distWheelR = motorBlockR->getTraveledDistance();
+    //float distWheelC = (distWheelR+distWheelL) / 2;
+    //pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
 
-    pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
+    deltaAngL = motorBlockL->getDeltaAngle();
+    deltaAngR = motorBlockR->getDeltaAngle();
 
     String msg_pos = "X pos: " + String(pos.x, 3) + " Y pos: " + String(pos.y, 3);
     Serial.println(msg_pos);
