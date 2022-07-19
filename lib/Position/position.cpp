@@ -35,39 +35,33 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     float cos_th = 0.0;
     float sin_th = 0.0;
 
-    bool infCurveR = false;
-
-    if (theta == 3.141593/2)
+    if(theta == 3.141593/2)
         cos_th = 0.0;
     else
         cos_th = cos(theta);
     
-    if (theta == 0.0)
+    if(theta == 0.0)
         sin_th = 0.0;
     else
         sin_th = sin(theta);
 
-    // float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
-    // float curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L));
-    
-    // // изменение координат в собственной СК
-    // float dXR = curveR * sin(deltaTheta); 
-    // float dYR = curveR * (1 - cos(deltaTheta));
+    // перемещения вдоль осей в собственной СК робота
+    float dXR;
+    float dYR;
 
-    // // изменение координат в глобальной СК
-    // float deltaX = dXR * cos(theta) - dYR * sin(theta);
-    // float deltaY = dXR * sin(theta) + dYR * cos(theta);
+    // перемещения вдоль осей в глобольной СК
+    float deltaX;
+    float deltaY;
 
     float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
     float curveR;
-    if(fabs(deltaTheta) < 0.01)
-    {
-        infCurveR = true;
-        curveR = 777; // )))0
-    }
+    bool infCurveR = false;
 
-    else 
-        curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L)); // ОБРАБОТАТЬ ДЕЛЕНИЕ НА НОЛЬ
+    if(fabs(deltaTheta) < 0.01)
+        infCurveR = true;
+        //curveR = 777; // )))0
+
+    else curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L)); // ОБРАБОТАТЬ ДЕЛЕНИЕ НА НОЛЬ
 
     float cos_dth = 0.0;
     float sin_dth = 0.0;
@@ -76,28 +70,31 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     {
         cos_dth = 1.0;
         sin_dth = 0.0;
+        
+        deltaX = ((deltaAng_R + deltaAng_R) * r / 2.0) * cos_th;
+        deltaY = ((deltaAng_R + deltaAng_L) * r / 2.0) * sin_th;
     } 
-
+    
     else
     {
-        if (deltaTheta == 3.141593/2)
+        if(deltaTheta == 3.141593/2)
             cos_dth = 0.0;
         else
             cos_dth = cos(deltaTheta);
     
-        if (deltaTheta == 0.0)
+        if(deltaTheta == 0.0)
             sin_dth = 0.0;
         else
             sin_dth = sin(deltaTheta);
-    }
-    
-    // изменение координат в собственной СК
-    float dXR = curveR * sin_dth; 
-    float dYR = curveR * (1 - cos_dth);
 
-    // изменение координат в глобальной СК
-    float deltaX = dXR * cos_th - dYR * sin_th;
-    float deltaY = dXR * sin_th + dYR * cos_th;
+        // изменение координат в собственной СК
+        dXR = curveR * sin_dth;
+        dYR = curveR * (1 - cos_dth);
+
+        // изменение координат в глобальной СК
+        deltaX = dXR * cos_th - dYR * sin_th;
+        deltaY = dXR * sin_th + dYR * cos_th;
+    }
 
     x = x + deltaX;
     y = y + deltaY;
