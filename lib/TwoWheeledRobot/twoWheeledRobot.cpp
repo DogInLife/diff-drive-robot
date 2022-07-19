@@ -153,9 +153,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
   //Расчет угла, на котором расположена целевая точка
   pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
 
-  if (DEBUG){
-    Serial.print("pos.thetaGoal: "); Serial.println(pos.thetaGoal); // ----- TEST
-  }
+  // if (DEBUG){
+  //   Serial.print("pos.thetaGoal: "); Serial.println(pos.thetaGoal); // ----- TEST
+  // }
 
   float r = getRadiusWheels();
   float L = baseLength;
@@ -208,7 +208,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
       reachedGoal = true;
     }
 
-
     if(reachedGoal)
     {
       if(isFinish)
@@ -218,36 +217,36 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
       } else { break; }
     }
     
-    if (DEBUG_PLOT){
-      Serial.print("$");
-      Serial.print(pos.x, 3);Serial.print(" ");Serial.print(pos.y, 3);
-      Serial.println(";");
-    }
-    if (DEBUG){
-      Serial.print("err: "); Serial.println(err, 3);
-    }
-    if (DEBUG){
-      Serial.print("$"); Serial.print(err); Serial.println(";");
-    }
-    if (DEBUG){
-      Serial.print("angVel: "); Serial.print(vel.ang);
-      Serial.print("  linVel: "); Serial.println(vel.lin);
-    }
-    if (DEBUG){
-      Serial.print("velL: "); Serial.print(velL);
-      Serial.print("  velR: "); Serial.println(velR);
-    }
-    if (DEBUG){
-      Serial.print("distWheelL: "); Serial.print(distWheelL, 3);
-      Serial.print("  distWheelR: "); Serial.print(distWheelR, 3);
-      Serial.print("  distWheelC: "); Serial.println(distWheelC, 3);
-    }
-    if (DEBUG){
-      Serial.print("X: "); Serial.print(pos.x, 3);
-      Serial.print("  Y: "); Serial.print(pos.y, 3);
-      Serial.print("  Th: "); Serial.println(pos.theta, 3);
-      Serial.println("  -------  ");
-    }
+    // if (DEBUG_PLOT){
+    //   Serial.print("$");
+    //   Serial.print(pos.x, 3);Serial.print(" ");Serial.print(pos.y, 3);
+    //   Serial.println(";");
+    // }
+    // if (DEBUG){
+    //   Serial.print("err: "); Serial.println(err, 3);
+    // }
+    // if (DEBUG){
+    //   Serial.print("$"); Serial.print(err); Serial.println(";");
+    // }
+    // if (DEBUG){
+    //   Serial.print("angVel: "); Serial.print(vel.ang);
+    //   Serial.print("  linVel: "); Serial.println(vel.lin);
+    // }
+    // if (DEBUG){
+    //   Serial.print("velL: "); Serial.print(velL);
+    //   Serial.print("  velR: "); Serial.println(velR);
+    // }
+    // if (DEBUG){
+    //   Serial.print("distWheelL: "); Serial.print(distWheelL, 3);
+    //   Serial.print("  distWheelR: "); Serial.print(distWheelR, 3);
+    //   Serial.print("  distWheelC: "); Serial.println(distWheelC, 3);
+    // }
+    // if (DEBUG){
+    //   Serial.print("X: "); Serial.print(pos.x, 3);
+    //   Serial.print("  Y: "); Serial.print(pos.y, 3);
+    //   Serial.print("  Th: "); Serial.println(pos.theta, 3);
+    //   Serial.println("  -------  ");
+    // }
     
     // Serial.println(checkCurrent(PIN_CURRENT_SENSOR));
     // Serial.println(i);
