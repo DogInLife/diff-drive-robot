@@ -194,6 +194,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
     deltaAngL = motorBlockL->getDeltaAngle();
     deltaAngR = motorBlockR->getDeltaAngle();
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
     String msg_pos = "X pos: " + String(pos.x, 3) + " Y pos: " + String(pos.y, 3);
     Serial.println(msg_pos);

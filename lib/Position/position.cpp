@@ -44,5 +44,5 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
 
     x += deltaX;
     y += deltaY;
-    theta += deltaTheta
+    theta += deltaTheta;
 }
