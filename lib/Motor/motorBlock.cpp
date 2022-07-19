@@ -85,6 +85,8 @@ float MotorBlock::getDeltaAngle() // угол поворота колеса за
     float ovAng_curr = encoder->getOverallTurn(); // число пройденных делений в текущий момент
     float deltaTurn = (ovAng_curr - ovAng_prev) / 4095.0; // переход от делений к оборотам
 
+    encoder->overallTurnEnc_k0 = ovAng_curr;
+
     return 2.0*3.141593*deltaTurn; // радианы
 }
 

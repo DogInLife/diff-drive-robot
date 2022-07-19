@@ -60,7 +60,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
 
     float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
     float curveR;
-    if(fabs(deltaTheta) < 0.001)
+    if(fabs(deltaTheta) < 0.01)
     {
         infCurveR = true;
         curveR = 777; // )))0
@@ -71,7 +71,6 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
 
     float cos_dth = 0.0;
     float sin_dth = 0.0;
-
 
     if(infCurveR)
     {
