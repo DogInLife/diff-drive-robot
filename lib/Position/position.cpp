@@ -35,6 +35,8 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     float cos_th = 0.0;
     float sin_th = 0.0;
 
+    bool infCurveR = false;
+
     if (theta == 3.141593/2)
         cos_th = 0.0;
     else
@@ -59,22 +61,32 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
     float curveR;
     if(fabs(deltaTheta) < 0.001)
-        curveR = 1000000;
+        infCurveR = true;
+        curveR = 777; // )))0
     else 
         curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L)); // ОБРАБОТАТЬ ДЕЛЕНИЕ НА НОЛЬ
 
     float cos_dth = 0.0;
     float sin_dth = 0.0;
 
-    if (deltaTheta == 3.141593/2)
-        cos_dth = 0.0;
-    else
-        cos_dth = cos(deltaTheta);
-    
-    if (deltaTheta == 0.0)
+
+    if(infCurveR)
+    {
+        cos_dth = 1.0;
         sin_dth = 0.0;
+    } 
+    
     else
-        sin_dth = sin(deltaTheta);
+    {
+        if (deltaTheta == 3.141593/2)
+            cos_dth = 0.0;
+        else
+            cos_dth = cos(deltaTheta);
+    
+        if (deltaTheta == 0.0)
+            sin_dth = 0.0;
+        else
+            sin_dth = sin(deltaTheta);
     
     // изменение координат в собственной СК
     float dXR = curveR * sin_dth; 
