@@ -293,10 +293,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 
   float dqL_des = (omg - L/2.0)/radius; // желаемая скорость вращения левого колеса [об/мин]
   float dqR_des = (omg + L/2.0)/radius; 
-  if(deb)
-  {
-    Serial.println("dqL_des: " + String(dqL_des, 3) + " dqR_des: " + String(dqR_des, 3));
-  }
+
+  Serial.println("dqL_des: " + String(dqL_des, 3) + " dqR_des: " + String(dqR_des, 3));
 
   // ошибки
   float qL_err = 0.0;
