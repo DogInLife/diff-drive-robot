@@ -202,7 +202,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     Serial.println(msg_pos);
  
 
-    if((abs(pos.x-xGoal) < 0.10) && (abs(pos.y-yGoal) < 0.10))
+    if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
     {
       Serial.println("PT REACHED");
       Serial.print("err_X: "); Serial.print(pos.x-xGoal, 3);
