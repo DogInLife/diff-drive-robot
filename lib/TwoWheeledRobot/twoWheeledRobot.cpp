@@ -399,20 +399,20 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
         goForward(whl_velL, whl_velR);
       }
 
-      if(abs(q_des) >= 9.975)
-      {
-        Serial.println("Stopping");
-        stopMoving();
+      // if(abs(q_des) >= 9.975)
+      // {
+      //   Serial.println("Stopping");
+      //   stopMoving();
 
-        qL_curr = motorBlockL->getRotAngle();
-        qR_curr = motorBlockR->getRotAngle();
-        t_curr = millis() - start;
-        String msg_ang = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr);
-        Serial.println(msg_ang);
+      //   qL_curr = motorBlockL->getRotAngle();
+      //   qR_curr = motorBlockR->getRotAngle();
+      //   t_curr = millis() - start;
+      //   String msg_ang = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr);
+      //   Serial.println(msg_ang);
 
-        isMoving = false;
-        isReady = false;
-      }
+      //   isMoving = false;
+      //   isReady = false;
+      // }
 
       qL_prev = qL_curr;
       qR_prev = qR_curr;
