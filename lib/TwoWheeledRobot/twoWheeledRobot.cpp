@@ -270,10 +270,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
   float R = 0.5;
   float L = baseLength;
 
-  if(deb)
-  {
-    Serial.println("radius: " + String(radius, 3) + " R: " + String(R, 2) + " L: " + String(L, 3));
-  }
+  Serial.println("radius: " + String(radius, 3) + " R: " + String(R, 2) + " L: " + String(L, 3));
 
   bool isReady = false;
   bool isMoving = false;
