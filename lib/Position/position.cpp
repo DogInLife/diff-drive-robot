@@ -100,8 +100,8 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     y = y + deltaY;
     
     float nextTheta = theta + deltaTheta;
-    if(newTheta > 3.141593) theta = nextTheta - 2*3.141593;
-    else if(newTheta < -3.141593) theta = newTheta + 2*3.141593;
-    else theta = newTheta; 
+    if(nextTheta > 3.141593) theta = nextTheta - 2*3.141593;
+    else if(nextTheta < -3.141593) theta = nextTheta + 2*3.141593;
+    else theta = nextTheta; 
 
 }
