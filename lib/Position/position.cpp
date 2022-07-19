@@ -32,29 +32,53 @@ void Position::computeCurentPose(float D_L, float D_R, float D_C, float L)
 void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, float L)
 {
 
-    // float cos_th = 0.0;
-    // float sin_th = 0.0;
+    float cos_th = 0.0;
+    float sin_th = 0.0;
 
-    // if (theta == 3.141593/2)
-    //     cos_th = 0.0;
-    // else
-    //     cos_th = cos(theta);
+    if (theta == 3.141593/2)
+        cos_th = 0.0;
+    else
+        cos_th = cos(theta);
     
-    // if (theta == 0.0)
-    //     sin_th = 0.0;
-    // else
-    //     sin_th = sin(theta);
+    if (theta == 0.0)
+        sin_th = 0.0;
+    else
+        sin_th = sin(theta);
+
+    // float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
+    // float curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L));
+    
+    // // изменение координат в собственной СК
+    // float dXR = curveR * sin(deltaTheta); 
+    // float dYR = curveR * (1 - cos(deltaTheta));
+
+    // // изменение координат в глобальной СК
+    // float deltaX = dXR * cos(theta) - dYR * sin(theta);
+    // float deltaY = dXR * sin(theta) + dYR * cos(theta);
 
     float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
-    float curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L));
+    float curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L)); // ОБРАБОТАТЬ ДЕЛЕНИЕ НА НОЛЬ
+ 
+    float cos_dth = 0.0;
+    float sin_dth = 0.0;
+
+    if (deltaTheta == 3.141593/2)
+        cos_dth = 0.0;
+    else
+        cos_dth = cos(deltaTheta);
+    
+    if (deltaTheta == 0.0)
+        sin_dth = 0.0;
+    else
+        sin_dth = sin(deltaTheta);
     
     // изменение координат в собственной СК
-    float dXR = curveR * sin(deltaTheta); 
-    float dYR = curveR * (1 - cos(deltaTheta));
+    float dXR = curveR * sin_dth; 
+    float dYR = curveR * (1 - cos_dth);
 
     // изменение координат в глобальной СК
-    float deltaX = dXR * cos(theta) - dYR * sin(theta);
-    float deltaY = dXR * sin(theta) + dYR * cos(theta);
+    float deltaX = dXR * cos_th - dYR * sin_th;
+    float deltaY = dXR * sin_th + dYR * cos_th;
 
     x = x + deltaX;
     y = y + deltaY;
