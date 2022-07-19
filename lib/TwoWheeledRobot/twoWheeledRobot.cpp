@@ -265,6 +265,16 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 // ############## Прямолинейное движение в пид-контроллером углов поворота колёс ###############
 void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 {
+
+  float radius = getRadiusWheels();
+  float R = 1.0;
+  float L = baseLength;
+
+  if(deb)
+  {
+    Serial.println("radius: " + String(radius, 3) + " R: " + String(R, 2) + " L: " + String(L, 3));
+  }
+
   bool isReady = false;
   bool isMoving = false;
 
@@ -276,17 +286,26 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
   float qR_prev = 0.0; // предыдущий измеренный угол поворота правого колеса
   int t_prev = 0; // предыдущий момент времени
 
+  float omg = whl_vel_des*radius/R;
+  
   float dqL = 0.0; // скорость вращения левого колеса
   float dqR = 0.0; // скорость вращения правого колеса
 
-  float q_des; // желаемый угол поворота колеса [град]
-  float dq_des; // желаемая скорость вращения колёс [об/мин]
+  float qL_des; // желаемый угол поворота левого колеса [об]
+  float qR_des;
+
+  float dqL_des = (omg - L/2.0)/radius; // желаемая скорость вращения левого колеса [об/мин]
+  float dqR_des = (omg + L/2.0)/radius; 
+  if(deb)
+  {
+    Serial.println("dqL_des: " + String(dqL_des, 3) + " dqR_des: " + String(dqR_des, 3));
+  }
 
   // ошибки
   float qL_err = 0.0;
   float qR_err = 0.0;
-  float dqL_err = 0.0;
-  float dqR_err = 0.0;
+  //float dqL_err = 0.0;
+  //float dqR_err = 0.0;
 
   float uL = 0.0;
   float uR = 0.0;
@@ -307,17 +326,17 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
         isReady = true;
         isMoving = true;
         start = millis();
-        dq_des = whl_vel_des;
-        goForward(dq_des, dq_des);
+        //dq_des = whl_vel_des;
+        goForward(dqL_des, dqR_des);
         break;
 
-      case('x'):
-        isReady = true;
-        isMoving = true;
-        start = millis();
-        dq_des = -whl_vel_des;
-        goForward(dq_des, dq_des);
-        break;
+      // case('x'):
+      //   isReady = true;
+      //   isMoving = true;
+      //   start = millis();
+      //   //dq_des = -whl_vel_des;
+      //   goForward(-dqL_des, -dqR_des);
+      //   break;
 
       case('s'):
         stopMoving();
@@ -337,16 +356,19 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
 
       t_curr = millis() - start;
 
-      q_des = dq_des * t_curr / 60000.0; // желаемый угол [об]
+      //q_des = dq_des * t_curr / 60000.0; // желаемый угол [об]
       
+      qL_des = dqL_des * t_curr / 60000.0;
+      qR_des = dqR_des * t_curr / 60000.0;
+
       dt = (t_curr - t_prev) / 60000.0; // промежуток между замерами [мин]
 
       // оценка измеренной скорости вращения колёс [об/мин]
       dqL = (qL_curr - qL_prev) / dt;
       dqR = (qR_curr - qR_prev) / dt;
 
-      qL_err = q_des - qL_curr;
-      qR_err = q_des - qR_curr;
+      qL_err = qL_des - qL_curr;
+      qR_err = qR_des - qR_curr;
 
       dqL_err = dq_des - dqL;
       dqR_err = dq_des - dqR;
@@ -357,19 +379,19 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
       uL = pidL->computeControl(qL_err, dt);
       uR = pidR->computeControl(qR_err, dt);
 
-      whl_velL = dq_des + uL;
-      whl_velR = dq_des + uR;
+      whl_velL = dqL_des + uL;
+      whl_velR = dqR_des + uR;
 
       if(deb)
       {
         String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
         Serial.println(msg_u);
 
-        int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
-        int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
-        int pwm_des = map(abs(dq_des), 0, 150, 0, 255);
-        String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
-        Serial.println(msg_pwm);
+        // int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
+        // int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
+        // int pwm_des = map(abs(dq_des), 0, 150, 0, 255);
+        // String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
+        // Serial.println(msg_pwm);
       } 
       
       else 
