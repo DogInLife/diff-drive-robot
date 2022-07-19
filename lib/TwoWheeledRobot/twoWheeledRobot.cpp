@@ -32,9 +32,9 @@ void TwoWheeledRobot::createWheels(float wheelRadius, float baseLength, float ma
   // vel.max = 6.28/60*wheelRadius*maxVel;
   vel.maxWheel = maxVel; // макс. скорость вращения колёс [об/мин]
   vel.maxRobot = maxVel * 2.0 * 3.141593 * wheelRadius / 60.0; // макс. линейная скорость робота [м/с]
-  if (DEBUG){
-    Serial.print("vel.max: "); Serial.println(vel.maxWheel);
-  }
+  // if (DEBUG){
+  //   Serial.print("vel.max: "); Serial.println(vel.maxWheel);
+  // }
 }
 
 
@@ -164,7 +164,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
   while(!reachedGoal && !globalStop)
   {
-    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+    //Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     Serial.println("Err theta: " + String(err, 3));
@@ -172,8 +172,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
 
-    String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
-    Serial.println(msg_vel);
+    // String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
+    // Serial.println(msg_vel);
 
     //Расчет скоростей для каждого двигателя в об/мин
     velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
