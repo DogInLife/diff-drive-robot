@@ -58,7 +58,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
 
     float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
     float curveR;
-    if(abs(deltaTheta) < 0.001)
+    if(fabs(deltaTheta) < 0.001)
         curveR = 1000000;
     else 
         curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L)); // ОБРАБОТАТЬ ДЕЛЕНИЕ НА НОЛЬ
