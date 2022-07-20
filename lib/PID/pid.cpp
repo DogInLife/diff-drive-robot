@@ -21,7 +21,10 @@ float PID::computeControl(float err, float dt)
 
 float PID::computeAngleError(float thetaGoal, float theta)
 {
-    return thetaGoal - theta;
+    float err = thetaGoal - theta;
+    if(err > 3.141593) return err - 2*3.141593;
+    else if(err < -3.141593) return err + 2*3.141593;
+    else return err;
 }
 
 void PID::setCoefficient(float Kp, float Ki, float Kd)
