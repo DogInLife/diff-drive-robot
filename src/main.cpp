@@ -23,8 +23,8 @@ void setup() {
   robot.setDriverPins(DRIVER_PWM_PIN_A, DRIVER_IN_A2, DRIVER_IN_A1 , DRIVER_IN_B1, DRIVER_IN_B2,  DRIVER_PWM_PIN_B);
   //robot.tunePID(5.3, 4.8, 0);
   //robot.tunePID(0.7, 1.5, 0.0);
-  robot.tunePID(4, 1.5, 0); // РАБОТАЕТ НА КРУГЕ (ну так)
-  robot.tunePID(3, 2, 0);
+  //robot.tunePID(4, 1.5, 0); // РАБОТАЕТ НА КРУГЕ (ну так)
+  robot.tunePID(3, 1.5, 0);
 // ====== Д Л Я  120 ОБ/МИН ======
 //   KpL = 600.0;
 //   KiL = 12000.0;
