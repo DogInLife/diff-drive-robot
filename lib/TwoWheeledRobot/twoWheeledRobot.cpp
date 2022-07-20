@@ -126,7 +126,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isFinish, 100, deb);
+    goToGoal(x, y, isFinish, 50, deb);
     if(globalStop) 
     { 
       Serial.println(" ==== GLOBAL STOP ==== ");
@@ -176,8 +176,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
 
-    // String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
-    // Serial.println(msg_vel);
+    String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
+    Serial.println(msg_vel);
 
     //Расчет скоростей для каждого двигателя в об/мин
     velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
