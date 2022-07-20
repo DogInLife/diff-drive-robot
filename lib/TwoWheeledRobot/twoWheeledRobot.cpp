@@ -126,7 +126,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isFinish, 50, deb);
+    goToGoal(x, y, isFinish, 100, deb);
     if(globalStop) 
     { 
       Serial.println(" ==== GLOBAL STOP ==== ");
@@ -153,7 +153,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
 
   //Расчет угла, на котором расположена целевая точка
-  pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+  //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
 
   // if (DEBUG){
   //   Serial.print("pos.thetaGoal: "); Serial.println(pos.thetaGoal); // ----- TEST
@@ -166,7 +166,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
   while(!reachedGoal && !globalStop)
   {
-    //Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     //Расчет угла, на котором расположена целевая точка
     pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
