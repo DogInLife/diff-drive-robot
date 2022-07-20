@@ -98,7 +98,7 @@ void TwoWheeledRobot::serialControl(bool deb)
         
         case ('t'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(1.0, 16, deb);
+          goCircle(0.5, 16, deb);
           break;
 
         case ('r'):
@@ -214,6 +214,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     {
       if(isFinish)
       {
+        Serial.println("TARGET POINT REACHED");
         stopMoving();
         break;
       } else { break; }
