@@ -8,6 +8,6 @@ Velocity::Velocity()
 float Velocity::computeLinearSpeed()
 {
    //return maxRobot/(2*square(fabs(ang)) + 1); // =======  А ЭТУ ШТУКУ МОЖНО ИСПОЛЬЗОВАТЬ КАК-ТО ПРИ УГЛОВАТЫХ ТРАЕКТОРИЯХ
-   return maxRobot*1.5/5.0;
+   return maxRobot*2.0/5.0;
 }
 
