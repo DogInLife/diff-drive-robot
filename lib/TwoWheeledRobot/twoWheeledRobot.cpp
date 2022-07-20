@@ -98,7 +98,7 @@ void TwoWheeledRobot::serialControl(bool deb)
         
         case ('t'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(1.0, 16, deb);
+          goCircle(1.0, 24, deb);
           break;
 
         case ('r'):
@@ -168,7 +168,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
   {
     //Расчет угла, на котором расположена целевая точка
     pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
-    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+    // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     Serial.println("Err theta: " + String(err, 3));
@@ -176,8 +176,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
 
-    String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
-    Serial.println(msg_vel);
+    // String msg_vel = "Angular: " + String(vel.ang, 3) + " Linear: " + String(vel.lin, 3);
+    // Serial.println(msg_vel);
 
     //Расчет скоростей для каждого двигателя в об/мин
     velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
