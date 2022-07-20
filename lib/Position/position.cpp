@@ -61,7 +61,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
         infCurveR = true;
         //curveR = 777; // )))0
 
-    else curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L)); // ОБРАБОТАТЬ ДЕЛЕНИЕ НА НОЛЬ
+    else curveR = (L * (deltaAng_R + deltaAng_L)) / (2.0 * (deltaAng_R - deltaAng_L)); 
 
     float cos_dth = 0.0;
     float sin_dth = 0.0;
