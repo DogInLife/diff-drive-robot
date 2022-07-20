@@ -166,10 +166,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 
   while(!reachedGoal && !globalStop)
   {
-    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
-
     //Расчет угла, на котором расположена целевая точка
     pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     Serial.println("Err theta: " + String(err, 3));
