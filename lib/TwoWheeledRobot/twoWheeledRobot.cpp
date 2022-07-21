@@ -169,13 +169,13 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
-    Serial.println("Err theta: " + String(err, 3));
+    //Serial.println("Err theta: " + String(err, 3));
     
     vel.ang = pid->computeControl(err, dt/1000);
     vel.lin = vel.computeLinearSpeed();
 
-    String msg_vel = "Ang_Vel: " + String(vel.ang, 3);
-    Serial.println(msg_vel);
+    // String msg_vel = "Ang_Vel: " + String(vel.ang, 3);
+    // Serial.println(msg_vel);
 
     //Расчет скоростей для каждого двигателя в об/мин
     velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
