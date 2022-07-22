@@ -1451,15 +1451,15 @@ void MFRC522::PICC_DumpDetailsToSerial(Uid *uid	///< Pointer to Uid struct retur
 	Serial.println();
 	
 	// SAK
-	// Serial.print(F("Card SAK: ")); //#########################################################################
+	// Serial.print(F("Card SAK: ")); //###########################################################################
 	// if(uid->sak < 0x10) // #####################################################################################
-	// 	Serial.print(F("0")); //##################################################################################
-	// Serial.println(uid->sak, HEX); //##########################################################################
+	// 	Serial.print(F("0")); //###################################################################################
+	// Serial.println(uid->sak, HEX); //###########################################################################
 	
 	// (suggested) PICC type
 	PICC_Type piccType = PICC_GetType(uid->sak);
-	// Serial.print(F("PICC type: ")); // ######################################################################
-	// Serial.println(PICC_GetTypeName(piccType)); //##########################################################
+	// Serial.print(F("PICC type: ")); // #########################################################################
+	// Serial.println(PICC_GetTypeName(piccType)); //##############################################################
 } // End PICC_DumpDetailsToSerial()
 
 /**
@@ -1492,12 +1492,13 @@ void MFRC522::PICC_DumpMifareClassicToSerial(	Uid *uid,			///< Pointer to Uid st
 	}
 	
 	// Dump sectors, highest address first.
-	if (no_of_sectors) {
-		Serial.println(F("Sector Block   0  1  2  3   4  5  6  7   8  9 10 11  12 13 14 15  AccessBits"));
-		for (int8_t i = no_of_sectors - 1; i >= 0; i--) {
-			PICC_DumpMifareClassicSectorToSerial(uid, key, i);
-		}
-	}
+	// if (no_of_sectors) { // ######################################################################################
+	// 	Serial.println(F("Sector Block   0  1  2  3   4  5  6  7   8  9 10 11  12 13 14 15  AccessBits")); // #######
+	// 	for (int8_t i = no_of_sectors - 1; i >= 0; i--) { // ########################################################
+	// 		PICC_DumpMifareClassicSectorToSerial(uid, key, i); // ###################################################
+	// 	} // ########################################################################################################
+	// } // #########################################################################################################
+	
 	PICC_HaltA(); // Halt the PICC before stopping the encrypted session.
 	PCD_StopCrypto1();
 } // End PICC_DumpMifareClassicToSerial()
