@@ -33,7 +33,7 @@ TwoWheeledRobot::TwoWheeledRobot()
 
 TwoWheeledRobot::~TwoWheeledRobot()
 {
-  delete mfrc522;
+  //delete mfrc522;
 
   delete motorBlockL;
   delete motorBlockR;
