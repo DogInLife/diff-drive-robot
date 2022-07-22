@@ -1,12 +1,28 @@
 #include "twoWheeledRobot.h"
 #include "constants.h"
 
+#include <SPI.h>
+#include <MFRC522.h>
+
+#define RST_PIN         5          // Configurable, see typical pin layout above
+#define SS_PIN          53         // Configurable, see typical pin layout above
+
 TwoWheeledRobot::TwoWheeledRobot()
   :reachedGoal(false), globalStop(false),
   PIN_CURRENT_SENSOR(A12),
   inByte(0), newMinRange(0) //newMinRange(0)
 {
+  // RFID READER
+  MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+
   Serial.begin(9600);
+  while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+	SPI.begin();			// Init SPI bus
+	mfrc522.PCD_Init();		// Init MFRC522
+	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
+	mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
+	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
+
   motorBlockL = new MotorBlock();
   motorBlockR = new MotorBlock();
   pidL = new PID();
@@ -17,6 +33,8 @@ TwoWheeledRobot::TwoWheeledRobot()
 
 TwoWheeledRobot::~TwoWheeledRobot()
 {
+  delete mfrc522;
+
   delete motorBlockL;
   delete motorBlockR;
   delete pidL;
@@ -167,6 +185,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     //Расчет угла, на котором расположена целевая точка
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+
+    checkRFID();
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
@@ -491,6 +511,12 @@ void TwoWheeledRobot::manualControl(float dt)
 
     delay(dt);
   }
+}
+
+void TwoWheeledRobot::checkRFID()
+{
+  if(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())
+    mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
 }
 
 

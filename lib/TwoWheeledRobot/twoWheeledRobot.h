@@ -12,6 +12,8 @@
 class TwoWheeledRobot
 {
 private:
+    //MFRC522* mfrc522;
+
     MotorBlock* motorBlockL;
     MotorBlock* motorBlockR;
     PID* pidL;
@@ -50,6 +52,7 @@ public:
     void goToGoal(float x_d, float y_d, bool isFinish, float dt, bool deb);
     void manualControl(float dt);
 
+    void checkRFID();
     void rot_test(int whl_vel_des, byte del, bool deb); // ####################################
 
     void goForward(int velL, int velR);
