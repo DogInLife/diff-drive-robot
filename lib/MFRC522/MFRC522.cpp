@@ -1439,7 +1439,7 @@ void MFRC522::PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned fro
 void MFRC522::PICC_DumpDetailsToSerial(Uid *uid	///< Pointer to Uid struct returned from a successful PICC_Select().
 									) {
 	// UID
-	Serial.print(F("Card UID:"));
+	// Serial.print(F("Card UID:")); ##############################################################################
 	for (byte i = 0; i < uid->size; i++) {
 		if(uid->uidByte[i] < 0x10)
 			Serial.print(F(" 0"));
@@ -1450,15 +1450,15 @@ void MFRC522::PICC_DumpDetailsToSerial(Uid *uid	///< Pointer to Uid struct retur
 	Serial.println();
 	
 	// SAK
-	Serial.print(F("Card SAK: "));
-	if(uid->sak < 0x10)
-		Serial.print(F("0"));
-	Serial.println(uid->sak, HEX);
+	// Serial.print(F("Card SAK: ")); #########################################################################
+	// if(uid->sak < 0x10)#####################################################################################
+	// 	Serial.print(F("0")); ##################################################################################
+	// Serial.println(uid->sak, HEX); ##########################################################################
 	
 	// (suggested) PICC type
 	PICC_Type piccType = PICC_GetType(uid->sak);
-	Serial.print(F("PICC type: "));
-	Serial.println(PICC_GetTypeName(piccType));
+	// Serial.print(F("PICC type: ")); ######################################################################
+	// Serial.println(PICC_GetTypeName(piccType)); ##########################################################
 } // End PICC_DumpDetailsToSerial()
 
 /**
