@@ -46,7 +46,7 @@ while True:
         ser.write(data) # send to serial (arduino)
     if(ser.in_waiting > 0):
 
-        ser_recv = ser.read(ser.in_waiting).decode('ascii') # what is received from serial
+        ser_recv = ser.readline().decode('ascii') # what is received from serial
     # if ser_recv:
         print(ser_recv)
 
