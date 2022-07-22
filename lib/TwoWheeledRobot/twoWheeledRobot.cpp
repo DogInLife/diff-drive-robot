@@ -13,7 +13,7 @@ TwoWheeledRobot::TwoWheeledRobot()
   inByte(0), newMinRange(0) //newMinRange(0)
 {
   // RFID READER
-  MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+  MFRC522 mfrc522 = mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 
   Serial.begin(9600);
   while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
