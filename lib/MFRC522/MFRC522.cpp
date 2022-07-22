@@ -1429,7 +1429,7 @@ void MFRC522::PICC_DumpToSerial(Uid *uid	///< Pointer to Uid struct returned fro
 			break; // No memory dump here
 	}
 	
-	// Serial.println(); // #######################################################################################
+	Serial.println(); // #######################################################################################
 	PICC_HaltA(); // Already done if it was a MIFARE Classic PICC.
 } // End PICC_DumpToSerial()
 
@@ -1457,7 +1457,7 @@ void MFRC522::PICC_DumpDetailsToSerial(Uid *uid	///< Pointer to Uid struct retur
 	// Serial.println(uid->sak, HEX); //###########################################################################
 	
 	// (suggested) PICC type
-	PICC_Type piccType = PICC_GetType(uid->sak);
+	// PICC_Type piccType = PICC_GetType(uid->sak); // ############################################################
 	// Serial.print(F("PICC type: ")); // #########################################################################
 	// Serial.println(PICC_GetTypeName(piccType)); //##############################################################
 } // End PICC_DumpDetailsToSerial()
