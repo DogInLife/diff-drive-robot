@@ -10,7 +10,7 @@ RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
 // }
 
 void RFIDReader::readerStart() {
-	while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+	while(!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	SPI.begin();			// Init SPI bus
 	reader->PCD_Init();		// Init MFRC522
 	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
@@ -19,7 +19,13 @@ void RFIDReader::readerStart() {
 }
 
 void RFIDReader::checkReaderData() {
+  	if(reader->PICC_IsNewCardPresent()) {
+        return;
+    }
+    if(reader->PICC_ReadCardSerial()) {
+        return;
+    }
+    
     Serial.println("CHEEEEECK");
-  	if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial())
-    	reader->PICC_DumpToSerial(&(reader->uid));
+    reader->PICC_DumpToSerial(&(reader->uid));
 }
