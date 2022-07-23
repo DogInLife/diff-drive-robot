@@ -143,7 +143,7 @@ void TwoWheeledRobot::serialControl(bool deb)
 void TwoWheeledRobot::rfidTest() {
   while(true) {
     rfidReader->checkReaderData();
-    delay(20);
+    delay(50);
   }
 }
 
