@@ -36,7 +36,8 @@ public:
     ~TwoWheeledRobot();
 
     void createWheels(float wheelRadius, float baseLength, float maxVel);
-    
+    void createRFIDReader();
+
     // SET
     void setEncoderPins(byte encPinL, byte encPinR);
     void setDriverPins(byte driverPinPWM_R, byte driverPin_R2, byte driverPin_R1, byte driverPin_L1, byte driverPin_L2, byte driverPinPWM_L);
