@@ -80,7 +80,7 @@ void TwoWheeledRobot::tunePID(float Kp, float Ki, float Kd)
   pid->setCoefficient(Kp, Ki, Kd);
 }
 
-void TwoWheeledRobot::createRFIDReader() { // #############################################
+MFRC522 TwoWheeledRobot::createRFIDReader() { // #############################################
   MFRC522 rfidReader(SS_PIN, RST_PIN);
   rfidReader.readerStart();
 }
