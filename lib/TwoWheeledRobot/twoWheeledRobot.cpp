@@ -531,11 +531,6 @@ void TwoWheeledRobot::manualControl(float dt)
   }
 }
 
-// void TwoWheeledRobot::checkRFID()
-// {
-//   if(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())
-//     mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
-// }
 
 void TwoWheeledRobot::stopMoving()
 {
