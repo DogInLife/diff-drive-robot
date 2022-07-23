@@ -22,6 +22,7 @@ void RFIDReader::readerStart() {
 	while(!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	SPI.begin();			// Init SPI bus
 	reader->PCD_Init();		// Init MFRC522
+    Serial.println("SS " + String(reader->_chipSelectPin) + " RST: " + String(reader->_resetPowerDownPin));
 	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
 	reader->PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
 	//Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
@@ -37,7 +38,7 @@ void RFIDReader::checkReaderData() {
 
     // reader.PICC_DumpDetailsToSerial(&(reader.uid));
     
-    Serial.println("CHEEEEECK");
+    //Serial.println("CHEEEEECK");
     if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial())
         reader->PICC_DumpDetailsToSerial(&(reader->uid));
 }
