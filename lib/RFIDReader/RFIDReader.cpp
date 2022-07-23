@@ -19,13 +19,13 @@ void RFIDReader::readerStart() {
 }
 
 void RFIDReader::checkReaderData() {
-  	if(reader->PICC_IsNewCardPresent()) {
+  	if(!reader->PICC_IsNewCardPresent()) {
         return;
     }
-    if(reader->PICC_ReadCardSerial()) {
+    if(!reader->PICC_ReadCardSerial()) {
         return;
     }
-    
+
     Serial.println("CHEEEEECK");
     reader->PICC_DumpToSerial(&(reader->uid));
 }
