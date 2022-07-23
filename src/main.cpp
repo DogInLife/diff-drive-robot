@@ -94,16 +94,20 @@ void setup() {
 
 void loop() {
 
-	// Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-	if ( ! mfrc522.PICC_IsNewCardPresent()) {
-		return;
-	}
+	// // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+	// if ( ! mfrc522.PICC_IsNewCardPresent()) {
+	// 	return;
+	// }
 
-	// Select one of the cards
-	if ( ! mfrc522.PICC_ReadCardSerial()) {
-		return;
-	}
+	// // Select one of the cards
+	// if ( ! mfrc522.PICC_ReadCardSerial()) {
+	// 	return;
+	// }
 
-	// Dump debug info about the card; PICC_HaltA() is automatically called
-	mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
+	// // Dump debug info about the card; PICC_HaltA() is automatically called
+	// mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
+
+  if(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
+    mfrc522.PICC_DumpToSerial();
+  }
 }
