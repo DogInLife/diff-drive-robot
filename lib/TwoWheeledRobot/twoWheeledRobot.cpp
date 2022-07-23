@@ -2,7 +2,7 @@
 #include "constants.h"
 
 #include <SPI.h>
-#include <MFRC522.h>
+//#include <MFRC522.h>
 
 #define RST_PIN         5          // Configurable, see typical pin layout above
 #define SS_PIN          53         // Configurable, see typical pin layout above
