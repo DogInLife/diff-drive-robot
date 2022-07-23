@@ -18,7 +18,7 @@ void RFIDReader::readerStart() {
 	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 }
 
-void MFRC522::checkReaderData() {
+void RFIDReader::checkReaderData() {
   	if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial())
     	reader->PICC_DumpToSerial(&(reader->uid));
 }
