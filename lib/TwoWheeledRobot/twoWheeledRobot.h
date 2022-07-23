@@ -12,7 +12,7 @@
 class TwoWheeledRobot
 {
 private:
-    //MFRC522* mfrc522;
+    MFRC522* rfidReader;
 
     MotorBlock* motorBlockL;
     MotorBlock* motorBlockR;
