@@ -1951,17 +1951,19 @@ bool MFRC522::PICC_ReadCardSerial() {
 	return (result == STATUS_OK);
 } // End 
 
-void MFRC522::readerStart() {
-	while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
-	SPI.begin();			// Init SPI bus
-	PCD_Init();		// Init MFRC522
-	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
-	PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
-	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
-}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void MFRC522::checkReaderData() {
-  	if(PICC_IsNewCardPresent() && PICC_ReadCardSerial())
-    	PICC_DumpToSerial(&(uid));
-}
+// void MFRC522::readerStart() {
+// 	while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+// 	SPI.begin();			// Init SPI bus
+// 	PCD_Init();		// Init MFRC522
+// 	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
+// 	PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
+// 	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
+// }
+
+// void MFRC522::checkReaderData() {
+//   	if(PICC_IsNewCardPresent() && PICC_ReadCardSerial())
+//     	PICC_DumpToSerial(&(uid));
+// }
 

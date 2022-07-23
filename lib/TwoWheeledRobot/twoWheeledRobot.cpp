@@ -23,6 +23,8 @@ TwoWheeledRobot::TwoWheeledRobot()
 	// mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
 	// Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 
+  rfidReader = new RFIDReader(SS_PIN, RST_PIN);
+
   motorBlockL = new MotorBlock();
   motorBlockR = new MotorBlock();
   pidL = new PID();
@@ -80,10 +82,10 @@ void TwoWheeledRobot::tunePID(float Kp, float Ki, float Kd)
   pid->setCoefficient(Kp, Ki, Kd);
 }
 
-MFRC522 TwoWheeledRobot::createRFIDReader() { // #############################################
-  MFRC522 rfidReader(SS_PIN, RST_PIN);
-  rfidReader.readerStart();
-}
+// MFRC522 TwoWheeledRobot::createRFIDReader() { // #############################################
+//   MFRC522 rfidReader(SS_PIN, RST_PIN);
+//   rfidReader.readerStart();
+// }
 
 // === GET ===
 float TwoWheeledRobot::getRadiusWheels()
@@ -190,7 +192,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     //Расчет угла, на котором расположена целевая точка
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
-    rfidReader.checkReaderData();
+    rfidReader->checkReaderData();
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));

@@ -8,11 +8,15 @@
 #include "position.h"
 #include "math.h"
 
+#include "RFIDReader.h"
+#include <MFRC522.h>
+
 
 class TwoWheeledRobot
 {
 private:
     //MFRC522* rfidReader;
+    RFIDReader* rfidReader;
 
     MotorBlock* motorBlockL;
     MotorBlock* motorBlockR;
@@ -21,7 +25,6 @@ private:
     PID* pid;
     Velocity vel;
     Position pos;
-    //MFRC522 rfidReader;
 
     float baseLength;
     byte PIN_CURRENT_SENSOR;
@@ -36,7 +39,7 @@ public:
     ~TwoWheeledRobot();
 
     void createWheels(float wheelRadius, float baseLength, float maxVel);
-    void createRFIDReader();
+    //void createRFIDReader();
 
     // SET
     void setEncoderPins(byte encPinL, byte encPinR);
