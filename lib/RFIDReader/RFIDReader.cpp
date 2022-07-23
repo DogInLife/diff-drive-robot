@@ -1,6 +1,6 @@
 #include "RFIDReader.h"
 
-RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
+RFIDReader::RFIDReader(int SS_PIN, int RST_PIN) {
     MFRC522 reader(SS_PIN, RST_PIN);
     //reader = new MFRC522(SS_PIN, RST_PIN);
     this->readerStart();
@@ -28,6 +28,6 @@ void RFIDReader::checkReaderData() {
     // }
     
     //Serial.println("CHEEEEECK");
-    //if(reader.PICC_IsNewCardPresent() && reader.PICC_ReadCardSerial())
-    reader.PICC_DumpToSerial(&(reader.uid));
+    if(reader.PICC_IsNewCardPresent() && reader.PICC_ReadCardSerial())
+        reader.PICC_DumpToSerial(&(reader.uid));
 }
