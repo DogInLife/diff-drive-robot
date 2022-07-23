@@ -1,4 +1,5 @@
 #include "RFIDReader.h"
+#include "SPI.h"
 
 RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
     //MFRC522 reader(SS_PIN, RST_PIN);
