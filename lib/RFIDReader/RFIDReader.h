@@ -4,7 +4,7 @@
 
 class RFIDReader {
     private:
-        MFRC522* reader;
+        MFRC522 reader;
 
     public:
         RFIDReader(byte SS_PIN, byte RST_PIN);
