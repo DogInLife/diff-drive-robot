@@ -15,10 +15,11 @@ void RFIDReader::readerStart() {
 	reader->PCD_Init();		// Init MFRC522
 	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
 	reader->PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
-	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
+	//Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 }
 
 void RFIDReader::checkReaderData() {
+    Serial.println("CHEEEEECK");
   	if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial())
     	reader->PICC_DumpToSerial(&(reader->uid));
 }
