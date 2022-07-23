@@ -13,14 +13,14 @@ TwoWheeledRobot::TwoWheeledRobot()
   inByte(0), newMinRange(0)
 {
   // RFID READER
-  MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance // ????????????????????????????????????
+  MFRC522 rfid_reader = new MFRC522(SS_PIN, RST_PIN);  // Create MFRC522 instance // ????????????????????????????????????
 
   Serial.begin(9600);
   while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	SPI.begin();			// Init SPI bus
-	mfrc522.PCD_Init();		// Init MFRC522
+	rfid_reader.PCD_Init();		// Init MFRC522
 	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
-	mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
+	rfid_reader.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
 	Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 
   motorBlockL = new MotorBlock();
@@ -515,8 +515,8 @@ void TwoWheeledRobot::manualControl(float dt)
 
 void TwoWheeledRobot::checkRFID()
 {
-  if(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())
-    mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
+  if(rfid_reader.PICC_IsNewCardPresent() && rfid_reader.PICC_ReadCardSerial())
+    rfid_reader.PICC_DumpToSerial(&(rfid_reader.uid));
 }
 
 
