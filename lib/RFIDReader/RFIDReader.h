@@ -10,7 +10,7 @@ class RFIDReader {
         RFIDReader(byte SS_PIN, byte RST_PIN);
         //~RFIDReader(byte SS_PIN, byte RST_PIN);
 
-        void readerStart();
+        void readerStart(byte SS_PIN, byte RST_PIN);
         void checkReaderData();
 };
 
