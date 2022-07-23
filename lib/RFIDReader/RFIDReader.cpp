@@ -28,6 +28,6 @@ void RFIDReader::checkReaderData() {
     // }
     
     //Serial.println("CHEEEEECK");
-    if(reader.PICC_IsNewCardPresent() && reader.PICC_ReadCardSerial())
-        reader.PICC_DumpToSerial(&(reader.uid));
+    //if(reader.PICC_IsNewCardPresent() && reader.PICC_ReadCardSerial())
+    reader.PICC_DumpToSerial(&(reader.uid));
 }
