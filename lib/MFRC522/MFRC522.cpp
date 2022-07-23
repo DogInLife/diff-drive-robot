@@ -196,6 +196,7 @@ MFRC522::StatusCode MFRC522::PCD_CalculateCRC(	byte *data,		///< In: Pointer to 
  * Initializes the MFRC522 chip.
  */
 void MFRC522::PCD_Init() {
+	Serial.println("SS " + String(this->_chipSelectPin) + " RST: " + String(this->_resetPowerDownPin));
 	bool hardReset = false;
 
 	// Set the chipSelectPin as digital output, do not select the slave yet
