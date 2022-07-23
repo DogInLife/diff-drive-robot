@@ -108,6 +108,6 @@ void loop() {
 	// mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
 
   if(mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial()) {
-    mfrc522.PICC_DumpToSerial();
+    mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
   }
 }
