@@ -1,7 +1,7 @@
 #include "twoWheeledRobot.h"
 #include "constants.h"
 
-#include <SPI.h>
+//#include <SPI.h>
 //#include <MFRC522.h>
 
 #define RST_PIN         5          // Configurable, see typical pin layout above
@@ -35,7 +35,7 @@ TwoWheeledRobot::TwoWheeledRobot()
 
 TwoWheeledRobot::~TwoWheeledRobot()
 {
-  //delete mfrc522;
+  delete rfidReader;
 
   delete motorBlockL;
   delete motorBlockR;
