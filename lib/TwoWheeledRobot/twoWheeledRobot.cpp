@@ -121,16 +121,28 @@ void TwoWheeledRobot::serialControl(bool deb)
           goToGoal(1, 1, true, 50, deb);
           break;
         
-        case ('t'):
+        case ('c'):
           Serial.println("====== Circle trajectory ======");
           goCircle(0.6, 24, deb);
           break;
 
-        case ('r'):
+        case ('t'):
           Serial.println(" ===== Rotation test ===== ");
           rot_test(90, 50, deb);
           break;
+
+        case ('r'):
+          Serial.println(" ===== RFID reader test ===== ");
+          //rfidReader->checkReaderData();
+          rfidTest();
+          break;
       }
+  }
+}
+
+void TwoWheeledRobot::rfidTest() {
+  while(true) {
+    rfidReader->checkReaderData();
   }
 }
 
