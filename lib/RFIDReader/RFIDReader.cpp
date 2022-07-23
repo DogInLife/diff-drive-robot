@@ -35,7 +35,7 @@ void RFIDReader::checkReaderData() {
         Serial.println("22222222222222222222");
     }
 
-    reader.PICC_DumpToSerial(&(reader.uid));
+    reader.PICC_DumpDetailsToSerial(&(reader.uid));
     
     Serial.println("CHEEEEECK");
     // if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial())
