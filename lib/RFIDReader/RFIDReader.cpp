@@ -1,7 +1,7 @@
 #include "RFIDReader.h"
 
 RFIDReader::RFIDReader(int SS_PIN, int RST_PIN) {
-    MFRC522 reader(SS_PIN, RST_PIN);
+    reader = new MFRC522(SS_PIN, RST_PIN);
     //reader = new MFRC522(SS_PIN, RST_PIN);
     this->readerStart();
 }
