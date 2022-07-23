@@ -2,6 +2,14 @@
 #include "twoWheeledRobot.h"
 #include "constants.h"
 
+// #include <SPI.h>
+#include <MFRC522.h>
+
+// #define RST_PIN         5          // Configurable, see typical pin layout above
+// #define SS_PIN          53         // Configurable, see typical pin layout above
+
+// MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+
 byte del = 50; // задержка
 int whl_vel_des = 60; // скорость колеса [об/мин]
 bool deb = false; // флаг типа дебаггинга
@@ -50,7 +58,7 @@ void setup() {
   
   robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
   //robot.tunePID(20.0, 0.0, 0.05, /*_*/ 25.0, 0.0, 0.05); // (pL, iL, dL, pR, iR, dR)
-
+  //mfrc522.readerStart();
   robot.serialControl(deb);
   //robot.goCircle(1.0, 8);
   //robot.manualControl(del);

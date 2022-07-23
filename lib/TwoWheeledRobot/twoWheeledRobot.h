@@ -12,7 +12,7 @@
 class TwoWheeledRobot
 {
 private:
-    MFRC522* rfidReader;
+    //MFRC522* rfidReader;
 
     MotorBlock* motorBlockL;
     MotorBlock* motorBlockR;
@@ -21,6 +21,7 @@ private:
     PID* pid;
     Velocity vel;
     Position pos;
+    MFRC522 rfidReader;
 
     float baseLength;
     byte PIN_CURRENT_SENSOR;
