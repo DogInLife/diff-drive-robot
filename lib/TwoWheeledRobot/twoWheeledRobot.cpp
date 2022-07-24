@@ -142,7 +142,7 @@ void TwoWheeledRobot::rfidTest(int del) {
   //this->rfidReader->readerStart(); // RFID TEST OK
   while(true) {
     this->rfidReader->checkReaderData(del);
-    delay(100);
+    delay(50);
   }
 }
 
