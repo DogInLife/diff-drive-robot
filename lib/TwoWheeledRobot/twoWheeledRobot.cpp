@@ -152,7 +152,7 @@ void TwoWheeledRobot::rfidTest(int del) {
 
 void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 {
-  rfidReader->readerStart();
+  this->rfidReader->readerStart();
 
   float x0 = 0.0;
   float y0 = 0.0;
@@ -208,7 +208,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     //Расчет угла, на котором расположена целевая точка
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
-    rfidReader->checkReaderData(del);
+    this->rfidReader->checkReaderData(del);
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
