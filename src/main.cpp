@@ -28,12 +28,12 @@ float KpR = 0.0;
 float KiR = 0.0;
 float KdR = 0.0;
 
+TwoWheeledRobot robot;
+
 void setup() {
   Serial.begin(9600);
   // Serial.println(F("SETUP"));
   // rfidReader->readerStart();
-  
-  TwoWheeledRobot robot;
   robot.createWheels(WHEEL_RADIUS, BASE_LENGTH, MAX_VELOCITY);
   robot.setEncoderPins(ENCODER_PIN_L, ENCODER_PIN_R);
   robot.setDriverPins(DRIVER_PWM_PIN_A, DRIVER_IN_A2, DRIVER_IN_A1 , DRIVER_IN_B1, DRIVER_IN_B2,  DRIVER_PWM_PIN_B);
@@ -78,6 +78,7 @@ void setup() {
 void loop() {
   // rfidReader->checkReaderData();
   //delay(50);
+  robot.serialControl(deb);
 }
 
 

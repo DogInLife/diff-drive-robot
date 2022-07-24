@@ -25,7 +25,6 @@ TwoWheeledRobot::TwoWheeledRobot()
 	// Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 
   rfidReader = new RFIDReader(SS_PIN, RST_PIN);
-  rfidReader->readerStart();
 
   motorBlockL = new MotorBlock();
   motorBlockR = new MotorBlock();
@@ -108,6 +107,7 @@ byte TwoWheeledRobot::getSerialData()
 
 void TwoWheeledRobot::serialControl(bool deb)
 {
+  Serial.println(" ===== Choose mode ===== ");
   while (true)
   {
     inByte = getSerialData();
