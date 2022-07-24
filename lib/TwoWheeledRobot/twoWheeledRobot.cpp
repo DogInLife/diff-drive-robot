@@ -331,6 +331,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       break;
     }
 
+    t_prev = t_curr;
+
     //delay(dt);
   }
 }
