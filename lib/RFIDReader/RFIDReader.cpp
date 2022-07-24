@@ -42,3 +42,8 @@ void RFIDReader::checkReaderData() {
     if(this->reader->PICC_IsNewCardPresent() && this->reader->PICC_ReadCardSerial())
         this->reader->PICC_DumpToSerial(&(this->reader->uid));
 }
+
+void RFIDReader::getUID() {
+    this->reader->PICC_DumpDetailsToSerial(&(this->reader->uid));
+    this->reader->PICC_HaltA();
+}
