@@ -51,17 +51,19 @@ void RFIDReader::checkReaderData(int del) {
 void RFIDReader::getUID() {
     //this->reader->PICC_DumpDetailsToSerial(&(this->reader->uid));
     MFRC522::Uid *thisUid = &(this->reader->uid);
-
-
+    
+    String uidStr = "";
     for(byte i = 0; i < thisUid->size; i++) {
-		if(thisUid->uidByte[i] < 0x10)
-			// Serial.print(F(" 0")); // ####
-			Serial.print(F("0")); // ###
-		else
-			//Serial.print(F(" ")); // ###
-		Serial.print(thisUid->uidByte[i], HEX);
+		// if(thisUid->uidByte[i] < 0x10)
+		// 	// Serial.print(F(" 0")); // ####
+		// 	//Serial.print(F("0")); // ###
+        //     //uidStr = uidStr + "0";
+		// else
+		// 	//Serial.print(F(" ")); // ###
+        uidStr = uidStr + String(thisUid->uidByte[i], HEX);
+		//Serial.print(thisUid->uidByte[i], HEX);
     }
-
-    Serial.println();
+    Serial.println(uidStr);
+    //Serial.println();
     this->reader->PICC_HaltA();
 }
