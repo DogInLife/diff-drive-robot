@@ -7,7 +7,7 @@
 #define RST_PIN         5          // Configurable, see typical pin layout above
 #define SS_PIN          53         // Configurable, see typical pin layout above
 
-//RFIDReader reader(RST_PIN, SS_PIN);
+RFIDReader reader(RST_PIN, SS_PIN);
 
 // #include <SPI.h>
 //#include <MFRC522.h>
@@ -31,7 +31,6 @@ void setup() {
 
   Serial.begin(9600);
   Serial.println("SETUP");
-  RFIDReader reader(RST_PIN, SS_PIN);
   //reader->readerStart();
   
 //   TwoWheeledRobot robot;
