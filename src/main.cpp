@@ -63,8 +63,8 @@ void setup() {
   KiR = 5000.0;
   KdR = 0.5;
   robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
-  
-  robot->serialControl(deb);
+
+  robot.serialControl(deb);
   //robot.goCircle(1.0, 8);
   //robot.manualControl(del);
   //robot.rot_test(whl_vel_des, del, deb); // ########################
