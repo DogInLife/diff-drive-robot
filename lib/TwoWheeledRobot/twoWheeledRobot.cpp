@@ -169,7 +169,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isFinish, 25, deb);
+    goToGoal(x, y, isFinish, 50, deb);
     if(globalStop) 
     { 
       Serial.println(" ==== GLOBAL STOP ==== ");
@@ -242,8 +242,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     deltaAngR = motorBlockR->getDeltaAngle();
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
-    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
-    Serial.println(msg_pos);
+    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    // Serial.println(msg_pos);
  
 
     if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
