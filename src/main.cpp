@@ -28,7 +28,7 @@ float KpR = 0.0;
 float KiR = 0.0;
 float KdR = 0.0;
 
-TwoWheeledRobot robot = new TwoWheeledRobot();
+TwoWheeledRobot robot;
 
 void setup() {
   Serial.begin(9600);
