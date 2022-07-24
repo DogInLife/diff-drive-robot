@@ -79,7 +79,7 @@ void setup() {
 
 
 void loop() {
-  rfidReader->checkReaderData();
+  rfidReader.checkReaderData();
 }
 
 
