@@ -148,7 +148,7 @@ void TwoWheeledRobot::rfidTest(int del) {
 
 void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 {
-  // rfidReader->readerStart(); // ??
+  this->rfidReader->readerStart(); // ??
 
   float x0 = 0.0;
   float y0 = 0.0;
@@ -180,7 +180,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
-  rfidReader->readerStart(); // ??
+  //rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
 
   reachedGoal = false;
 
