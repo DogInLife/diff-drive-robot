@@ -106,6 +106,7 @@ byte TwoWheeledRobot::getSerialData()
 
 
 void TwoWheeledRobot::serialControl(bool deb) {
+  this->rfidReader->readerStart();
   Serial.println(" ===== Choose mode ===== ");
   while (true)
   {
@@ -134,7 +135,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
 
         case ('r'):
           Serial.println(" ===== RFID reader test ===== ");
-          this->rfidReader->readerStart();
+          //this->rfidReader->readerStart();
           rfidTest(50);
           break;
       }
