@@ -25,7 +25,6 @@ TwoWheeledRobot::TwoWheeledRobot()
 	// Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 
   rfidReader = new RFIDReader(SS_PIN, RST_PIN);
-  this->rfidReader->readerStart();
 
   motorBlockL = new MotorBlock();
   motorBlockR = new MotorBlock();
@@ -84,11 +83,6 @@ void TwoWheeledRobot::tunePID(float Kp, float Ki, float Kd)
   pid->setCoefficient(Kp, Ki, Kd);
 }
 
-// MFRC522 TwoWheeledRobot::createRFIDReader() { // #############################################
-//   MFRC522 rfidReader(SS_PIN, RST_PIN);
-//   rfidReader.readerStart();
-// }
-
 // === GET ===
 float TwoWheeledRobot::getRadiusWheels()
 {
@@ -107,7 +101,7 @@ byte TwoWheeledRobot::getSerialData()
 
 
 void TwoWheeledRobot::serialControl(bool deb) {
-  //this->rfidReader->readerStart();
+  //this->rfidReader->readerStart(); // RFID TEST OK =/= ??
   Serial.println(" ===== Choose mode ===== ");
   while (true)
   {
@@ -126,6 +120,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
+          //this->rfidReader->readerStart(); // ??
           goCircle(0.6, 24, deb);
           break;
 
@@ -136,7 +131,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
 
         case ('r'):
           Serial.println(" ===== RFID reader test ===== ");
-          //this->rfidReader->readerStart();
+          //this->rfidReader->readerStart(); // RFID TEST OK
           rfidTest(50);
           break;
       }
@@ -144,9 +139,8 @@ void TwoWheeledRobot::serialControl(bool deb) {
 }
 
 void TwoWheeledRobot::rfidTest(int del) {
-  //this->rfidReader->readerStart();
+  //this->rfidReader->readerStart(); // RFID TEST OK
   while(true) {
-    //Serial.println("GO");
     this->rfidReader->checkReaderData(del);
     delay(10);
   }
@@ -154,7 +148,7 @@ void TwoWheeledRobot::rfidTest(int del) {
 
 void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 {
-  //rfidReader->readerStart();
+  // rfidReader->readerStart(); // ??
 
   float x0 = 0.0;
   float y0 = 0.0;
@@ -186,7 +180,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
-  rfidReader->readerStart();
+  rfidReader->readerStart(); // ??
 
   reachedGoal = false;
 
