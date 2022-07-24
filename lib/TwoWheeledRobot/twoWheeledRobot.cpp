@@ -117,24 +117,23 @@ void TwoWheeledRobot::serialControl(bool deb) {
           manualControl(50);
           break;
 
-        case ('g'):
-          Serial.println("========= GO GO GO =========");
-          goToGoal(1, 1, true, 50, deb);
-          break;
+        // case ('g'):
+        //   Serial.println("========= GO GO GO =========");
+        //   goToGoal(1, 1, true, 50, deb);
+        //   break;
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
           goCircle(0.6, 24, deb);
           break;
 
-        case ('t'):
-          Serial.println(" ===== Rotation test ===== ");
-          rot_test(90, 50, deb);
-          break;
+        // case ('t'):
+        //   Serial.println(" ===== Rotation test ===== ");
+        //   rot_test(90, 50, deb);
+        //   break;
 
         case ('r'):
           Serial.println(" ===== RFID reader test ===== ");
-          //rfidReader->readerStart();
           rfidTest(50);
           break;
       }
@@ -163,6 +162,9 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
   bool isFinish = false;
 
   float dPhi = 2.0*3.141593 / ptsNum;
+
+  //long t_start = millis();
+
   for(int i=1; i <= ptsNum; i++)
   {
     if(i == ptsNum) { isFinish = true; }
@@ -182,6 +184,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
   rfidReader->readerStart();
+
   reachedGoal = false;
 
   // поворот колёс за время между оценкой положения робота
@@ -202,7 +205,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   float r = getRadiusWheels();
   float L = baseLength;
   float err = 0.0;
-  
+
+  long t_start = millis();
+  float dt = 0.0;
 
   while(!reachedGoal && !globalStop)
   {
@@ -211,10 +216,12 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
     rfidReader->checkReaderData(del);
 
+    dt = (t_start - millis()) / 1000.0;
+
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
     
-    vel.ang = pid->computeControl(err, del/1000.0);
+    vel.ang = pid->computeControl(err, dt);
     vel.lin = vel.computeLinearSpeed();
 
     // String msg_vel = "Ang_Vel: " + String(vel.ang, 3);
