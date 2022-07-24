@@ -215,7 +215,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
-    rfidReader->checkReaderData(del);
+    this->rfidReader->checkReaderData(del);
 
     t_curr = millis() - t_start;
 
