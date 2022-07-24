@@ -9,7 +9,7 @@ RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
     //MFRC522 reader(SS_PIN, RST_PIN);
     //Serial.begin(9600);
     //Serial.println(F("Init"));
-    this->readerStart();
+    //this->readerStart();
 }
 
 // RFIDReader::~RFIDReader(byte SS_PIN, byte RST_PIN) {
@@ -38,7 +38,7 @@ void RFIDReader::checkReaderData() {
 
     // reader.PICC_DumpDetailsToSerial(&(reader.uid));
     
-    //Serial.println("CHEEEEECK");
+    Serial.println("CHEEEEECK");
     if(this->reader->PICC_IsNewCardPresent() && this->reader->PICC_ReadCardSerial())
         this->reader->PICC_DumpToSerial(&(this->reader->uid));
 }

@@ -134,7 +134,7 @@ void TwoWheeledRobot::serialControl(bool deb)
 
         case ('r'):
           Serial.println(" ===== RFID reader test ===== ");
-          //rfidReader->checkReaderData();
+          rfidReader->readerStart();
           rfidTest();
           break;
       }
@@ -144,7 +144,7 @@ void TwoWheeledRobot::serialControl(bool deb)
 void TwoWheeledRobot::rfidTest() {
   while(true) {
     //Serial.println("GO");
-    this->rfidReader->checkReaderData();
+    rfidReader->checkReaderData();
     //delay(50);
   }
 }
