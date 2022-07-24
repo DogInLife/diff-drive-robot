@@ -168,7 +168,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
     if(i == ptsNum) { isFinish = true; }
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
-    Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
+    //Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
     goToGoal(x, y, isFinish, 50, deb);
     if(globalStop) 
     { 
