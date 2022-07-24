@@ -146,7 +146,7 @@ void TwoWheeledRobot::rfidTest(int del) {
   while(true) {
     //Serial.println("GO");
     rfidReader->checkReaderData(del);
-    //delay(50);
+    delay(10);
   }
 }
 
