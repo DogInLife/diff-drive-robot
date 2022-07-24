@@ -9,7 +9,7 @@
 
 
 //Serial.begin(9600);
-RFIDReader rfidReader = new RFIDReader(SS_PIN, RST_PIN);
+RFIDReader* rfidReader = new RFIDReader(SS_PIN, RST_PIN);
 
 // #include <SPI.h>
 //#include <MFRC522.h>
@@ -32,7 +32,7 @@ float KdR = 0.0;
 void setup() {
   Serial.begin(9600);
   Serial.println(F("SETUP"));
-  rfidReader.readerStart();
+  rfidReader->readerStart();
   
 //   TwoWheeledRobot robot;
 //   robot.createWheels(WHEEL_RADIUS, BASE_LENGTH, MAX_VELOCITY);
@@ -77,7 +77,7 @@ void setup() {
 
 
 void loop() {
-  rfidReader.checkReaderData();
+  rfidReader->checkReaderData();
 }
 
 
