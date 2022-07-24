@@ -115,7 +115,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
 
         case ('g'):
           Serial.println("========= GO GO GO =========");
-          goToGoal(1, 0, true, 10, deb);
+          goToGoal(1, 0, true, 100, deb);
           break;
         
         case ('c'):
