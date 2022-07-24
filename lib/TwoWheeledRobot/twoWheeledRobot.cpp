@@ -105,8 +105,7 @@ byte TwoWheeledRobot::getSerialData()
 // }
 
 
-void TwoWheeledRobot::serialControl(bool deb)
-{
+void TwoWheeledRobot::serialControl(bool deb) {
   Serial.println(" ===== Choose mode ===== ");
   while (true)
   {
@@ -153,6 +152,8 @@ void TwoWheeledRobot::rfidTest() {
 
 void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 {
+  rfidReader->readerStart();
+
   float x0 = 0.0;
   float y0 = 0.0;
 
@@ -179,9 +180,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
-void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt, bool deb)
-{
-
+void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt, bool deb) {
   reachedGoal = false;
 
   // поворот колёс за время между оценкой положения робота
@@ -326,8 +325,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
 }
 
 // ############## Прямолинейное движение в пид-контроллером углов поворота колёс ###############
-void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb)
-{
+void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb) {
 
   float radius = getRadiusWheels();
   float R = 0.5;
