@@ -57,7 +57,7 @@ public:
     void goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb);
     void manualControl(int dt);
 
-    void rfidTest();
+    void rfidTest(int del);
     void rot_test(int whl_vel_des, byte del, bool deb); // ####################################
 
     void goForward(int velL, int velR);
