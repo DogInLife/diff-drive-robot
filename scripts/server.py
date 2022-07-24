@@ -47,7 +47,7 @@ while True:
     if(ser.in_waiting > 0):
         ser_recv = ser.readline().decode('ascii') # what is received from serial
     # if ser_recv:
-    print(ser_recv)
+        print(ser_recv)
 
 conn.close()
 
