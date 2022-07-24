@@ -141,11 +141,11 @@ void TwoWheeledRobot::serialControl(bool deb) {
   }
 }
 
-void TwoWheeledRobot::rfidTest() {
+void TwoWheeledRobot::rfidTest(int del) {
   rfidReader->readerStart();
   while(true) {
     //Serial.println("GO");
-    rfidReader->checkReaderData();
+    rfidReader->checkReaderData(del);
     //delay(50);
   }
 }
@@ -320,7 +320,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       break;
     }
 
-    delay(dt);
+    //delay(dt);
   }
 }
 
@@ -485,7 +485,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb) {
 
 
 // ==== manual control ==== //
-void TwoWheeledRobot::manualControl(float dt)
+void TwoWheeledRobot::manualControl(int del)
 {
   int vel = 60;
 
@@ -530,7 +530,7 @@ void TwoWheeledRobot::manualControl(float dt)
     String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3) + " " + String(pos.theta);
     Serial.println(msg_enc);
 
-    delay(dt);
+    delay(del);
   }
 }
 
