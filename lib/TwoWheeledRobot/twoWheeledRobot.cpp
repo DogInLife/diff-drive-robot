@@ -139,7 +139,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
 }
 
 void TwoWheeledRobot::rfidTest(int del) {
-  this->rfidReader->readerStart(); // RFID TEST OK
+  //this->rfidReader->readerStart(); // RFID TEST OK
   while(true) {
     this->rfidReader->checkReaderData(del);
     delay(10);
@@ -180,7 +180,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
-  rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
+  this->rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
 
   reachedGoal = false;
 
