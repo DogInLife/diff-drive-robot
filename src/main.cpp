@@ -78,6 +78,7 @@ void setup() {
 
 void loop() {
   rfidReader->checkReaderData();
+  delay(50)
 }
 
 
