@@ -44,9 +44,9 @@ while True:
             ser.write(b's')
             break
         ser.write(data) # send to serial (arduino)
-    if(ser.in_waiting > 0):
-        ser_recv = ser.read(ser.in_waiting).decode('ascii') # what is received from serial
-    # if ser_recv:
+    # if(ser.in_waiting > 0):
+    ser_recv = ser.read(ser.in_waiting).decode('ascii') # what is received from serial
+    if ser_recv:
         print(ser_recv)
 
 conn.close()
