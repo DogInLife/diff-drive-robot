@@ -12,6 +12,7 @@ class RFIDReader {
 
         void readerStart();
         void checkReaderData();
+        void getUID();
 };
 
 #endif
