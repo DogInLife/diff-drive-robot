@@ -4,6 +4,7 @@
 
 RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
     //MFRC522 reader(SS_PIN, RST_PIN);
+    Serial.begin(9600);
     reader = new MFRC522(SS_PIN, RST_PIN);
     //MFRC522 reader(SS_PIN, RST_PIN);
     //Serial.begin(9600);

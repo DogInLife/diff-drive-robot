@@ -8,7 +8,7 @@
 #define SS_PIN          53         // Configurable, see typical pin layout above
 
 
-Serial.begin(9600);
+//Serial.begin(9600);
 RFIDReader rfidReader(RST_PIN, SS_PIN);
 
 // #include <SPI.h>
@@ -32,6 +32,7 @@ float KdR = 0.0;
 void setup() {
 
   //Serial.begin(9600);
+  Serial.begin(9600);
   Serial.println("SETUP");
   //reader->readerStart();
   
