@@ -14,7 +14,8 @@ TwoWheeledRobot::TwoWheeledRobot()
 {
   // RFID READER
   //MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance // ????????????????????????????????????
-  Serial.begin(9600);
+  if(!Serial) 
+    Serial.begin(9600);
 
   // while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	// SPI.begin();			// Init SPI bus
@@ -142,8 +143,9 @@ void TwoWheeledRobot::serialControl(bool deb)
 
 void TwoWheeledRobot::rfidTest() {
   while(true) {
+    Serial.println("GO");
     rfidReader->checkReaderData();
-    delay(50);
+    //delay(50);
   }
 }
 

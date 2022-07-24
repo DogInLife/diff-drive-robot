@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include "twoWheeledRobot.h"
 #include "constants.h"
-//#include "MFRC522.h"
 #include "RFIDReader.h"
 
 #define RST_PIN         5          // Configurable, see typical pin layout above
@@ -9,7 +8,7 @@
 
 
 //Serial.begin(9600);
-RFIDReader* rfidReader = new RFIDReader(SS_PIN, RST_PIN);
+//RFIDReader* rfidReader = new RFIDReader(SS_PIN, RST_PIN);
 
 // #include <SPI.h>
 //#include <MFRC522.h>
@@ -31,53 +30,53 @@ float KdR = 0.0;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println(F("SETUP"));
-  rfidReader->readerStart();
+  // Serial.println(F("SETUP"));
+  // rfidReader->readerStart();
   
-//   TwoWheeledRobot robot;
-//   robot.createWheels(WHEEL_RADIUS, BASE_LENGTH, MAX_VELOCITY);
-//   robot.setEncoderPins(ENCODER_PIN_L, ENCODER_PIN_R);
-//   robot.setDriverPins(DRIVER_PWM_PIN_A, DRIVER_IN_A2, DRIVER_IN_A1 , DRIVER_IN_B1, DRIVER_IN_B2,  DRIVER_PWM_PIN_B);
-//   //robot.tunePID(5.3, 4.8, 0);
-//   //robot.tunePID(0.7, 1.5, 0.0);
-//   //robot.tunePID(4, 1.5, 0); // РАБОТАЕТ НА КРУГЕ (ну так)
-//   robot.tunePID(3.5, 1.8, 0);
-// // ====== Д Л Я  120 ОБ/МИН ======
-// //   KpL = 600.0;
-// //   KiL = 12000.0;
-// //   KdL = 0.5;
-// // // ================  П Р О В Е Р Ь  ============
-// // // ================     Ф Л А Г     ============
-// // // ================      D E B      ============
-// //   KpR = 600.0;
-// //   KiR = 12000.0;
-// //   KdR = 0.5;
-
-// // ====== Д Л Я 60  ОБ/МИН =====
-//   KpL = 250.0;
-//   KiL = 5000.0;
+  TwoWheeledRobot robot;
+  robot.createWheels(WHEEL_RADIUS, BASE_LENGTH, MAX_VELOCITY);
+  robot.setEncoderPins(ENCODER_PIN_L, ENCODER_PIN_R);
+  robot.setDriverPins(DRIVER_PWM_PIN_A, DRIVER_IN_A2, DRIVER_IN_A1 , DRIVER_IN_B1, DRIVER_IN_B2,  DRIVER_PWM_PIN_B);
+  //robot.tunePID(5.3, 4.8, 0);
+  //robot.tunePID(0.7, 1.5, 0.0);
+  //robot.tunePID(4, 1.5, 0); // РАБОТАЕТ НА КРУГЕ (ну так)
+  robot.tunePID(3.5, 1.8, 0);
+// ====== Д Л Я  120 ОБ/МИН ======
+//   KpL = 600.0;
+//   KiL = 12000.0;
 //   KdL = 0.5;
 // // ================  П Р О В Е Р Ь  ============
 // // ================     Ф Л А Г     ============
 // // ================      D E B      ============
-//   KpR = 250.0;
-//   KiR = 5000.0;
+//   KpR = 600.0;
+//   KiR = 12000.0;
 //   KdR = 0.5;
-//   robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
-//   robot.serialControl(deb);
-//   //robot.goCircle(1.0, 8);
-//   //robot.manualControl(del);
-//   //robot.rot_test(whl_vel_des, del, deb); // ########################
 
-//   // float xGoal = 1;
-//   // float yGoal = 1;
-//   // robot.goToGoal(xGoal, yGoal, dt);
-//   // robot.manualControl();
+// ====== Д Л Я 60  ОБ/МИН =====
+  KpL = 250.0;
+  KiL = 5000.0;
+  KdL = 0.5;
+// ================  П Р О В Е Р Ь  ============
+// ================     Ф Л А Г     ============
+// ================      D E B      ============
+  KpR = 250.0;
+  KiR = 5000.0;
+  KdR = 0.5;
+  robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
+  robot.serialControl(deb);
+  //robot.goCircle(1.0, 8);
+  //robot.manualControl(del);
+  //robot.rot_test(whl_vel_des, del, deb); // ########################
+
+  // float xGoal = 1;
+  // float yGoal = 1;
+  // robot.goToGoal(xGoal, yGoal, dt);
+  // robot.manualControl();
 }
 
 
 void loop() {
-  rfidReader->checkReaderData();
+  // rfidReader->checkReaderData();
   //delay(50);
 }
 
