@@ -46,5 +46,6 @@ void RFIDReader::checkReaderData() {
 
 void RFIDReader::getUID() {
     this->reader->PICC_DumpDetailsToSerial(&(this->reader->uid));
+    Serial.println();
     this->reader->PICC_HaltA();
 }
