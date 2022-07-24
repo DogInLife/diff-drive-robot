@@ -31,7 +31,7 @@ float KdR = 0.0;
 void setup() {
 
   Serial.begin(9600);
-  reader.startReader();
+  reader.readerStart();
   
 //   TwoWheeledRobot robot;
 //   robot.createWheels(WHEEL_RADIUS, BASE_LENGTH, MAX_VELOCITY);
