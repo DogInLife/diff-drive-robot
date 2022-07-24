@@ -180,7 +180,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
-  //rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
+  rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
 
   reachedGoal = false;
 
