@@ -46,7 +46,7 @@ void RFIDReader::checkReaderData() {
 
 void RFIDReader::getUID() {
     //this->reader->PICC_DumpDetailsToSerial(&(this->reader->uid));
-    Uid *thisUid = &(this->reader->uid);
+    MFRC522::Uid *thisUid = &(this->reader->uid);
 
 
     for(byte i = 0; i < thisUid->size; i++) {
