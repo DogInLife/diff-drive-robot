@@ -18,7 +18,7 @@ RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
 
 void RFIDReader::readerStart() {
     //Serial.begin(9600);
-    //Serial.println(F("Start"));
+    Serial.println(F("Start"));
 	if(!Serial) 
         Serial.begin(9600);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	SPI.begin();			// Init SPI bus
