@@ -4,7 +4,7 @@
 //#include <SPI.h>
 //#include <MFRC522.h>
 
-#define RST_PIN         8          // Configurable, see typical pin layout above
+#define RST_PIN         9          // Configurable, see typical pin layout above
 #define SS_PIN          53         // Configurable, see typical pin layout above
 
 TwoWheeledRobot::TwoWheeledRobot()
