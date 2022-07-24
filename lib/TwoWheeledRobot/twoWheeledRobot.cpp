@@ -24,7 +24,7 @@ TwoWheeledRobot::TwoWheeledRobot()
 	// mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
 	// Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 
-  rfidReader = new RFIDReader(SS_PIN, RST_PIN);
+  this->rfidReader = new RFIDReader(SS_PIN, RST_PIN);
 
   motorBlockL = new MotorBlock();
   motorBlockR = new MotorBlock();
