@@ -7,7 +7,9 @@
 #define RST_PIN         5          // Configurable, see typical pin layout above
 #define SS_PIN          53         // Configurable, see typical pin layout above
 
-RFIDReader reader(RST_PIN, SS_PIN);
+
+Serial.begin(9600);
+RFIDReader rfidReader(RST_PIN, SS_PIN);
 
 // #include <SPI.h>
 //#include <MFRC522.h>
@@ -76,7 +78,7 @@ void setup() {
 
 
 void loop() {
-  reader.checkReaderData();
+  reader->checkReaderData();
 }
 
 
