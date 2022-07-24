@@ -30,10 +30,8 @@ float KiR = 0.0;
 float KdR = 0.0;
 
 void setup() {
-
-  //Serial.begin(9600);
   Serial.begin(9600);
-  Serial.println("SETUP");
+  Serial.println(F("SETUP"));
   //reader->readerStart();
   
 //   TwoWheeledRobot robot;

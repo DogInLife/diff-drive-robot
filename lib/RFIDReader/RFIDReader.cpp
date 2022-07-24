@@ -8,7 +8,7 @@ RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
     reader = new MFRC522(SS_PIN, RST_PIN);
     //MFRC522 reader(SS_PIN, RST_PIN);
     //Serial.begin(9600);
-    Serial.println("Init");
+    Serial.println(F("Init"));
     this->readerStart();
 }
 
@@ -17,7 +17,7 @@ RFIDReader::RFIDReader(byte SS_PIN, byte RST_PIN) {
 // }
 
 void RFIDReader::readerStart() {
-    Serial.println("Start");
+    Serial.println(F("Start"));
 	while(!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	SPI.begin();			// Init SPI bus
 	this->reader->PCD_Init();		// Init MFRC522
