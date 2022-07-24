@@ -214,7 +214,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
     rfidReader->checkReaderData(del);
 
-    dt = (t_start - millis()) / 1000.0;
+    dt = (millis() - t_start) / 1000.0;
     Serial.println(dt);
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
