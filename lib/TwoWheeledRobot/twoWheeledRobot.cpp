@@ -113,10 +113,10 @@ void TwoWheeledRobot::serialControl(bool deb) {
           manualControl(50);
           break;
 
-        // case ('g'):
-        //   Serial.println("========= GO GO GO =========");
-        //   goToGoal(1, 1, true, 50, deb);
-        //   break;
+        case ('g'):
+          Serial.println("========= GO GO GO =========");
+          goToGoal(1, 0, true, 10, deb);
+          break;
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
