@@ -169,7 +169,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     //Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isFinish, 1, deb);
+    goToGoal(x, y, isFinish, 50, deb);
     if(globalStop) 
     { 
       Serial.println(" ==== GLOBAL STOP ==== ");
@@ -180,7 +180,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
-void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt, bool deb) {
+void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
   reachedGoal = false;
 
   // поворот колёс за время между оценкой положения робота
@@ -208,12 +208,12 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, float dt
     //Расчет угла, на котором расположена целевая точка
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
-    rfidReader->checkReaderData();
+    rfidReader->checkReaderData(del);
 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
     
-    vel.ang = pid->computeControl(err, dt/1000);
+    vel.ang = pid->computeControl(err, del/1000.0);
     vel.lin = vel.computeLinearSpeed();
 
     // String msg_vel = "Ang_Vel: " + String(vel.ang, 3);
