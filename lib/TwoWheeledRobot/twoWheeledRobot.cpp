@@ -499,6 +499,9 @@ void TwoWheeledRobot::manualControl(int del)
   float L = baseLength;
   float err = 0.0;
 
+  float deltaAngL;
+  float deltaAngR;
+
   while(true)
   {
     switch (getSerialData())
