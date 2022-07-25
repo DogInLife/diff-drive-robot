@@ -8,7 +8,7 @@ Velocity::Velocity()
 
 float Velocity::computeLinearSpeed(float err)
 {
-   if(abs(err) < 0.1)
+   if(fabs(err) < 0.1)
       return 0.5*maxRobot;
    else 
       return 0;
