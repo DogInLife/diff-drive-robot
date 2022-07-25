@@ -255,12 +255,16 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     switch (rfidFound) {
       case 0:
         break;
+
       case 1:
         reachedGoal = true;
+        isFinish = true;
         break;
+
       case 2:
         Serial.println("Not that one");
         break;
+
       default:
         Serial.println("Stranger");
         break;
