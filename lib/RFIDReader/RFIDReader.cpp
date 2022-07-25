@@ -84,13 +84,13 @@ int RFIDReader::getUID() {
 
     //Serial.println(uidStr);
 
-    int rfidFound = 0;
+    int rfidFound;
 
-    if(uidStr == "87eafa67") {
+    if(uidStr.equals("87eafa67")) {
         rfidFound = 1;
-    } else if(uidStr == "bc20eb30") {
+    } else if(uidStr.equals("bc20eb30")) {
         rfidFound = 2;
-    } else rfidFound = 0;
+    } else rfidFound = -1;
 
     // switch(uidStr) {
     //     case("87eafa67"):
