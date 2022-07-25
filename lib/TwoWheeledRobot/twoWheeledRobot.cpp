@@ -239,13 +239,13 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     deltaAngR = motorBlockR->getDeltaAngle();
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
-    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
-    // Serial.println(msg_pos);
+    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    Serial.println(msg_pos);
 
     if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
     {
-      // Serial.println("PT REACHED");
-      // Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+      Serial.println("PT REACHED");
+      Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
       reachedGoal = true;
     }
 
@@ -263,9 +263,11 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       case 3:
         Serial.println("Not that one");
         break;
+
       case 4:
         reachedGoal = true;
         break;
+
       default:
         Serial.println("Stranger");
         break;
