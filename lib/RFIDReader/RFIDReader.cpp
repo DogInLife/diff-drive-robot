@@ -54,12 +54,12 @@ int RFIDReader::checkReaderData() {
     //     Serial.println(String(millis()));
     // }
 
-    int rfidFound = 0;
+    //int rfidFound = 0;
 
     if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial()) {
-        rfidFound = getUID();
-        Serial.println(rfidFound);
-        return rfidFound;
+        //getUID();
+        //Serial.println(rfidFound);
+        return getUID();
     } else {
         return 0;
     }
@@ -82,7 +82,7 @@ int RFIDReader::getUID() {
 		//Serial.print(thisUid->uidByte[i], HEX);
     }
 
-    Serial.println(uidStr);
+    //Serial.println(uidStr);
 
     int rfidFound;
 

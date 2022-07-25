@@ -134,7 +134,7 @@ void TwoWheeledRobot::rfidTest(int del) {
 
   while(true) {
     rfidFound = rfidReader->checkReaderData();
-    //Serial.println(rfidFound);
+    Serial.println(rfidFound);
     delay(del);
   }
 }
@@ -248,8 +248,22 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     }
 
     rfidFound = rfidReader->checkReaderData();
-    if(rfidFound == 1) {
-      reachedGoal = true;
+    // if(rfidFound == 1) {
+    //   reachedGoal = true;
+    //   Serial.println(rfidFound);
+    // }
+    switch (rfidFound) {
+      case 0:
+        break;
+      case 1:
+        reachedGoal = true;
+        break;
+      case 2:
+        Serial.println("Not that one");
+        break;
+      default:
+        Serial.println("Stranger");
+        break;
     }
 
     if(reachedGoal)
