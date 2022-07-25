@@ -174,6 +174,16 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
   }
 }
 
+// void TwoWheeledRobot::faceToGoal(float xGoal, float yGoal) {
+//   bool isFaced = false;
+//   float err = 0.0;
+  
+//   //Расчет угла, на котором расположена целевая точка
+//   pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+//   err = pid->e
+//   while()
+// }
+
 // void TwoWheeledRobot::followRFIDs(int numRFIDs, bool deb) {
 //   for(int i=1; i<=numRFIDs; i++) {
 //     goToGoal():
@@ -187,6 +197,8 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb, bool followRFID, int idRFID) {
+
+
   reachedGoal = false;
 
   // поворот колёс за время между оценкой положения робота
