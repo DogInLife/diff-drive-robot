@@ -82,7 +82,7 @@ int RFIDReader::getUID() {
 		//Serial.print(thisUid->uidByte[i], HEX);
     }
 
-    //Serial.println(uidStr);
+    Serial.println(uidStr);
 
     int rfidFound;
 
