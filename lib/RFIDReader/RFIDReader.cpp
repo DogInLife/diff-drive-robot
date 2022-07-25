@@ -28,8 +28,8 @@ void RFIDReader::readerStart() {
 	//Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 }
 
-void RFIDReader::checkReaderData(int del) {
-    long t_start = millis();
+void RFIDReader::checkReaderData() {
+    //long t_start = millis();
     //int dt = 0;
   	// if(reader.PICC_IsNewCardPresent()) {
     //     Serial.println("111111111111111111111");

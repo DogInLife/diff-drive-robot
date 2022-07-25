@@ -17,15 +17,7 @@ TwoWheeledRobot::TwoWheeledRobot()
   if(!Serial) 
     Serial.begin(9600);
 
-  // while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
-	// SPI.begin();			// Init SPI bus
-	// mfrc522.PCD_Init();		// Init MFRC522
-	// delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme
-	// mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
-	// Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
-
   rfidReader = new RFIDReader(SS_PIN, RST_PIN);
-
   rfidReader->readerStart();
 
   motorBlockL = new MotorBlock();
@@ -103,7 +95,6 @@ byte TwoWheeledRobot::getSerialData()
 
 
 void TwoWheeledRobot::serialControl(bool deb) {
-  //rfidReader->readerStart(); // RFID TEST ?? =/= MOTION ??
   Serial.println(" ===== Choose mode ===== ");
   while (true)
   {
@@ -139,10 +130,9 @@ void TwoWheeledRobot::serialControl(bool deb) {
 }
 
 void TwoWheeledRobot::rfidTest(int del) {
-  //rfidReader->readerStart();
   while(true) {
-    rfidReader->checkReaderData(del);
-    delay(10);
+    rfidReader->checkReaderData();
+    delay(del);
   }
 }
 
@@ -179,8 +169,6 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
-  //this->rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
-
   reachedGoal = false;
 
   // поворот колёс за время между оценкой положения робота
@@ -202,24 +190,17 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   float L = baseLength;
   float err = 0.0;
 
-  // int t_start = millis();
-  // int t_prev = 0.0;
-  // int t_curr = 0.0;
-
-  float dt = 0.0;
-
-  while(!reachedGoal && !globalStop)
-  {
+  while(!reachedGoal && !globalStop) {
     //Расчет угла, на котором расположена целевая точка
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
-    rfidReader->checkReaderData(del);
+    rfidReader->checkReaderData();
 
     //t_curr = millis() - t_start;
     //dt = (t_curr - t_prev) / 1000.0;
 
-    dt = del / 1000.0;
+    dt = (del + 25) / 1000.0; // типа плюс время на вычисления
     //Serial.println(dt);
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
@@ -240,9 +221,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     // motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 
     if(!deb)
-    {
       goForward(velL, velR);
-    }
 
     //float distWheelL = motorBlockL->getTraveledDistance();
     //float distWheelR = motorBlockR->getTraveledDistance();
@@ -253,15 +232,15 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     deltaAngR = motorBlockR->getDeltaAngle();
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
-    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3); ########################################
-    // Serial.println(msg_pos);
+    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    Serial.println(msg_pos);
  
 
     if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
     {
-      // Serial.println("PT REACHED");
-      // Serial.print("err_X: "); Serial.print(pos.x-xGoal, 3);
-      // Serial.print("  err_Y: "); Serial.println(pos.y-yGoal, 3);
+      Serial.println("PT REACHED");
+      Serial.println("X_e: " + String(xGoal-pos.x, 3));
+      Serial.println("Y_e: " + String(yGoal-pos.y, 3));
       reachedGoal = true;
     }
 
@@ -272,7 +251,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         Serial.println("TARGET POINT REACHED");
         stopMoving();
         break;
-      } else { break; }
+      } 
+      else { break; }
     }
     
     // if (DEBUG_PLOT){
@@ -330,8 +310,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         break;
       break;
     }
-
-    //t_prev = t_curr;
 
     delay(del);
   }
