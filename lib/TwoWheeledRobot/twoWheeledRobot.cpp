@@ -239,8 +239,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     deltaAngR = motorBlockR->getDeltaAngle();
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
-    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
-    Serial.println(msg_pos);
+    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    // Serial.println(msg_pos);
 
     if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
     {
@@ -269,14 +269,14 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         Serial.println("RFID 2 REACHED");
         break;
       case 3:
-        x.pos = -0.6;
-        y.pos = 0.6;
+        pos.x = -0.6;
+        pos.y = 0.6;
         Serial.println("RFID 3 REACHED");
         break;
 
       case 4:
-        x.pos = 0.0;
-        y.pos = 0.0;
+        pos.x = 0.0;
+        pos.y = 0.0;
         Serial.println("BACK TO BASE");
         reachedGoal = true;
         break;
