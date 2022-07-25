@@ -301,7 +301,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
       if(rfidFound == idRFID) {
         reachedGoal = true;
-        break;
+        //break;
       }
     }
 
