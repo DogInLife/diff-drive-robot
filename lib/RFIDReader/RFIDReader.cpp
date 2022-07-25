@@ -28,7 +28,7 @@ void RFIDReader::readerStart() {
 	//Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
 }
 
-void RFIDReader::checkReaderData() {
+int RFIDReader::checkReaderData() {
     //long t_start = millis();
     //int dt = 0;
   	// if(reader.PICC_IsNewCardPresent()) {
@@ -54,15 +54,14 @@ void RFIDReader::checkReaderData() {
     //     Serial.println(String(millis()));
     // }
 
-    if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial()) {
-            //this->reader->PICC_DumpToSerial(&(this->reader->uid));
-            getUID();
-            //break;
-        }
+    //int rfidNearby = 0;
 
+    if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial()) {
+        return getUID();
+    }
 }
 
-void RFIDReader::getUID() {
+int RFIDReader::getUID() {
     //this->reader->PICC_DumpDetailsToSerial(&(this->reader->uid));
     MFRC522::Uid *thisUid = &(reader->uid);
     
@@ -77,6 +76,18 @@ void RFIDReader::getUID() {
         uidStr = uidStr + String(thisUid->uidByte[i], HEX);
 		//Serial.print(thisUid->uidByte[i], HEX);
     }
-    Serial.println(uidStr);
+    //Serial.println(uidStr);
+
+    int rfidFound = 0;
+
+    switch(uidStr) {
+        case("87eafa67"):
+            rfidFound = 1;
+            break;
+        case("bc20eb30"):
+            rfidFound = 2;
+            break;
+    }
     reader->PICC_HaltA();
+    return rfidFound;
 }

@@ -11,8 +11,8 @@ class RFIDReader {
         //~RFIDReader(byte SS_PIN, byte RST_PIN);
 
         void readerStart();
-        void checkReaderData();
-        void getUID();
+        int checkReaderData();
+        int getUID();
 };
 
 #endif

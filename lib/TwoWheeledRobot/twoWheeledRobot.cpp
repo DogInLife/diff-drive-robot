@@ -192,12 +192,12 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
   float dt = 0.0;
 
+  int rfidFound = 0;
+
   while(!reachedGoal && !globalStop) {
     //Расчет угла, на котором расположена целевая точка
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
-
-    rfidReader->checkReaderData();
 
     //t_curr = millis() - t_start;
     //dt = (t_curr - t_prev) / 1000.0;
@@ -236,12 +236,16 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
     String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
     Serial.println(msg_pos);
- 
 
     if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
     {
       Serial.println("PT REACHED");
       Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+      reachedGoal = true;
+    }
+
+    rfidFound = rfidReader->checkReaderData();
+    if(rfidFound == 1) {
       reachedGoal = true;
     }
 
