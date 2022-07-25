@@ -88,8 +88,12 @@ int RFIDReader::getUID() {
 
     if(uidStr.equals("87eafa67")) {
         rfidFound = 1;
-    } else if(uidStr.equals("bc20eb30")) {
+    } else if(uidStr.equals("d4a1a733")) {
         rfidFound = 2;
+    } else if(uidStr.equals("49409e5")) {
+        rfidFound = 3;
+    } else if(uidStr.equals("57aba285")) {
+        rfidFound = 4
     } else rfidFound = -1;
 
     // switch(uidStr) {
