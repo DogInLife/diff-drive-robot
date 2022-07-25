@@ -17,7 +17,7 @@ public:
     PID();
     ~PID();
     
-    float computeControl(float err, float dt);
+    float computeControl(float err, float dt, int rfidFound);
     float computeAngleError(float thetaGoal, float theta);
     void setCoefficient(float Kp, float Ki, float Kd);
 

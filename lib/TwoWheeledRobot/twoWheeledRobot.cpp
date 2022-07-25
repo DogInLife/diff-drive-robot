@@ -237,7 +237,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     Serial.println("Err theta: " + String(err, 3));
 
-    vel.ang = pid->computeControl(err, dt);
+    vel.ang = pid->computeControl(err, dt, rfidFound);
     vel.lin = vel.computeLinearSpeed(err);
 
     // String msg_vel = "Ang_Vel: " + String(vel.ang, 3);
@@ -285,7 +285,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
           break;
 
         Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
-
         case 1:
           //pos.x = 0.6;
           //pos.y = 0.6;

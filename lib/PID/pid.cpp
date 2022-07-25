@@ -7,8 +7,11 @@ PID::PID()
 
 PID::~PID(){}
 
-float PID::computeControl(float err, float dt)
+float PID::computeControl(float err, float dt, int rfidFound)
 {
+    if(rfidFound > 0)
+        errSum = 0;
+
     errDot = err - errOld; // дельта соседних измерений
     errSum = errSum + err; // суммарная ошибка за всё время
 
