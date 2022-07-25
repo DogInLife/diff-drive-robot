@@ -143,7 +143,6 @@ void TwoWheeledRobot::rfidTest(int del) {
 
 void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 {
-
   float x0 = 0.0;
   float y0 = 0.0;
 
@@ -271,9 +270,11 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         case 0:
           break;
 
+        Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
+
         case 1:
-          // pos.x = 0.6;
-          // pos.y = 0.6;
+          pos.x = 0.6;
+          pos.y = 0.6;
           Serial.println("RFID 1 REACHED");
           break;
         case 2:
@@ -315,7 +316,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       {
         stopMoving();
         Serial.println("TARGET POINT REACHED");
-        Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
+        //Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
         break;
       } 
       else { break; }
