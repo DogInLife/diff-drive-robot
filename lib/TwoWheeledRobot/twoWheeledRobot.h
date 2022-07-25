@@ -53,8 +53,8 @@ public:
     
 // ========= behavior ===========
     void serialControl(bool deb);
-    void goCircle(float radius, int ptsNum, bool deb, bool followRFID, int idRFID);
-    void goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb);
+    void goCircle(float radius, int ptsNum, bool deb);
+    void goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb, bool followRFID, int idRFID);
     void manualControl(int dt);
 
     void rfidTest(int del);
