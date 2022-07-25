@@ -190,6 +190,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   float L = baseLength;
   float err = 0.0;
 
+  float dt = 0.0;
+
   while(!reachedGoal && !globalStop) {
     //Расчет угла, на котором расположена целевая точка
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
