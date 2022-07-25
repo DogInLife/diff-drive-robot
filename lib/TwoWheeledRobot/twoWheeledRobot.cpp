@@ -113,7 +113,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.6, 8, deb);
+          goCircle(0.6, 4, deb);
           break;
 
         // case ('t'):
@@ -149,7 +149,8 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
   float x;
   float y;
   
-  bool followRFID = false;
+  //bool followRFID = false;
+  bool followRFID = true;
 
   bool isFinish = false;
 
@@ -159,7 +160,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 
   for(int i=1; i <= ptsNum; i++)
   {
-    if(i % 2 == 0) followRFID = true;
+    //if(i % 2 == 0) followRFID = true;
     if(i == ptsNum) { isFinish = true; }
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
