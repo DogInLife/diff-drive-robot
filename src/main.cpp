@@ -28,12 +28,12 @@ void setup() {
   robot.createWheels(WHEEL_RADIUS, BASE_LENGTH, MAX_VELOCITY);
   robot.setEncoderPins(ENCODER_PIN_L, ENCODER_PIN_R);
   robot.setDriverPins(DRIVER_PWM_PIN_A, DRIVER_IN_A2, DRIVER_IN_A1 , DRIVER_IN_B1, DRIVER_IN_B2,  DRIVER_PWM_PIN_B);
-  //robot.tunePID(5.3, 4.8, 0);
+  robot.tunePID(5.3, 4.8, 0);
   //robot.tunePID(0.7, 1.5, 0.0);
   //robot.tunePID(4, 1.5, 0); 
   //robot.tunePID(3.5, 1.8, 0); // Тестовые с видео
 
-  robot.tunePID(3.4, 0.5, 0.9);
+  //robot.tunePID(3.4, 0.5, 0.9);
 // ====== Д Л Я  120 ОБ/МИН ======
 //   KpL = 600.0;
 //   KiL = 12000.0;
