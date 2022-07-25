@@ -11,7 +11,7 @@ float Velocity::computeLinearSpeed(float err)
    // if(fabs(ang) < 0.5)
    //    return 0.5*maxRobot*4*square(0.5 - fabs(ang));
    // else 
-   //    return 0; 
+   //    return 0;
 
    return 0.8*(0.5*maxRobot*(1 + cos(err)));
    //return 0.6*maxRobot/(square(fabs(ang)) + 1); // =======  А ЭТУ ШТУКУ МОЖНО ИСПОЛЬЗОВАТЬ КАК-ТО ПРИ УГЛОВАТЫХ ТРАЕКТОРИЯХ
