@@ -41,7 +41,6 @@ void RFIDReader::checkReaderData(int del) {
     // reader.PICC_DumpDetailsToSerial(&(reader.uid));
     
     //Serial.println("CHEEEEECK");
-    Serial.println(millis() - t_start);
     
     while(millis() - t_start < del) {
     //while(millis()-t_start < del) {
@@ -51,6 +50,8 @@ void RFIDReader::checkReaderData(int del) {
             getUID();
             //break;
         }
+
+        Serial.println(millis() - t_start);
     }
 }
 
