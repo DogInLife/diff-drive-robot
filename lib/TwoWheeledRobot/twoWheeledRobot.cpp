@@ -149,8 +149,8 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
   float x;
   float y;
   
-  //bool followRFID = false;
-  bool followRFID = true;
+  bool followRFID = false;
+  //bool followRFID = true;
 
   bool isFinish = false;
 
