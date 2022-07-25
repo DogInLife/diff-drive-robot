@@ -219,7 +219,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     t_curr = millis() - t_start;
 
     dt = (t_curr - t_prev) / 1000.0;
-    Serial.println(dt);
+    //Serial.println(dt);
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
     
