@@ -159,7 +159,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 
   for(int i=1; i <= ptsNum; i++)
   {
-    if(i % 2 == ) followRFID = true;
+    if(i % 2 == 0) followRFID = true;
     if(i == ptsNum) { isFinish = true; }
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
