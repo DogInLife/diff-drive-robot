@@ -108,7 +108,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
 
         case ('g'):
           Serial.println("========= GO GO GO =========");
-          goToGoal(1, 0, true, 50, deb);
+          goToGoal(3, 0, true, 50, deb);
           break;
         
         case ('c'):
@@ -136,7 +136,7 @@ void TwoWheeledRobot::rfidTest(int del) {
     rfidFound = rfidReader->checkReaderData();
     if(rfidFound > 0)
       Serial.println(rfidFound);
-      
+
     delay(del);
   }
 }
@@ -239,13 +239,13 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     deltaAngR = motorBlockR->getDeltaAngle();
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
-    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
-    Serial.println(msg_pos);
+    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    // Serial.println(msg_pos);
 
     if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
     {
-      Serial.println("PT REACHED");
-      Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+      // Serial.println("PT REACHED");
+      // Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
       reachedGoal = true;
     }
 
