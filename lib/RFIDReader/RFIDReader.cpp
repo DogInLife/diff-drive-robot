@@ -51,7 +51,7 @@ void RFIDReader::checkReaderData(int del) {
             //break;
         }
 
-        Serial.println(String(millis() - t_start));
+        Serial.println(String(millis()));
     }
 }
 
