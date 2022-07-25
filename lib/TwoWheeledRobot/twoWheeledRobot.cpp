@@ -503,8 +503,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb) {
       String msg_q_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3) + " dt: " + String(dt, 4);
       Serial.println(msg_q_err); 
 
-      uL = pidL->computeControl(qL_err, dt);
-      uR = pidR->computeControl(qR_err, dt);
+      //uL = pidL->computeControl(qL_err, dt);
+      //uR = pidR->computeControl(qR_err, dt);
 
       whl_velL = dqL_des + uL;
       whl_velR = dqR_des + uR;
