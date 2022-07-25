@@ -30,21 +30,21 @@ void RFIDReader::readerStart() {
 
 void RFIDReader::checkReaderData(int del) {
     int t_start = millis();
-  	if(reader.PICC_IsNewCardPresent()) {
-        Serial.println("111111111111111111111");
-    }
-    if(reader.PICC_ReadCardSerial()) {
-        Serial.println("22222222222222222222");
-    }
+  	// if(reader.PICC_IsNewCardPresent()) {
+    //     Serial.println("111111111111111111111");
+    // }
+    // if(reader.PICC_ReadCardSerial()) {
+    //     Serial.println("22222222222222222222");
+    // }
 
     // reader.PICC_DumpDetailsToSerial(&(reader.uid));
     
     //Serial.println("CHEEEEECK");
     while(millis()-t_start < del) {
         //Serial.println("CHECK");
-        if(this->reader->PICC_IsNewCardPresent() && this->reader->PICC_ReadCardSerial()) {
+        if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial()) {
             //this->reader->PICC_DumpToSerial(&(this->reader->uid));
-            this->getUID();
+            getUID();
             //break;
         }
     }
