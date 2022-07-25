@@ -242,7 +242,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
     Serial.println(msg_pos);
 
-    if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
+    if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
     {
       Serial.println("PT REACHED");
       Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
@@ -259,12 +259,25 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         break;
 
       case 1:
+        pos.x = 0.6;
+        pos.y = 0.6;
+        Serial.println("RFID 1 REACHED");
+        break;
       case 2:
+        pos.x = 0.0;
+        pos.y = 1.2;
+        Serial.println("RFID 2 REACHED");
+        break;
       case 3:
-        Serial.println("Not that one");
+        x.pos = -0.6;
+        y.pos = 0.6;
+        Serial.println("RFID 3 REACHED");
         break;
 
       case 4:
+        x.pos = 0.0;
+        y.pos = 0.0;
+        Serial.println("BACK TO BASE");
         reachedGoal = true;
         break;
 
