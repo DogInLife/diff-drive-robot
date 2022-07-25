@@ -78,7 +78,7 @@ int RFIDReader::getUID() {
         //     //uidStr = uidStr + "0";
 		// else
 		// 	//Serial.print(F(" ")); // ###
-        uidStr = uidStr + String(thisUid->uidByte[i], DEC);
+        uidStr = uidStr + String(thisUid->uidByte[i], HEX);
 		//Serial.print(thisUid->uidByte[i], HEX);
     }
 
