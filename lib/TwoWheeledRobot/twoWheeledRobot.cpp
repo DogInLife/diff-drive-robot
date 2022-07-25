@@ -265,6 +265,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         break;
       case 4:
         reachedGoal = true;
+        break;
       default:
         Serial.println("Stranger");
         break;
