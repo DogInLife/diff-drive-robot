@@ -58,7 +58,10 @@ int RFIDReader::checkReaderData() {
 
     if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial()) {
         return getUID();
+    } else {
+        return 0;
     }
+    
 }
 
 int RFIDReader::getUID() {
@@ -80,14 +83,21 @@ int RFIDReader::getUID() {
 
     int rfidFound = 0;
 
-    switch(uidStr) {
-        case("87eafa67"):
-            rfidFound = 1;
-            break;
-        case("bc20eb30"):
-            rfidFound = 2;
-            break;
-    }
+    if(uidStr == "87eafa67") {
+        rfidFound = 1;
+    } else if(uidStr == "bc20eb30") {
+        rfidFound = 2;
+    } else rfidFound = 0;
+
+    // switch(uidStr) {
+    //     case("87eafa67"):
+    //         rfidFound = 1;
+    //         break;
+    //     case("bc20eb30"):
+    //         rfidFound = 2;
+    //         break;
+    // }
+
     reader->PICC_HaltA();
     return rfidFound;
 }
