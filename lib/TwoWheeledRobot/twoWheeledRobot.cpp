@@ -113,7 +113,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.6, 8, deb);
+          goCircle(0.6, 4, deb);
           break;
 
         // case ('t'):
@@ -149,6 +149,8 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 
   float x;
   float y;
+  
+  bool followRFID = true;
 
   bool isFinish = false;
 
@@ -162,7 +164,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
     x = x0 + radius * sin(dPhi*i);
     y = (y0 + radius) - radius * cos(dPhi*i);
     Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isFinish, 50, deb);
+    goToGoal(x, y, isFinish, 50, deb, followRFID, i);
     if(globalStop) 
     { 
       Serial.println(" ==== GLOBAL STOP ==== ");
@@ -171,9 +173,19 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
   }
 }
 
+// void TwoWheeledRobot::followRFIDs(int numRFIDs, bool deb) {
+//   for(int i=1; i<=numRFIDs; i++) {
+//     goToGoal():
+//     if(globalStop) {
+//       Serial.println(" ==== GLOBAL STOP ==== ");
+//       break
+//     }
+//   }
+// }
+
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
-void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
+void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb, bool followRFID, int idRFID) {
   reachedGoal = false;
 
   // поворот колёс за время между оценкой положения робота
@@ -242,48 +254,55 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
     Serial.println(msg_pos);
 
-    if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
-    {
-      Serial.println("PT REACHED");
-      Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
-      reachedGoal = true;
-    }
+    if(!followRFID) {
+      if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
+      {
+        Serial.println("PT REACHED");
+        Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+        reachedGoal = true;
+      }
+    } else {
+      rfidFound = rfidReader->checkReaderData();
+      // if(rfidFound == 1) {
+      //   reachedGoal = true;
+      //   Serial.println(rfidFound);
+      // }
+      switch (rfidFound) {
+        case 0:
+          break;
 
-    rfidFound = rfidReader->checkReaderData();
-    // if(rfidFound == 1) {
-    //   reachedGoal = true;
-    //   Serial.println(rfidFound);
-    // }
-    switch (rfidFound) {
-      case 0:
-        break;
+        case 1:
+          pos.x = 0.6;
+          pos.y = 0.6;
+          Serial.println("RFID 1 REACHED");
+          break;
+        case 2:
+          pos.x = 0.0;
+          pos.y = 1.2;
+          Serial.println("RFID 2 REACHED");
+          break;
+        case 3:
+          pos.x = -0.6;
+          pos.y = 0.6;
+          Serial.println("RFID 3 REACHED");
+          break;
 
-      case 1:
-        pos.x = 0.6;
-        pos.y = 0.6;
-        Serial.println("RFID 1 REACHED");
-        break;
-      case 2:
-        pos.x = 0.0;
-        pos.y = 1.2;
-        Serial.println("RFID 2 REACHED");
-        break;
-      case 3:
-        pos.x = -0.6;
-        pos.y = 0.6;
-        Serial.println("RFID 3 REACHED");
-        break;
+        case 4:
+          pos.x = 0.0;
+          pos.y = 0.0;
+          Serial.println("BACK TO BASE");
+          reachedGoal = true;
+          break;
 
-      case 4:
-        pos.x = 0.0;
-        pos.y = 0.0;
-        Serial.println("BACK TO BASE");
+        default:
+          Serial.println("Stranger");
+          break;
+      }
+
+      if(rfidFound == idRFID) {
         reachedGoal = true;
         break;
-
-      default:
-        Serial.println("Stranger");
-        break;
+      }
     }
 
     // //Расчет угла, на котором расположена целевая точка
