@@ -113,7 +113,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.6, 4, deb);
+          goCircle(0.6, 8, deb);
           break;
 
         // case ('t'):
@@ -285,6 +285,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         Serial.println("Stranger");
         break;
     }
+
+    //Расчет угла, на котором расположена целевая точка
+    pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
 
     if(reachedGoal)
     {
