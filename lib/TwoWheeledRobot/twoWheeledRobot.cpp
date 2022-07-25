@@ -101,7 +101,7 @@ byte TwoWheeledRobot::getSerialData()
 
 
 void TwoWheeledRobot::serialControl(bool deb) {
-  //this->rfidReader->readerStart(); // RFID TEST OK =/= ??
+  rfidReader->readerStart(); // RFID TEST ?? =/= MOTION ??
   Serial.println(" ===== Choose mode ===== ");
   while (true)
   {
@@ -131,7 +131,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
 
         case ('r'):
           Serial.println(" ===== RFID reader test ===== ");
-          //this->rfidReader->readerStart(); // RFID TEST OK
+          //this->rfidReader->readerStart(); // RFID TEST ??
           rfidTest(100);
           break;
       }
@@ -139,7 +139,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
 }
 
 void TwoWheeledRobot::rfidTest(int del) {
-  rfidReader->readerStart(); // RFID TEST OK
+  //rfidReader->readerStart(); // RFID TEST OK
   while(true) {
     rfidReader->checkReaderData(del);
     delay(10);
@@ -180,7 +180,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
 void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb) {
-  this->rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
+  //this->rfidReader->readerStart(); // ПЕРЕБОИ ПРИ КАЖДОМ READERSTART
 
   reachedGoal = false;
 
