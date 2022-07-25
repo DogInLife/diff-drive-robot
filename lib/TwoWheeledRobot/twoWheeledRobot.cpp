@@ -240,8 +240,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     vel.ang = pid->computeControl(err, dt);
     vel.lin = vel.computeLinearSpeed(err);
 
-    // String msg_vel = "Ang_Vel: " + String(vel.ang, 3);
-    // Serial.println(msg_vel);
+    String msg_vel = "Ang_Vel: " + String(vel.ang, 3);
+    Serial.println(msg_vel);
 
     //Расчет скоростей для каждого двигателя в об/мин
     velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
