@@ -3,17 +3,6 @@
 #include "constants.h"
 #include "RFIDReader.h"
 
-#define RST_PIN         5          // Configurable, see typical pin layout above
-#define SS_PIN          53         // Configurable, see typical pin layout above
-
-
-//Serial.begin(9600);
-//RFIDReader* rfidReader = new RFIDReader(SS_PIN, RST_PIN);
-
-// #include <SPI.h>
-//#include <MFRC522.h>
-
-// MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 
 byte del = 50; // задержка
 int whl_vel_des = 60; // скорость колеса [об/мин]
@@ -42,8 +31,8 @@ void setup() {
   //robot.tunePID(5.3, 4.8, 0);
   //robot.tunePID(0.7, 1.5, 0.0);
   //robot.tunePID(4, 1.5, 0); 
-  //robot.tunePID(3.5, 1.8, 0); // Тестовые с видео
-  robot.tunePID(0.1, 0, 0);
+  robot.tunePID(3.5, 1.8, 0); // Тестовые с видео
+  //robot.tunePID(0.1, 0, 0);
 // ====== Д Л Я  120 ОБ/МИН ======
 //   KpL = 600.0;
 //   KiL = 12000.0;
@@ -80,9 +69,7 @@ void setup() {
 
 
 void loop() {
-  // rfidReader->checkReaderData();
-  //delay(50);
-  //robot.serialControl(deb);
+
 }
 
 
