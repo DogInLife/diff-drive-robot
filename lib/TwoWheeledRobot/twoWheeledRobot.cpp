@@ -134,7 +134,7 @@ void TwoWheeledRobot::rfidTest(int del) {
 
   while(true) {
     rfidFound = rfidReader->checkReaderData();
-    Serial.println(rfidFound);
+    //Serial.println(rfidFound);
     delay(del);
   }
 }
