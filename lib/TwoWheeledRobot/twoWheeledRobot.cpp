@@ -292,13 +292,13 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
           break;
         case 2:
           pos.x = 0.0;
-          pos.y = 1.2;
-          Serial.println("RFID 2 REACHED 0.0 1.2");
+          pos.y = 0.6;
+          Serial.println("RFID 2 REACHED 0.0 0.6");
           break;
         case 3:
           pos.x = -0.6;
           pos.y = 0.6;
-          Serial.println("RFID 3 REACHED -0.6 0.6");
+          Serial.println("RFID 3 REACHED 0.0 1.2");
           break;
 
         case 4:
