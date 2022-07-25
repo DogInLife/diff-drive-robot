@@ -286,9 +286,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         break;
     }
 
-    //Расчет угла, на котором расположена целевая точка
-    pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
-    Serial.println("Theta GOAL: " + String(pos.thetaGoal, 3));
+    // //Расчет угла, на котором расположена целевая точка
+    // pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+    // Serial.println("Theta GOAL: " + String(pos.thetaGoal, 3));
 
     if(reachedGoal)
     {
