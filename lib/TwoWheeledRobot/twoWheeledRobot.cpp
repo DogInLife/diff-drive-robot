@@ -216,9 +216,10 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
     rfidReader->checkReaderData(del);
 
-    t_curr = millis() - t_start;
+    //t_curr = millis() - t_start;
+    //dt = (t_curr - t_prev) / 1000.0;
 
-    dt = (t_curr - t_prev) / 1000.0;
+    dt = del / 1000.0;
     //Serial.println(dt);
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
@@ -330,9 +331,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       break;
     }
 
-    t_prev = t_curr;
+    //t_prev = t_curr;
 
-    //delay(dt);
+    delay(dt);
   }
 }
 
