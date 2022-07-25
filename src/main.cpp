@@ -33,7 +33,7 @@ void setup() {
   //robot.tunePID(4, 1.5, 0); 
   //robot.tunePID(3.5, 1.8, 0); // Тестовые с видео
 
-  robot.tunePID(5, 10, 1);
+  robot.tunePID(2.4, 10, 1);
 // ====== Д Л Я  120 ОБ/МИН ======
 //   KpL = 600.0;
 //   KiL = 12000.0;
