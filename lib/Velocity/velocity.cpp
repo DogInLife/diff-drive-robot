@@ -8,9 +8,9 @@ Velocity::Velocity()
 float Velocity::computeLinearSpeed()
 {
    if(fabs(ang) > 0.1)
-      return maxRobot/(8*fabs(ang));
+      return maxRobot/(5*fabs(ang));
    else 
-      return 0.8*maxRobot; 
+      return 0.5*maxRobot; 
 
    //return 0.6*maxRobot/(square(fabs(ang)) + 1); // =======  А ЭТУ ШТУКУ МОЖНО ИСПОЛЬЗОВАТЬ КАК-ТО ПРИ УГЛОВАТЫХ ТРАЕКТОРИЯХ
    //return maxRobot*2.0/5.0;
