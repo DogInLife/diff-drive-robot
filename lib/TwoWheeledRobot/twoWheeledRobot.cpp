@@ -202,9 +202,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   float L = baseLength;
   float err = 0.0;
 
-  int t_start = millis();
-  int t_prev = 0.0;
-  int t_curr = 0.0;
+  // int t_start = millis();
+  // int t_prev = 0.0;
+  // int t_curr = 0.0;
 
   float dt = 0.0;
 
@@ -333,7 +333,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
     //t_prev = t_curr;
 
-    delay(dt);
+    delay(del);
   }
 }
 
