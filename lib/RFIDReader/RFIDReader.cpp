@@ -30,6 +30,7 @@ void RFIDReader::readerStart() {
 
 void RFIDReader::checkReaderData(int del) {
     int t_start = millis();
+    int dt = 0;
   	// if(reader.PICC_IsNewCardPresent()) {
     //     Serial.println("111111111111111111111");
     // }
@@ -40,7 +41,10 @@ void RFIDReader::checkReaderData(int del) {
     // reader.PICC_DumpDetailsToSerial(&(reader.uid));
     
     //Serial.println("CHEEEEECK");
-    while(millis()-t_start < del) {
+    dt = millis() - t_start;
+    Serial.println(dt);
+    while(dt < del) {
+    //while(millis()-t_start < del) {
         //Serial.println("CHECK");
         if(reader->PICC_IsNewCardPresent() && reader->PICC_ReadCardSerial()) {
             //this->reader->PICC_DumpToSerial(&(this->reader->uid));
@@ -66,6 +70,5 @@ void RFIDReader::getUID() {
 		//Serial.print(thisUid->uidByte[i], HEX);
     }
     Serial.println(uidStr);
-    //Serial.println();
     reader->PICC_HaltA();
 }
