@@ -26,6 +26,8 @@ TwoWheeledRobot::TwoWheeledRobot()
 
   rfidReader = new RFIDReader(SS_PIN, RST_PIN);
 
+  rfidReader->readerStart();
+
   motorBlockL = new MotorBlock();
   motorBlockR = new MotorBlock();
   pidL = new PID();
@@ -101,7 +103,7 @@ byte TwoWheeledRobot::getSerialData()
 
 
 void TwoWheeledRobot::serialControl(bool deb) {
-  rfidReader->readerStart(); // RFID TEST ?? =/= MOTION ??
+  //rfidReader->readerStart(); // RFID TEST ?? =/= MOTION ??
   Serial.println(" ===== Choose mode ===== ");
   while (true)
   {
@@ -120,7 +122,6 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          //this->rfidReader->readerStart(); // ??
           goCircle(0.6, 24, deb);
           break;
 
@@ -131,7 +132,6 @@ void TwoWheeledRobot::serialControl(bool deb) {
 
         case ('r'):
           Serial.println(" ===== RFID reader test ===== ");
-          //this->rfidReader->readerStart(); // RFID TEST ??
           rfidTest(100);
           break;
       }
@@ -139,7 +139,6 @@ void TwoWheeledRobot::serialControl(bool deb) {
 }
 
 void TwoWheeledRobot::rfidTest(int del) {
-  //rfidReader->readerStart(); // RFID TEST OK
   while(true) {
     rfidReader->checkReaderData(del);
     delay(10);
@@ -148,7 +147,6 @@ void TwoWheeledRobot::rfidTest(int del) {
 
 void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
 {
-  //this->rfidReader->readerStart(); // ??
 
   float x0 = 0.0;
   float y0 = 0.0;
@@ -215,7 +213,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     // Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
-    this->rfidReader->checkReaderData(del);
+    rfidReader->checkReaderData(del);
 
     t_curr = millis() - t_start;
 
