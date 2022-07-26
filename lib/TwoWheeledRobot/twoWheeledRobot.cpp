@@ -602,8 +602,15 @@ void TwoWheeledRobot::manualControl(int del)
       break;
     }
 
-    distWheelL = motorBlockL->getTraveledDistance();
-    distWheelR = motorBlockR->getTraveledDistance();
+    // pos.computeCurentPose(distWheelL, distWheelR, distWheelC, baseLength);
+
+
+    deltaAngL = motorBlockL->getDeltaAngle();
+    deltaAngR = motorBlockR->getDeltaAngle();
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
+
+    distWheelL = distWheelL + deltaAngL*r;
+    distWheelR = distWheelR + deltaAngR*r;
     distWheelC = (distWheelR + distWheelL) / 2;
 
     Serial.println(distWheelC);
@@ -613,12 +620,6 @@ void TwoWheeledRobot::manualControl(int del)
       stopMoving();
       break;
     }
-    // pos.computeCurentPose(distWheelL, distWheelR, distWheelC, baseLength);
-
-
-    deltaAngL = motorBlockL->getDeltaAngle();
-    deltaAngR = motorBlockR->getDeltaAngle();
-    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
 
     String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3) + " " + String(pos.theta);
