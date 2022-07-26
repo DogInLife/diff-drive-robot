@@ -103,7 +103,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
       {
         case ('m'):
           Serial.println("=== You are using manual control ===");
-          manualControl(50);
+          manualControl(10);
           break;
 
         case ('g'):
