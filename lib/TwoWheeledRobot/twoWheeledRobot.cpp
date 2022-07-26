@@ -566,6 +566,10 @@ void TwoWheeledRobot::manualControl(int del)
   float deltaAngL;
   float deltaAngR;
 
+  float distWheelL = 0.0;
+  float distWheelR = 0.0;
+  float distWheelC = 0.0;
+
   while(true)
   {
     switch (getSerialData())
@@ -598,9 +602,15 @@ void TwoWheeledRobot::manualControl(int del)
       break;
     }
 
-    // float distWheelL = motorBlockL->getTraveledDistance();
-    // float distWheelR = motorBlockR->getTraveledDistance();
-    // float distWheelC = (distWheelR + distWheelL) / 2;
+    distWheelL = motorBlockL->getTraveledDistance();
+    distWheelR = motorBlockR->getTraveledDistance();
+    distWheelC = (distWheelR + distWheelL) / 2;
+
+    if(distWheelC > 1.0) {
+      Serial.println("1 m traveled, distance: " + String(distWheelC, 3));
+      stopMoving();
+      break;
+    }
     // pos.computeCurentPose(distWheelL, distWheelR, distWheelC, baseLength);
 
 

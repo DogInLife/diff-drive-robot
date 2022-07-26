@@ -3,7 +3,7 @@
 
 Position::Position() 
 :   x(0.0), y(0.0), theta(0.0),
-    xGoal(0.0), yGoal(0.0), thetaGoal(0.0)
+    xGoal(0.0), yGoal(0.0), thetaGoal(0.0), traveledDistance(0.0)
 {}
 
 void Position::computeCurentPose(float D_L, float D_R, float D_C, float L)
@@ -98,10 +98,16 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
 
     x = x + deltaX;
     y = y + deltaY;
+
+    // traveledDistance = traveledDistance + sqrt(square(deltaX) + square(deltaY));
     
     float nextTheta = theta + deltaTheta;
     if(nextTheta > 3.141593) theta = nextTheta - 2*3.141593;
     else if(nextTheta < -3.141593) theta = nextTheta + 2*3.141593;
     else theta = nextTheta; 
+
+}
+
+float Position::getTraveledDistance() {
 
 }

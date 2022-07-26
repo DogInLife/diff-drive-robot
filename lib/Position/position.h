@@ -14,6 +14,8 @@ public:
     float yGoal;
     float thetaGoal;
 
+    float traveledDistance;
+
     Position();
     void computeCurentPose(float D_L, float D_R, float D_C, float L);
     void estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, float L); // оценка текущей позиции робота по данным с энкодеров

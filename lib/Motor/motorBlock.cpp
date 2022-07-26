@@ -104,7 +104,7 @@ float MotorBlock::getTraveledDistance()
 
     // Обновление значений
     distanceTraveled_k0 = distanceTraveled_k1; // по пройденному расстоянию
-    encoder->overallTurnEnc_k0 = ovTurn_k1;    // по абсолютному улглу энкодера
+    //encoder->overallTurnEnc_k0 = ovTurn_k1;    // по абсолютному улглу энкодера
 
     return distanceTraveled_k1;
 }
