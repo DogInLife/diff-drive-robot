@@ -615,7 +615,7 @@ void TwoWheeledRobot::manualControl(int del)
 
     Serial.println(distWheelC);
 
-    if(distWheelC > 1.0) {
+    if(distWheelC >= 1.0) {
       Serial.println("1 m traveled, distance: " + String(distWheelC, 3));
       stopMoving();
       break;
