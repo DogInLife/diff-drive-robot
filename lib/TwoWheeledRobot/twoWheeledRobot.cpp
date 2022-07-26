@@ -606,6 +606,8 @@ void TwoWheeledRobot::manualControl(int del)
     distWheelR = motorBlockR->getTraveledDistance();
     distWheelC = (distWheelR + distWheelL) / 2;
 
+    Serial.println(distWheelC);
+
     if(distWheelC > 1.0) {
       Serial.println("1 m traveled, distance: " + String(distWheelC, 3));
       stopMoving();
