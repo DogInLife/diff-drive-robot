@@ -107,7 +107,3 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     else theta = nextTheta; 
 
 }
-
-float Position::getTraveledDistance() {
-
-}
