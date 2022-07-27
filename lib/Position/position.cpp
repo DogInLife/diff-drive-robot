@@ -109,7 +109,6 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
         y = y + dPath*avgYerr;
         distWheelPrev = distWheelC;
         corrected = true;
-        //Serial.println("CORRECTED");
     } 
     
     float nextTheta = theta + deltaTheta;
