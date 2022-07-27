@@ -20,7 +20,7 @@ void RFIDReader::readerStart() {
     //Serial.begin(9600);
     Serial.println(F("Start"));
 	if(!Serial) 
-        Serial.begin(9600);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+        Serial.begin(38400);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
 	SPI.begin();			// Init SPI bus
 	reader->PCD_Init();		// Init MFRC522
 	delay(4);				// Optional delay. Some board do need more time after init to be ready, see Readme

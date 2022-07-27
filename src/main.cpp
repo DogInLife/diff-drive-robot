@@ -21,7 +21,7 @@ float KdR = 0.0;
 
 void setup() {
 
-  Serial.begin(9600);
+  Serial.begin(38400);
   TwoWheeledRobot robot;
   // Serial.println(F("SETUP"));
   // rfidReader->readerStart();

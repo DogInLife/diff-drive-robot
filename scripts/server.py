@@ -11,7 +11,7 @@ sys.path.append('/opt/ros/kinetic/lib/python2.7/dist-packages')
 '''
 
 ser = serial.Serial()
-ser.baudrate = 9600
+ser.baudrate = 38400
 ser.port = '/dev/ttyUSB0'   # for Raspberry
 # s.port = '/dev/ttyACM0'     # for Linux
 ser.timeout = 0.5
