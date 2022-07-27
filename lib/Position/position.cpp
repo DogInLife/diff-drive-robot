@@ -32,7 +32,7 @@ void Position::computeCurentPose(float D_L, float D_R, float D_C, float L)
 void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, float L, float distWheelC)
 {
     float avgXerr = 0.01; // средняя погрешность измерений по X на метр пройденного пути
-    float avgYerr = -0,047; // средняя погрешность измерений по Y на метр пройденного пути
+    float avgYerr = -0.047; // средняя погрешность измерений по Y на метр пройденного пути
     float distWheelPrev = 0.0;
     float dPath = 0.2; // дельта расстояние, за которое учитывается погрешность измерений
 
