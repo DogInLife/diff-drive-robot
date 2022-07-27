@@ -3,7 +3,7 @@
 
 Position::Position() 
 :   x(0.0), y(0.0), theta(0.0),
-    xGoal(0.0), yGoal(0.0), thetaGoal(0.0), distWheelPrev(0.0)
+    xGoal(0.0), yGoal(0.0), thetaGoal(0.0), distWheelPrev(0.0), 
     corrected(false)
 {}
 
