@@ -46,7 +46,8 @@ void TwoWheeledRobot::createWheels(float wheelRadius, float baseLength, float ma
   this->baseLength = baseLength;
   // vel.max = 6.28/60*wheelRadius*maxVel;
   vel.maxWheel = maxVel; // макс. скорость вращения колёс [об/мин]
-  vel.maxRobot = maxVel * 2.0 * 3.141593 * wheelRadius / 60.0; // макс. линейная скорость робота [м/с]
+  //vel.maxRobot = maxVel * 2.0 * 3.141593 * wheelRadius / 60.0; // макс. линейная скорость робота [м/с]
+  vel.maxRobot = maxVel * wheelRadius;
   // if (DEBUG){
   //   Serial.print("vel.max: "); Serial.println(vel.maxWheel);
   // }
@@ -248,8 +249,11 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     Serial.println(msg_vel);
 
     //Расчет скоростей для каждого двигателя в об/мин
-    velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
-    velR = ((2.0 * vel.lin + vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
+    // velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
+    // velR = ((2.0 * vel.lin + vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
+    velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * r);
+    velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * r);
+    
 
     Serial.println("vleL: " + String(velL, 3) + " velR " + String(velR, 3));
 
