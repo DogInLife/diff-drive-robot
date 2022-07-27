@@ -286,7 +286,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     Serial.println(msg_pos);
 
     if(!followRFID) {
-      if((abs(xGoal-pos.x) < 0.01) && (abs(yGoal-pos.y) < 0.01))
+      if((abs(xGoal-pos.x) < 0.025) && (abs(yGoal-pos.y) < 0.025))
       {
         Serial.println("PT REACHED");
         Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
