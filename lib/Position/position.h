@@ -14,7 +14,7 @@ public:
     float yGoal;
     float thetaGoal;
 
-    float traveledDistance;
+    float distWheelPrev;
 
     Position();
     void computeCurentPose(float D_L, float D_R, float D_C, float L);
