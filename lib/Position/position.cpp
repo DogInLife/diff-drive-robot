@@ -104,12 +104,12 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     x = x + deltaX;
     y = y + deltaY;
 
-    if(distWheelC-distWheelPrev >= dPath) {
-        x = x + dPath*avgXerr;
-        y = y + dPath*avgYerr;
-        distWheelPrev = distWheelC;
-        corrected = true;
-    } 
+    // if(distWheelC-distWheelPrev >= dPath) {
+    //     x = x + dPath*avgXerr;
+    //     y = y + dPath*avgYerr;
+    //     distWheelPrev = distWheelC;
+    //     corrected = true;
+    // } 
     
     float nextTheta = theta + deltaTheta;
     if(nextTheta > 3.141593) theta = nextTheta - 2*3.141593;
