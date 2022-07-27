@@ -245,8 +245,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     vel.ang = pid->computeControl(err, dt, rfidFound);
     vel.lin = vel.computeLinearSpeed(err);
 
-    String msg_vel = "Ang_Vel: " + String(vel.ang, 3) + " Lin_Vel: " + String(vel.lin, 3);
-    Serial.println(msg_vel);
+    // String msg_vel = "Ang_Vel: " + String(vel.ang, 3) + " Lin_Vel: " + String(vel.lin, 3);
+    // Serial.println(msg_vel);
 
     //Расчет скоростей для каждого двигателя в об/мин
     // velL = ((2.0 * vel.lin - vel.ang * L) / (2.0 * r)) * 60.0 / (2*3.141593);
@@ -278,8 +278,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L, distWheelC);
 
-    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
-    // Serial.println(msg_pos);
+    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    Serial.println(msg_pos);
 
     if(!followRFID) {
       if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
