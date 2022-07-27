@@ -36,7 +36,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     // float avgYerr = -0.047; // средняя погрешность измерений по Y на метр пройденного пути
     
     float avgXerr = 0.04872;
-    float avgYerr = -0,03613;
+    float avgYerr = -0.03613;
 
     float dPath = 0.2; // дельта расстояние, за которое учитывается погрешность измерений
 
