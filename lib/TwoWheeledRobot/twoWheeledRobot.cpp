@@ -291,6 +291,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         Serial.println("PT REACHED");
         Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
         reachedGoal = true;
+        Serial.println(distWheelC);
       }
     } else {
       rfidFound = rfidReader->checkReaderData();
