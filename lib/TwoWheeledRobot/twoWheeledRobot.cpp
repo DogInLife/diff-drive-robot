@@ -108,12 +108,12 @@ void TwoWheeledRobot::serialControl(bool deb) {
 
         case ('g'):
           Serial.println("========= GO GO GO =========");
-          goToGoal(0.6, 0.6, true, 50, deb, true, 3);
+          goToGoal(0.6, 0.6, true, 50, deb, false, 3);
           break;
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.6, 8, deb);
+          goCircle(0.6, 4, deb);
           break;
 
         // case ('t'):
@@ -202,8 +202,12 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   reachedGoal = false;
 
   // поворот колёс за время между оценкой положения робота
-  float deltaAngL;
-  float deltaAngR;
+  float deltaAngL = 0.0;
+  float deltaAngR = 0.0;
+
+  float distWheelL = 0.0;
+  float distWheelR = 0.0;
+  float distWheelC = 0.0;
 
   // скорректированные скорости колёс
   float velL;
@@ -232,10 +236,10 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     //t_curr = millis() - t_start;
     //dt = (t_curr - t_prev) / 1000.0;
 
-    dt = (del + 25) / 1000.0; // типа плюс время на вычисления
+    dt = (del) / 1000.0; 
     //Serial.println(dt);
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
-    Serial.println("Err theta: " + String(err, 3));
+    //Serial.println("Err theta: " + String(err, 3));
 
     vel.ang = pid->computeControl(err, dt, rfidFound);
     vel.lin = vel.computeLinearSpeed(err);
@@ -260,9 +264,15 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     //float distWheelC = (distWheelR+distWheelL) / 2;
     //pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
 
+
     deltaAngL = motorBlockL->getDeltaAngle();
     deltaAngR = motorBlockR->getDeltaAngle();
-    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
+
+    distWheelL = distWheelL + deltaAngL*r;
+    distWheelR = distWheelR + deltaAngR*r;
+    distWheelC = (distWheelR + distWheelL) / 2;
+
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L, distWheelC);
 
     String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
     Serial.println(msg_pos);
@@ -276,10 +286,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       }
     } else {
       rfidFound = rfidReader->checkReaderData();
-      // if(rfidFound == 1) {
-      //   reachedGoal = true;
-      //   Serial.println(rfidFound);
-      // }
       switch (rfidFound) {
         case 0:
           break;
