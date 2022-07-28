@@ -115,7 +115,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     else theta = nextTheta; 
 }
 
-void correctPosEst(float distWheelC) {
+void Position::correctPosEst(float distWheelC) {
     float avgXerr = 0.02399;
     float avgYerr = -0.00405;
 
