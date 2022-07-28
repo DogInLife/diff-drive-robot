@@ -35,10 +35,10 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     // float avgXerr = 0.01; // средняя погрешность измерений по X на метр пройденного пути
     // float avgYerr = -0.047; // средняя погрешность измерений по Y на метр пройденного пути
     
-    float avgXerr = 0.04872 - 0.01369;
-    float avgYerr = -0.03613 + 0.00816;
+    // float avgXerr = 0.04872 - 0.01369;
+    // float avgYerr = -0.03613 + 0.00816;
 
-    float dPath = 0.2; // дельта расстояние, за которое учитывается погрешность измерений
+    // float dPath = 0.2; // дельта расстояние, за которое учитывается погрешность измерений
 
     float cos_th = 0.0;
     float sin_th = 0.0;
@@ -107,12 +107,12 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     x = x + deltaX;
     y = y + deltaY;
 
-    if(distWheelC-distWheelPrev >= dPath) {
-        x = x + dPath*avgXerr;
-        y = y + dPath*avgYerr;
-        distWheelPrev = distWheelC;
-        corrected = true;
-    } 
+    // if(distWheelC-distWheelPrev >= dPath) {
+    //     x = x + dPath*avgXerr;
+    //     y = y + dPath*avgYerr;
+    //     distWheelPrev = distWheelC;
+    //     corrected = true;
+    // } 
     
     float nextTheta = theta + deltaTheta;
     if(nextTheta > 3.141593) theta = nextTheta - 2*3.141593;
