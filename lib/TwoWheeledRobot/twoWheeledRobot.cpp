@@ -285,9 +285,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       pos.corrected = false;
     }
 
-    String msg_pos = "CORRECTED X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3);
-    Serial.println(msg_pos);
-
     if(!followRFID) {
       if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05))
       {
