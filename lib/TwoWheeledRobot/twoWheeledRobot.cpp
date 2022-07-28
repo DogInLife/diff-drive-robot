@@ -432,6 +432,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
   vel.lin = whl_vel_des*r;
   vel.ang = vel.lin/R;
 
+  Serial.println("Desired // VelLin: " + String(vel.lin, 3) + " VelAng: " + String(vel.ang, 3));
+
   velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * r);
   velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * r);
 
