@@ -116,8 +116,8 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
 }
 
 void Position::correctPosEst(float distWheelC) {
-    float avgXerr = 0.02399 + 0.02754;
-    float avgYerr = -0.00405 - 0.01203;
+    float avgXerr = 0.02075;
+    float avgYerr = -0.00485;
 
     float dPath = 0.1;
 
