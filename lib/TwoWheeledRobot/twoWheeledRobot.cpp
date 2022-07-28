@@ -10,7 +10,7 @@
 TwoWheeledRobot::TwoWheeledRobot()
   :reachedGoal(false), globalStop(false),
   PIN_CURRENT_SENSOR(A12),
-  inByte(0), newMinRange(127)
+  inByte(0), newMinRange(20)
 {
   // RFID READER
   //MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance // ????????????????????????????????????
@@ -738,20 +738,20 @@ void TwoWheeledRobot::stopMoving()
 
 void TwoWheeledRobot::goForward(int velL, int velR)
 {
-  motorBlockL->setVelocity(velL, vel.maxWheel, 0);
-  motorBlockR->setVelocity(velR, vel.maxWheel, 0);
+  motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
+  motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 }
 
 void TwoWheeledRobot::turnLeft(int velL, int velR)
 {
-  motorBlockL->setVelocity(velL, vel.maxWheel, 0);
-  motorBlockR->setVelocity(velR, vel.maxWheel, 0);
+  motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
+  motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 }
 
 void TwoWheeledRobot::turnRight(int velL, int velR)
 {
-  motorBlockL->setVelocity(velL, vel.maxWheel, 0);
-  motorBlockR->setVelocity(velR, vel.maxWheel, 0);
+  motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
+  motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
 }
 
 int TwoWheeledRobot::checkCurrent(byte PIN_CURRENT_SENSOR)
