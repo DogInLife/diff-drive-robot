@@ -58,7 +58,7 @@ public:
     void manualControl(int dt);
 
     void rfidTest(int del);
-    void rot_test(int whl_vel_des, byte del, bool deb); // ####################################
+    void rot_test(int whl_vel_des, byte del, bool deb, float xGoal, float yGoal); // ####################################
 
     void goForward(int velL, int velR);
     void turnLeft(int velL, int velR);

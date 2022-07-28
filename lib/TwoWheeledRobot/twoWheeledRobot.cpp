@@ -117,10 +117,10 @@ void TwoWheeledRobot::serialControl(bool deb) {
           goCircle(0.6, 4, deb);
           break;
 
-        // case ('t'):
-        //   Serial.println(" ===== Rotation test ===== ");
-        //   rot_test(90, 50, deb);
-        //   break;
+        case ('t'):
+          Serial.println(" ===== Rotation test ===== ");
+          rot_test(60, 50, deb, 0.61, 0.61);
+          break;
 
         case ('r'):
           Serial.println(" ===== RFID reader test ===== ");
@@ -413,159 +413,228 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 }
 
 // ############## Прямолинейное движение в пид-контроллером углов поворота колёс ###############
-void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb) {
+void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal, float yGoal) {
 
   float radius = getRadiusWheels();
-  float R = 0.5;
+  float R = 0.61; // радиус окружности
   float L = baseLength;
 
-  Serial.println("radius: " + String(radius, 3) + " R: " + String(R, 2) + " L: " + String(L, 3));
+  float deltaAngL = 0.0;
+  float deltaAngR = 0.0;
 
-  bool isReady = false;
-  bool isMoving = false;
+  float distWheelL = 0.0;
+  float distWheelR = 0.0;
+  float distWheelC = 0.0;
 
-  float qL_curr = 0.0; // текущий измеренный угол поворота левого колеса
-  float qR_curr = 0.0; // текущий измеренный угол повората правого колеса
-  int t_curr = 0; // текущий момент времени
+  float velL;
+  float velR;
 
-  float qL_prev = 0.0; // предыдущий измеренный угол поворота левого колеса
-  float qR_prev = 0.0; // предыдущий измеренный угол поворота правого колеса
-  int t_prev = 0; // предыдущий момент времени
+  vel.lin = whl_vel_des*radius;
+  vel.ang = vel.lin/R;
 
-  float omg = whl_vel_des*radius/R;
-  
-  float dqL = 0.0; // скорость вращения левого колеса
-  float dqR = 0.0; // скорость вращения правого колеса
+  velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * radius);
+  velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * radius);
 
-  float qL_des; // желаемый угол поворота левого колеса [об]
-  float qR_des;
+  if(!deb)
+    goForward(velL, velR);
 
-  float dqL_des = omg*(R - L/2.0)/radius; // желаемая скорость вращения левого колеса [об/мин]
-  float dqR_des = omg*(R + L/2.0)/radius; 
+  while(!reachedGoal && !globalStop) {
+    deltaAngL = motorBlockL->getDeltaAngle();
+    deltaAngR = motorBlockR->getDeltaAngle();
 
-  Serial.println("dqL_des: " + String(dqL_des, 3) + " dqR_des: " + String(dqR_des, 3));
+    distWheelL = distWheelL + deltaAngL*r;
+    distWheelR = distWheelR + deltaAngR*r;
+    distWheelC = (distWheelR + distWheelL) / 2;
 
-  // ошибки
-  float qL_err = 0.0;
-  float qR_err = 0.0;
-  //float dqL_err = 0.0;
-  //float dqR_err = 0.0;
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
+    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    Serial.println(msg_pos);
 
-  float uL = 0.0;
-  float uR = 0.0;
+    pos.correctPosEst(distWheelC);
 
-  // скоррекированные значения [об/мин]
-  float whl_velL;
-  float whl_velR;
-
-  float dt = 0.0; // измерительный промежуток [мин]
-
-  uint32_t start;
-
-  while(true)
-  {
-    switch(getSerialData())
-    {
-      case('w'):
-        isReady = true;
-        isMoving = true;
-        start = millis();
-        //dq_des = whl_vel_des;
-        goForward(dqL_des, dqR_des);
-        break;
-
-      // case('x'):
-      //   isReady = true;
-      //   isMoving = true;
-      //   start = millis();
-      //   //dq_des = -whl_vel_des;
-      //   goForward(-dqL_des, -dqR_des);
-      //   break;
-
-      case('s'):
-        stopMoving();
-        isReady = false;
-        isMoving = false;
-        break;
-
-      default:
-        break;
+    if(pos.corrected) {
+      Serial.println("CORRECTED X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3));
+      pos.corrected = false;
     }
 
-    if(isMoving && isReady)
-    {
-      // углы [об]
-      qL_curr = motorBlockL->getRotAngle();
-      qR_curr = motorBlockR->getRotAngle();
-
-      t_curr = millis() - start;
-
-      //q_des = dq_des * t_curr / 60000.0; // желаемый угол [об]
-      
-      qL_des = dqL_des * t_curr / 60000.0;
-      qR_des = dqR_des * t_curr / 60000.0;
-
-      dt = (t_curr - t_prev) / 60000.0; // промежуток между замерами [мин]
-
-      // оценка измеренной скорости вращения колёс [об/мин]
-      dqL = (qL_curr - qL_prev) / dt;
-      dqR = (qR_curr - qR_prev) / dt;
-
-      qL_err = qL_des - qL_curr;
-      qR_err = qR_des - qR_curr;
-
-      //dqL_err = dq_des - dqL;
-      //dqR_err = dq_des - dqR;
-
-      String msg_q_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3) + " dt: " + String(dt, 4);
-      Serial.println(msg_q_err); 
-
-      //uL = pidL->computeControl(qL_err, dt);
-      //uR = pidR->computeControl(qR_err, dt);
-
-      whl_velL = dqL_des + uL;
-      whl_velR = dqR_des + uR;
-
-      if(deb)
-      {
-        String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
-        Serial.println(msg_u);
-
-        // int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
-        // int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
-        // int pwm_des = map(abs(dq_des), 0, 150, 0, 255);
-        // String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
-        // Serial.println(msg_pwm);
-      } 
-      
-      else 
-      {
-        goForward(whl_velL, whl_velR);
+    if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05)) {
+        Serial.println("PT REACHED");
+        Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+        reachedGoal = true;
+        Serial.println(distWheelC);
       }
 
-      // if(abs(q_des) >= 9.975)
-      // {
-      //   Serial.println("Stopping");
-      //   stopMoving();
+      if(reachedGoal) {
+        stopMoving();
+        Serial.println("TARGET POINT REACHED");
+        //Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
+        break;
+      }
 
-      //   qL_curr = motorBlockL->getRotAngle();
-      //   qR_curr = motorBlockR->getRotAngle();
-      //   t_curr = millis() - start;
-      //   String msg_ang = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr);
-      //   Serial.println(msg_ang);
+      switch(getSerialData()) {
+        case('s'):
+          stopMoving();
+          globalStop = true;
+        break;
 
-      //   isMoving = false;
-      //   isReady = false;
-      // }
+        case('r'):
+          stopMoving();
+          break;
+        break;
+      }
 
-      qL_prev = qL_curr;
-      qR_prev = qR_curr;
-      t_prev = t_curr;
-
+      delay(del);
     }
-
-    delay(del);
   }
+
+
+  // Serial.println("radius: " + String(radius, 3) + " R: " + String(R, 2) + " L: " + String(L, 3));
+
+  // bool isReady = false;
+  // bool isMoving = false;
+
+  // float qL_curr = 0.0; // текущий измеренный угол поворота левого колеса
+  // float qR_curr = 0.0; // текущий измеренный угол повората правого колеса
+  // int t_curr = 0; // текущий момент времени
+
+  // float qL_prev = 0.0; // предыдущий измеренный угол поворота левого колеса
+  // float qR_prev = 0.0; // предыдущий измеренный угол поворота правого колеса
+  // int t_prev = 0; // предыдущий момент времени
+
+  // float omg = whl_vel_des*radius/R;
+  
+  // float dqL = 0.0; // скорость вращения левого колеса
+  // float dqR = 0.0; // скорость вращения правого колеса
+
+  // float qL_des; // желаемый угол поворота левого колеса [об]
+  // float qR_des;
+
+  // float dqL_des = omg*(R - L/2.0)/radius; // желаемая скорость вращения левого колеса [об/мин]
+  // float dqR_des = omg*(R + L/2.0)/radius; 
+
+  // Serial.println("dqL_des: " + String(dqL_des, 3) + " dqR_des: " + String(dqR_des, 3));
+
+  // // ошибки
+  // float qL_err = 0.0;
+  // float qR_err = 0.0;
+  // //float dqL_err = 0.0;
+  // //float dqR_err = 0.0;
+
+  // float uL = 0.0;
+  // float uR = 0.0;
+
+  // // скоррекированные значения [об/мин]
+  // float whl_velL;
+  // float whl_velR;
+
+  // float dt = 0.0; // измерительный промежуток [мин]
+
+  // uint32_t start;
+
+  // while(true)
+  // {
+  //   switch(getSerialData())
+  //   {
+  //     case('w'):
+  //       isReady = true;
+  //       isMoving = true;
+  //       start = millis();
+  //       //dq_des = whl_vel_des;
+  //       goForward(dqL_des, dqR_des);
+  //       break;
+
+  //     // case('x'):
+  //     //   isReady = true;
+  //     //   isMoving = true;
+  //     //   start = millis();
+  //     //   //dq_des = -whl_vel_des;
+  //     //   goForward(-dqL_des, -dqR_des);
+  //     //   break;
+
+  //     case('s'):
+  //       stopMoving();
+  //       isReady = false;
+  //       isMoving = false;
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+
+  //   if(isMoving && isReady)
+  //   {
+  //     // углы [об]
+  //     qL_curr = motorBlockL->getRotAngle();
+  //     qR_curr = motorBlockR->getRotAngle();
+
+  //     t_curr = millis() - start;
+
+  //     //q_des = dq_des * t_curr / 60000.0; // желаемый угол [об]
+      
+  //     qL_des = dqL_des * t_curr / 60000.0;
+  //     qR_des = dqR_des * t_curr / 60000.0;
+
+  //     dt = (t_curr - t_prev) / 60000.0; // промежуток между замерами [мин]
+
+  //     // оценка измеренной скорости вращения колёс [об/мин]
+  //     dqL = (qL_curr - qL_prev) / dt;
+  //     dqR = (qR_curr - qR_prev) / dt;
+
+  //     qL_err = qL_des - qL_curr;
+  //     qR_err = qR_des - qR_curr;
+
+  //     //dqL_err = dq_des - dqL;
+  //     //dqR_err = dq_des - dqR;
+
+  //     String msg_q_err = "qL_err: " + String(qL_err, 3) + " qR_err: " + String(qR_err, 3) + " dt: " + String(dt, 4);
+  //     Serial.println(msg_q_err); 
+
+  //     //uL = pidL->computeControl(qL_err, dt);
+  //     //uR = pidR->computeControl(qR_err, dt);
+
+  //     whl_velL = dqL_des + uL;
+  //     whl_velR = dqR_des + uR;
+
+  //     if(deb)
+  //     {
+  //       String msg_u = "uL: " + String(uL, 3) + " uR: " + String(uR, 3) + " whl_velL: " + String(whl_velL, 3) + " whl_velR: " + String(whl_velR, 3);
+  //       Serial.println(msg_u);
+
+  //       // int pwmL = map(abs(whl_velL), 0, 150, 0, 255);
+  //       // int pwmR = map(abs(whl_velR), 0, 150, 0, 255);
+  //       // int pwm_des = map(abs(dq_des), 0, 150, 0, 255);
+  //       // String msg_pwm = "PWM L: " + String(pwmL) + " PWM R: " + String(pwmR) + " Desired PWM: " + String(pwm_des);
+  //       // Serial.println(msg_pwm);
+  //     } 
+      
+  //     else 
+  //     {
+  //       goForward(whl_velL, whl_velR);
+  //     }
+
+  //     // if(abs(q_des) >= 9.975)
+  //     // {
+  //     //   Serial.println("Stopping");
+  //     //   stopMoving();
+
+  //     //   qL_curr = motorBlockL->getRotAngle();
+  //     //   qR_curr = motorBlockR->getRotAngle();
+  //     //   t_curr = millis() - start;
+  //     //   String msg_ang = "L: " + String(qL_curr, 3) + " R: " + String(qR_curr, 3) + " Time: " + String(t_curr);
+  //     //   Serial.println(msg_ang);
+
+  //     //   isMoving = false;
+  //     //   isReady = false;
+  //     // }
+
+  //     qL_prev = qL_curr;
+  //     qR_prev = qR_curr;
+  //     t_prev = t_curr;
+
+  //   }
+
+  //   delay(del);
+  // }
 }
 
 
