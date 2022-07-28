@@ -31,7 +31,8 @@ void setup() {
   //robot.tunePID(5.3, 4.8, 0);
   //robot.tunePID(0.7, 1.5, 0.0);
   //robot.tunePID(4, 1.5, 0); 
-  robot.tunePID(20.0, 2.8, 0.5); // работает в точку 
+  //robot.tunePID(20.0, 2.8, 0.5); // работает в точку 
+  robot.tunePID(17.5, 2.8, 0.5);
 
   //robot.tunePID(3.4, 1.2, 0.9);
 // ====== Д Л Я  120 ОБ/МИН ======
