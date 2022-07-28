@@ -41,7 +41,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     float avgXerr = 0.02399;
     float avgYerr = -0.00405;
 
-    float dPath = 0.2; // дельта расстояние, за которое учитывается погрешность измерений
+    float dPath = 0.2; // дельта расстояния, за которое учитывается погрешность измерений
 
     float cos_th = 0.0;
     float sin_th = 0.0;
@@ -111,8 +111,8 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     y = y + deltaY;
 
     if(distWheelC-distWheelPrev >= dPath) {
-        x = x + dPath*avgXerr;
-        y = y + dPath*avgYerr;
+        x = x + (dPath * avgXerr);
+        y = y + (dPath * avgYerr);
         distWheelPrev = distWheelC;
         corrected = true;
     } 
