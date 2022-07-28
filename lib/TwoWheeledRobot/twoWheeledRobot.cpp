@@ -450,7 +450,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
     String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
     Serial.println(msg_pos);
 
-    pos.correctPosEst(distWheelC);
+    //pos.correctPosEst(distWheelC);
 
     if(pos.corrected) {
       Serial.println("CORRECTED X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3));
