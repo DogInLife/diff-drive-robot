@@ -415,7 +415,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 // ############## Прямолинейное движение в пид-контроллером углов поворота колёс ###############
 void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal, float yGoal) {
 
-  float radius = getRadiusWheels();
+  float r = getRadiusWheels();
   float R = 0.61; // радиус окружности
   float L = baseLength;
 
@@ -432,8 +432,8 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
   vel.lin = whl_vel_des*radius;
   vel.ang = vel.lin/R;
 
-  velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * radius);
-  velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * radius);
+  velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * r);
+  velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * r);
 
   if(!deb)
     goForward(velL, velR);
@@ -458,11 +458,11 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
     }
 
     if((abs(xGoal-pos.x) < 0.05) && (abs(yGoal-pos.y) < 0.05)) {
-        Serial.println("PT REACHED");
-        Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
-        reachedGoal = true;
-        Serial.println(distWheelC);
-      }
+      Serial.println("PT REACHED");
+      Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+      reachedGoal = true;
+      Serial.println(distWheelC);
+    }
 
       if(reachedGoal) {
         stopMoving();
@@ -635,7 +635,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
 
   //   delay(del);
   // }
-}
+// }
 
 
 // ##########################################################
