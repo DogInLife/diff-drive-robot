@@ -3,8 +3,8 @@
 
 Position::Position() 
 :   x(0.0), y(0.0), theta(0.0),
-    xGoal(0.0), yGoal(0.0), thetaGoal(0.0), distWheelPrev(0.0), 
-    corrected(false)
+    xGoal(0.0), yGoal(0.0), thetaGoal(0.0), 
+    distWheelPrev(0.0), corrected(false)
 {}
 
 void Position::computeCurentPose(float D_L, float D_R, float D_C, float L)
@@ -30,18 +30,17 @@ void Position::computeCurentPose(float D_L, float D_R, float D_C, float L)
 }
 
 // оценка текущей позиции робота по данным с энкодеров
-void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, float L, float distWheelC)
-{
+void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, float L) {
     //float avgXerr = 0.01; // средняя погрешность измерений по X на метр пройденного пути
     //float avgYerr = -0.047; // средняя погрешность измерений по Y на метр пройденного пути
     
     // float avgXerr = 0.04872 - 0.01369;
     // float avgYerr = -0.03613 + 0.00816;
 
-    float avgXerr = 0.02399;
-    float avgYerr = -0.00405;
+    // float avgXerr = 0.02399;
+    // float avgYerr = -0.00405;
 
-    float dPath = 0.1; // дельта расстояния, за которое учитывается погрешность измерений
+    // float dPath = 0.1; // дельта расстояния, за которое учитывается погрешность измерений
 
     float cos_th = 0.0;
     float sin_th = 0.0;
@@ -109,17 +108,23 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
 
     x = x + deltaX;
     y = y + deltaY;
+    
+    float nextTheta = theta + deltaTheta;
+    if(nextTheta > 3.141593) theta = nextTheta - 2*3.141593;
+    else if(nextTheta < -3.141593) theta = nextTheta + 2*3.141593;
+    else theta = nextTheta; 
+}
+
+void correctPosEst(float distWheelC) {
+    float avgXerr = 0.02399;
+    float avgYerr = -0.00405;
+
+    float dPath = 0.1;
 
     if(distWheelC-distWheelPrev >= dPath) {
         x = x + (dPath * avgXerr);
         y = y + (dPath * avgYerr);
         distWheelPrev = distWheelC;
         corrected = true;
-    } 
-    
-    float nextTheta = theta + deltaTheta;
-    if(nextTheta > 3.141593) theta = nextTheta - 2*3.141593;
-    else if(nextTheta < -3.141593) theta = nextTheta + 2*3.141593;
-    else theta = nextTheta; 
-
+    }
 }
