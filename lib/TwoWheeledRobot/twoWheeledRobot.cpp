@@ -429,7 +429,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
   float velL;
   float velR;
 
-  vel.lin = whl_vel_des*radius;
+  vel.lin = whl_vel_des*r;
   vel.ang = vel.lin/R;
 
   velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * r);
