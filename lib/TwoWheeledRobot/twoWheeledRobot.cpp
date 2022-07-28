@@ -10,7 +10,7 @@
 TwoWheeledRobot::TwoWheeledRobot()
   :reachedGoal(false), globalStop(false),
   PIN_CURRENT_SENSOR(A12),
-  inByte(0), newMinRange(0)
+  inByte(0), newMinRange(20)
 {
   // RFID READER
   //MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance // ????????????????????????????????????
@@ -206,10 +206,10 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   float deltaAngL = 0.0;
   float deltaAngR = 0.0;
 
-  float velL_meas = 0.0;
-  float velR_meas = 0.0;
+  // float velL_meas = 0.0;
+  // float velR_meas = 0.0;
 
-  float V_err = 0.0;
+  // float V_err = 0.0;
 
   float distWheelL = 0.0;
   float distWheelR = 0.0;
@@ -250,10 +250,10 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     vel.ang = pid->computeControl(err, dt, rfidFound);
     vel.lin = vel.computeLinearSpeed(err);
 
-    velL_meas = (deltaAngL * 60000.0) / (2.0 * 3.141593 * del);
-    velR_meas = (deltaAngR * 60000.0) / (2.0 * 3.141593 * del);
+    // velL_meas = (deltaAngL * 60000.0) / (2.0 * 3.141593 * del);
+    // velR_meas = (deltaAngR * 60000.0) / (2.0 * 3.141593 * del);
 
-    Serial.println(String(velL_meas, 3) + "  " + velR_meas);
+    // Serial.println(String(velL_meas, 3) + "  " + velR_meas);
     
 
     // String msg_vel = "Ang_Vel: " + String(vel.ang, 3) + " Lin_Vel: " + String(vel.lin, 3);
@@ -266,7 +266,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * r);
     
 
-    Serial.println("vleL: " + String(velL, 3) + " velR " + String(velR, 3));
+    Serial.println("velL: " + String(velL, 3) + " velR " + String(velR, 3));
 
     // motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
     // motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
