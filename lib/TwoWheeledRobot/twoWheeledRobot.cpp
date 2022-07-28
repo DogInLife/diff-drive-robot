@@ -629,7 +629,7 @@ void TwoWheeledRobot::manualControl(int del)
     distWheelR = distWheelR + deltaAngR*r;
     distWheelC = (distWheelR + distWheelL) / 2;
 
-    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L, distWheelC);
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
     Serial.println(distWheelC);
 
