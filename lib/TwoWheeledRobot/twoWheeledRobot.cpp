@@ -276,10 +276,12 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     distWheelR = distWheelR + deltaAngR*r;
     distWheelC = (distWheelR + distWheelL) / 2;
 
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
     String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
     Serial.println(msg_pos);
-    
-    pos.estCurrentPosition(deltaAngL, deltaAngR, r, L, distWheelC);
+
+    pos.correctPosEst(distWheelC);
+
     if(pos.corrected) {
       Serial.println("CORRECTED X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3));
       pos.corrected = false;
