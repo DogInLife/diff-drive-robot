@@ -4,7 +4,7 @@
 #define DEBUG  0
 #define DEBUG_PLOT 0
 
-#define WHEEL_RADIUS 0.045  //m
+#define WHEEL_RADIUS 0.0443  //m
 #define BASE_LENGTH 0.285   //m
 
 #define MAX_VELOCITY 150  // об/мин у двигателей
