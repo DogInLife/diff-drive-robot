@@ -63,7 +63,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     float deltaX;
     float deltaY;
 
-    float deltaTheta = r * (deltaAng_R - deltaAng_L) / L;
+    float deltaTheta = r * (deltaAng_R - deltaAng_L)*0.9 / L;
     float curveR;
     bool infCurveR = false;
 
