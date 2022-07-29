@@ -114,7 +114,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.61, 32, deb);
+          goCircle(0.61, 32, deb, 2);
           break;
 
         case ('t'):
@@ -142,7 +142,7 @@ void TwoWheeledRobot::rfidTest(int del) {
   }
 }
 
-void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
+void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
 {
   float x0 = 0.0;
   float y0 = 0.0;
@@ -158,19 +158,21 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb)
   float dPhi = 2.0*3.141593 / ptsNum;
 
   //long t_start = millis();
-
-  for(int i=1; i <= ptsNum; i++)
-  {
-    //if(i % 2 == 0) followRFID = true;
-    if(i == ptsNum) { isFinish = true; }
-    x = x0 + radius * sin(dPhi*i);
-    y = (y0 + radius) - radius * cos(dPhi*i);
-    Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-    goToGoal(x, y, isFinish, 50, deb, followRFID, i);
-    if(globalStop) 
-    { 
-      Serial.println(" ==== GLOBAL STOP ==== ");
-      break; 
+  for(int c = 1; c <= circles; c++) {
+    Serial.println(" CIRCLE " + String(c));
+    for(int i=1; i <= ptsNum; i++)
+    {
+      //if(i % 2 == 0) followRFID = true;
+      if(i == ptsNum) { isFinish = true; }
+      x = x0 + radius * sin(dPhi*i);
+      y = (y0 + radius) - radius * cos(dPhi*i);
+      Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
+      goToGoal(x, y, isFinish, 50, deb, followRFID, i);
+      if(globalStop) 
+      { 
+        Serial.println(" ==== GLOBAL STOP ==== ");
+        break; 
+      }
     }
   }
 }
