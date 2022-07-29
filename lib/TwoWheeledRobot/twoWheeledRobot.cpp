@@ -266,7 +266,7 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * r);
     
 
-    Serial.println("velL: " + String(velL, 3) + " velR " + String(velR, 3));
+    //Serial.println("velL: " + String(velL, 3) + " velR " + String(velR, 3));
 
     // motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
     // motorBlockR->setVelocity(velR, vel.maxWheel, newMinRange);
