@@ -114,7 +114,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.61, 32, deb, 2);
+          goCircle(0.61, 32, deb, 5);
           break;
 
         case ('t'):
@@ -300,54 +300,96 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       pos.corrected = false;
     }
 
-    if(!followRFID) {
-      if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
-      {
-        Serial.println("PT REACHED");
-        Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
-        reachedGoal = true;
-        Serial.println(distWheelC);
-      }
-    } else {
-      rfidFound = rfidReader->checkReaderData();
-      switch (rfidFound) {
-        case 0:
-          break;
 
-        Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
-        case 1:
-          //pos.x = 0.6;
-          //pos.y = 0.6;
-          Serial.println("RFID 1 REACHED: 0.6 0.6");
-          break;
-        case 2:
-          pos.x = 0.0;
-          pos.y = 0.6;
-          Serial.println("RFID 2 REACHED 0.0 0.6");
-          break;
-        case 3:
-          pos.x = 0.0;
-          pos.y = 1.2;
-          Serial.println("RFID 3 REACHED 0.0 1.2");
-          break;
-
-        case 4:
-          pos.x = 0.0;
-          pos.y = 0.0;
-          Serial.println("BACK TO BASE 0.0 0.0");
-          reachedGoal = true;
-          break;
-
-        default:
-          Serial.println("Stranger");
-          break;
-      }
-
-      if(rfidFound == idRFID) {
-        reachedGoal = true;
-        //break;
-      }
+    if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03)) {
+      //Serial.println("PT REACHED");
+      //Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+      reachedGoal = true;
+      //Serial.println(distWheelC);
     }
+
+    rfidFound = rfidReader->checkReaderData();
+    switch (rfidFound) {
+      case 0:
+        break;
+
+      //Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
+      case 1:
+        //pos.x = 0.6;
+        //pos.y = 0.6;
+        Serial.println("RFID 1 REACHED: 0.6 0.6");
+        break;
+      case 2:
+        //pos.x = 0.0;
+        //pos.y = 0.6;
+        Serial.println("RFID 2 REACHED 0.0 0.6");
+        break;
+      case 3:
+        //pos.x = 0.0;
+        //pos.y = 1.2;
+        Serial.println("RFID 3 REACHED 0.0 1.2");
+        break;
+
+      case 4:
+        //pos.x = 0.0;
+        //pos.y = 0.0;
+        Serial.println("BACK TO BASE 0.0 0.0");
+        reachedGoal = true;
+        break;
+
+      default:
+        Serial.println("Stranger");
+        break;
+    }
+
+    // if(!followRFID) {
+    //   if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
+    //   {
+    //     Serial.println("PT REACHED");
+    //     Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
+    //     reachedGoal = true;
+    //     Serial.println(distWheelC);
+    //   }
+    // } else {
+    //   rfidFound = rfidReader->checkReaderData();
+    //   switch (rfidFound) {
+    //     case 0:
+    //       break;
+
+    //     Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
+    //     case 1:
+    //       //pos.x = 0.6;
+    //       //pos.y = 0.6;
+    //       Serial.println("RFID 1 REACHED: 0.6 0.6");
+    //       break;
+    //     case 2:
+    //       pos.x = 0.0;
+    //       pos.y = 0.6;
+    //       Serial.println("RFID 2 REACHED 0.0 0.6");
+    //       break;
+    //     case 3:
+    //       pos.x = 0.0;
+    //       pos.y = 1.2;
+    //       Serial.println("RFID 3 REACHED 0.0 1.2");
+    //       break;
+
+    //     case 4:
+    //       pos.x = 0.0;
+    //       pos.y = 0.0;
+    //       Serial.println("BACK TO BASE 0.0 0.0");
+    //       reachedGoal = true;
+    //       break;
+
+    //     default:
+    //       Serial.println("Stranger");
+    //       break;
+    //   }
+
+    //   if(rfidFound == idRFID) {
+    //     reachedGoal = true;
+    //     //break;
+    //   }
+    // }
 
     // //Расчет угла, на котором расположена целевая точка
     // pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
@@ -445,7 +487,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
   vel.lin = whl_vel_des*r;
   vel.ang = vel.lin/R;
 
-  Serial.println("Desired // VelLin: " + String(vel.lin, 3) + " VelAng: " + String(vel.ang, 3));
+  //Serial.println("Desired // VelLin: " + String(vel.lin, 3) + " VelAng: " + String(vel.ang, 3));
 
   velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * r);
   velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * r);
