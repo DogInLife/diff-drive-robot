@@ -312,7 +312,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     rfidFound = rfidReader->checkReaderData();
     switch (rfidFound) {
       case 0:
-        break;
 
       //Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
       case 1:
@@ -339,10 +338,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         Serial.println("BASE RFID 4 REACHED");
         //reachedGoal = true;
         //break;
-
-      default:
-        Serial.println("Stranger");
-        break;
 
       pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
       Serial.println("LLDLS");
