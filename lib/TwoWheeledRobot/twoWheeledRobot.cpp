@@ -342,8 +342,9 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     }
 
     if(rfidFound > 0) {
+      Serial.println("PREV: " + String(pos.thetaGoal));
       pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
-      Serial.println("LLDLS");
+      Serial.println("CURR: " + String(pos.thetaGoal));
     }
     // if(!followRFID) {
     //   if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
