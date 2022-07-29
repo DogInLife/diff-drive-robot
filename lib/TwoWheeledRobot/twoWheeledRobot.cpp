@@ -321,29 +321,30 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
         Serial.println("RFID 1 REACHED");
         //Расчет угла, на котором расположена целевая точка
         //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
-        //break;
+        break;
       case 2:
         pos.x = (pos.x + 0)/2;
         pos.y = (pos.y + 1.22)/2;
         Serial.println("RFID 2 REACHED");
-        //break;
+        break;
       case 3:
         pos.x = (pos.x + 0)/2;
         pos.y = (pos.y + 1.274)/2;
         Serial.println("RFID 3 REACHED");
-        //break;
+        break;
 
       case 4:
         pos.x = (pos.x + 0)/2;
         pos.y = (pos.x + 0)/2;
         Serial.println("BASE RFID 4 REACHED");
         //reachedGoal = true;
-        //break;
+        break;
+    }
 
+    if(rfidFound > 0) {
       pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
       Serial.println("LLDLS");
     }
-
     // if(!followRFID) {
     //   if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
     //   {
