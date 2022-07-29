@@ -174,6 +174,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
         break; 
       }
     }
+    isFinish = false;
   }
 }
 
