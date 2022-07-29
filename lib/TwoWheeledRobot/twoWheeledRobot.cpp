@@ -1,9 +1,6 @@
 #include "twoWheeledRobot.h"
 #include "constants.h"
 
-//#include <SPI.h>
-//#include <MFRC522.h>
-
 #define RST_PIN         8          // Configurable, see typical pin layout above
 #define SS_PIN          53         // Configurable, see typical pin layout above
 
@@ -13,7 +10,6 @@ TwoWheeledRobot::TwoWheeledRobot()
   inByte(0), newMinRange(0)
 {
   // RFID READER
-  //MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance // ????????????????????????????????????
   if(!Serial) 
     Serial.begin(38400);
 
@@ -88,12 +84,6 @@ byte TwoWheeledRobot::getSerialData()
 {
   return Serial.read();
 }
-
-// void TwoWheeledRobot::sendSerialData(std::sring &str)
-// {
-//   Serial.writeln(str);
-// }
-
 
 void TwoWheeledRobot::serialControl(bool deb) {
   Serial.println(" ===== Choose mode ===== ");
@@ -225,10 +215,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   //Расчет угла, на котором расположена целевая точка
   pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
 
-  // if (DEBUG){
-  //   Serial.print("pos.thetaGoal: "); Serial.println(pos.thetaGoal); // ----- TEST
-  // }
-
   float r = getRadiusWheels();
   float L = baseLength;
   float err = 0.0;
@@ -238,8 +224,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
   int rfidFound = 0;
 
   while(!reachedGoal && !globalStop) {
-    //Расчет угла, на котором расположена целевая точка
-    //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     //Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     //t_curr = millis() - t_start;
@@ -268,7 +252,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     velL = (2.0 * vel.lin - vel.ang * L) / (2.0 * r);
     velR = (2.0 * vel.lin + vel.ang * L) / (2.0 * r);
     
-
     //Serial.println("velL: " + String(velL, 3) + " velR " + String(velR, 3));
 
     // motorBlockL->setVelocity(velL, vel.maxWheel, newMinRange);
@@ -276,12 +259,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
     if(!deb)
       goForward(velL, velR);
-
-    //float distWheelL = motorBlockL->getTraveledDistance();
-    //float distWheelR = motorBlockR->getTraveledDistance();
-    //float distWheelC = (distWheelR+distWheelL) / 2;
-    //pos.computeCurentPose(distWheelL, distWheelR, distWheelC, L);
-
 
     deltaAngL = motorBlockL->getDeltaAngle();
     deltaAngR = motorBlockR->getDeltaAngle();
@@ -294,12 +271,11 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
     // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
     // Serial.println(msg_pos);
 
-    //pos.correctPosEst(distWheelC);
-
-    if(pos.corrected) {
-      Serial.println("CORRECTED X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3));
-      pos.corrected = false;
-    }
+    // pos.correctPosEst(distWheelC);
+    // if(pos.corrected) {
+    //   Serial.println("CORRECTED X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3));
+    //   pos.corrected = false;
+    // }
 
 
     if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03)) {
@@ -316,26 +292,24 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
       //Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
       case 1:
-        pos.x = (pos.x + 0)/2;
-        pos.y = (pos.y + 1.166)/2;
+        pos.x = (pos.x + 0.0)/2.0;
+        pos.y = (pos.y + 1.166)/2.0;
         Serial.println("RFID 1 REACHED");
-        //Расчет угла, на котором расположена целевая точка
-        //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
         break;
       case 2:
-        pos.x = (pos.x + 0)/2;
-        pos.y = (pos.y + 1.22)/2;
+        pos.x = (pos.x + 0.0)/2.0;
+        pos.y = (pos.y + 1.22)/2.0;
         Serial.println("RFID 2 REACHED");
         break;
       case 3:
-        pos.x = (pos.x + 0)/2;
-        pos.y = (pos.y + 1.274)/2;
+        pos.x = (pos.x + 0.0)/2.0;
+        pos.y = (pos.y + 1.274)/2.0;
         Serial.println("RFID 3 REACHED");
         break;
 
       case 4:
-        pos.x = (pos.x + 0)/2;
-        pos.y = (pos.x + 0)/2;
+        pos.x = (pos.x + 0.0)/2.0;
+        pos.y = (pos.y + 0.0)/2.0;
         Serial.println("BASE RFID 4 REACHED");
         //reachedGoal = true;
         break;
@@ -410,49 +384,6 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
       } 
       else { break; }
     }
-    
-    // if (DEBUG_PLOT){
-    //   Serial.print("$");
-    //   Serial.print(pos.x, 3);Serial.print(" ");Serial.print(pos.y, 3);
-    //   Serial.println(";");
-    // }
-    // if (DEBUG){
-    //   Serial.print("err: "); Serial.println(err, 3);
-    // }
-    // if (DEBUG){
-    //   Serial.print("$"); Serial.print(err); Serial.println(";");
-    // }
-    // if (DEBUG){
-    //   Serial.print("angVel: "); Serial.print(vel.ang);
-    //   Serial.print("  linVel: "); Serial.println(vel.lin);
-    // }
-    // if (DEBUG){
-    //   Serial.print("velL: "); Serial.print(velL);
-    //   Serial.print("  velR: "); Serial.println(velR);
-    // }
-    // if (DEBUG){
-    //   Serial.print("distWheelL: "); Serial.print(distWheelL, 3);
-    //   Serial.print("  distWheelR: "); Serial.print(distWheelR, 3);
-    //   Serial.print("  distWheelC: "); Serial.println(distWheelC, 3);
-    // }
-    // if (DEBUG){
-    //   Serial.print("X: "); Serial.print(pos.x, 3);
-    //   Serial.print("  Y: "); Serial.print(pos.y, 3);
-    //   Serial.print("  Th: "); Serial.println(pos.theta, 3);
-    //   Serial.println("  -------  ");
-    // }
-    
-    // Serial.println(checkCurrent(PIN_CURRENT_SENSOR));
-    // Serial.println(i);
-    
-    // if (i>7){
-    //   if(checkCurrent(PIN_CURRENT_SENSOR)>550)
-    //   {
-    //     stopMoving();
-    //     break;
-    //   }
-    // }
-
   
     switch(getSerialData())
     {
@@ -737,20 +668,15 @@ void TwoWheeledRobot::manualControl(int del)
         turnLeft(-vel, vel);
       break;
       case ('e'):
-        // turnRight(100, -50);
         vel += 5;
         (vel >= 150) ? 150 : vel;
 
       break;
       case ('q'):
-        // turnLeft(-50, 100);
         vel -= 5;
         (vel <= 0) ? 0 : vel;
       break;
     }
-
-    // pos.computeCurentPose(distWheelL, distWheelR, distWheelC, baseLength);
-
 
     deltaAngL = motorBlockL->getDeltaAngle();
     deltaAngR = motorBlockR->getDeltaAngle();
@@ -768,7 +694,6 @@ void TwoWheeledRobot::manualControl(int del)
       stopMoving();
       break;
     }
-
 
     String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3) + " " + String(pos.theta);
     Serial.println(msg_enc);
