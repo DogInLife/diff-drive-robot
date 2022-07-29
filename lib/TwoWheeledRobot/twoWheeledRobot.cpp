@@ -316,31 +316,36 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
       //Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
       case 1:
-        //pos.x = 0.6;
-        //pos.y = 0.6;
+        pos.x = (pos.x + 0)/2;
+        pos.y = (pos.y + 1.166)/2;
         Serial.println("RFID 1 REACHED");
-        break;
+        //Расчет угла, на котором расположена целевая точка
+        //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+        //break;
       case 2:
-        //pos.x = 0.0;
-        //pos.y = 0.6;
+        pos.x = (pos.x + 0)/2;
+        pos.y = (pos.y + 1.22)/2;
         Serial.println("RFID 2 REACHED");
-        break;
+        //break;
       case 3:
-        //pos.x = 0.0;
-        //pos.y = 1.2;
+        pos.x = (pos.x + 0)/2;
+        pos.y = (pos.y + 1.274)/2;
         Serial.println("RFID 3 REACHED");
-        break;
+        //break;
 
       case 4:
-        //pos.x = 0.0;
-        //pos.y = 0.0;
+        pos.x = (pos.x + 0)/2;
+        pos.y = (pos.x + 0)/2;
         Serial.println("BASE RFID 4 REACHED");
         //reachedGoal = true;
-        break;
+        //break;
 
       default:
         Serial.println("Stranger");
         break;
+
+      pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+      Serial.println("LLDLS");
     }
 
     // if(!followRFID) {
