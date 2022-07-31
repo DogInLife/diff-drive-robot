@@ -221,7 +221,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
   float velR;
 
   //Расчет угла, на котором расположена целевая точка
-  pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+  //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
 
   float r = getRadiusWheels();
   float L = baseLength;
@@ -232,6 +232,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
   int rfidFound = 0;
 
   while(!reachedGoal && !globalStop) {
+    pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     //Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     //t_curr = millis() - t_start;
@@ -240,6 +241,8 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
     dt = (del) / 1000.0; 
     //Serial.println(dt);
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
+    if(abs(err) > 3.1416/2.0)
+      break;
     //Serial.println("Err theta: " + String(err, 3));
 
     vel.ang = pid->computeControl(err, dt, rfidFound);
@@ -285,12 +288,12 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
     //   pos.corrected = false;
     // }
 
+    if(atan2(xGoal-pos.x))
 
     if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03)) {
       //Serial.println("PT REACHED");
       //Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
       reachedGoal = true;
-      //Serial.println(distWheelC);
     }
 
     rfidFound = rfidReader->checkReaderData();
