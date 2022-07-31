@@ -232,7 +232,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
   int rfidFound = 0;
 
   while(!reachedGoal && !globalStop) {
-    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+    //Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     //t_curr = millis() - t_start;
     //dt = (t_curr - t_prev) / 1000.0;
