@@ -232,7 +232,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
   int rfidFound = 0;
 
   while(!reachedGoal && !globalStop) {
-    //Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
+    Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     //t_curr = millis() - t_start;
     //dt = (t_curr - t_prev) / 1000.0;
@@ -276,8 +276,8 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
     distWheelC = (distWheelR + distWheelL) / 2;
 
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
-    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
-    // Serial.println(msg_pos);
+    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    Serial.println(msg_pos);
 
     // pos.correctPosEst(distWheelC);
     // if(pos.corrected) {
