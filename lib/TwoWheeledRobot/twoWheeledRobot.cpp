@@ -303,7 +303,8 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
         // pos.x = (pos.x + 0.0)/2.0;
         // pos.y = (pos.y + 1.166)/2.0;
         pos.x = 0.0;
-        pos.y = 1.166;
+        //pos.y = 1.166;
+        pos.y = 1.181;
         //pos.theta = (pos.theta + 3.1416) / 2.0;
         Serial.println("RFID 1 REACHED");
         break;
@@ -311,7 +312,8 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
         // pos.x = (pos.x + 0.0)/2.0;
         // pos.y = (pos.y + 1.22)/2.0;
         pos.x = 0.0;
-        pos.y = 1.22;
+        // pos.y = 1.22;
+        pos.y = 1.259;
         //pos.theta = (pos.theta + 3.1416) / 2.0;
         Serial.println("RFID 2 REACHED");
         break;
