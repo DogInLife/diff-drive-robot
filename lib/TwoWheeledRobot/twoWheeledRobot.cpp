@@ -160,15 +160,15 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
       y = (y0 + radius) - radius * cos(dPhi*i);
       Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
       rfidFound = goToGoal(x, y, isFinish, 50, deb, followRFID, i);
-      if(globalStop) 
-      { 
+      if(globalStop) { 
         Serial.println(" ==== GLOBAL STOP ==== ");
         break; 
       }
+
       if(rfidFound > 0) {
-        if(rfidFound <= 3)
+        if(rfidFound <= 2)
           i = ptsNum/2;
-        else if(rfidFound == 4 && i > ptsNum/2)
+        else if(i > ptsNum/2)
           i = ptsNum;
       }
     }
