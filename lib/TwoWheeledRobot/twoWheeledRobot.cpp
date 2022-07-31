@@ -104,7 +104,7 @@ void TwoWheeledRobot::serialControl(bool deb) {
         
         case ('c'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.61, 32, deb, 5);
+          goCircle(0.61, 32, deb, 10);
           break;
 
         case ('t'):
