@@ -221,7 +221,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
   float velR;
 
   //Расчет угла, на котором расположена целевая точка
-  //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+  pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
 
   float r = getRadiusWheels();
   float L = baseLength;
@@ -232,7 +232,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
   int rfidFound = 0;
 
   while(!reachedGoal && !globalStop) {
-    pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+    //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
     //Serial.println("Theta goal: " + String(pos.thetaGoal, 3) + " Theta: " + String(pos.theta, 3));
 
     //t_curr = millis() - t_start;
