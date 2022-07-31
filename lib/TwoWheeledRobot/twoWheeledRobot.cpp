@@ -150,6 +150,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
   //long t_start = millis();
   for(int c = 1; c <= circles; c++) {
     Serial.println(" CIRCLE " + String(c));
+    int rfidFound;
     for(int i=1; i <= ptsNum; i++)
     {
       //if(i % 2 == 0) followRFID = true;
@@ -157,11 +158,17 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
       x = x0 + radius * sin(dPhi*i);
       y = (y0 + radius) - radius * cos(dPhi*i);
       //Serial.println("X" + String(i) + ": " + String(x, 3) + " Y" + String(i) + ": " + String(y, 3));
-      goToGoal(x, y, isFinish, 50, deb, followRFID, i);
+      rfidFound = goToGoal(x, y, isFinish, 50, deb, followRFID, i);
       if(globalStop) 
       { 
         Serial.println(" ==== GLOBAL STOP ==== ");
         break; 
+      }
+      if(rfidFound > 0) {
+        if(rfidFound <= 3)
+          i = ptsNum/2 + 1;
+        else if(rfidFound == 4)
+          i = 1;
       }
     }
     isFinish = false;
@@ -190,7 +197,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
 
 // ====================== robot behavior ===================== //
 // ======= GO ======== //
-void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb, bool followRFID, int idRFID) {
+int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, bool deb, bool followRFID, int idRFID) {
 
 
   reachedGoal = false;
@@ -292,33 +299,42 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
       //Serial.println("X_err: " + String(xGoal-pos.x, 3) + " Y_err: " + String(yGoal-pos.y));
       case 1:
-        pos.x = (pos.x + 0.0)/2.0;
-        pos.y = (pos.y + 1.166)/2.0;
+        // pos.x = (pos.x + 0.0)/2.0;
+        // pos.y = (pos.y + 1.166)/2.0;
+        pos.x = 0.0;
+        pos.y = 1.166;
         Serial.println("RFID 1 REACHED");
         break;
       case 2:
-        pos.x = (pos.x + 0.0)/2.0;
-        pos.y = (pos.y + 1.22)/2.0;
+        // pos.x = (pos.x + 0.0)/2.0;
+        // pos.y = (pos.y + 1.22)/2.0;
+        pos.x = 0.0;
+        pos.y = 1.22;
         Serial.println("RFID 2 REACHED");
         break;
       case 3:
-        pos.x = (pos.x + 0.0)/2.0;
-        pos.y = (pos.y + 1.274)/2.0;
+        // pos.x = (pos.x + 0.0)/2.0;
+        // pos.y = (pos.y + 1.274)/2.0;
+        pos.x = 0.0;
+        pos.y = 1.274;
         Serial.println("RFID 3 REACHED");
         break;
 
       case 4:
-        pos.x = (pos.x + 0.0)/2.0;
-        pos.y = (pos.y + 0.0)/2.0;
+        // pos.x = (pos.x + 0.0)/2.0;
+        // pos.y = (pos.y + 0.0)/2.0;
+        pos.x = 0.0;
+        pos.y = 0.0;
         Serial.println("BASE RFID 4 REACHED");
         //reachedGoal = true;
         break;
     }
 
     if(rfidFound > 0) {
-      Serial.println("PREV: " + String(pos.thetaGoal));
-      pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
-      Serial.println("CURR: " + String(pos.thetaGoal));
+      //Serial.println("PREV: " + String(pos.thetaGoal));
+      //pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
+      //Serial.println("CURR: " + String(pos.thetaGoal));
+      return rfidFound;
     }
     // if(!followRFID) {
     //   if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03))
@@ -400,6 +416,8 @@ void TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del,
 
     delay(del);
   }
+
+  return 0;
 }
 
 // ############## Прямолинейное движение в пид-контроллером углов поворота колёс ###############

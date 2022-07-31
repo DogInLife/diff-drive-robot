@@ -54,7 +54,7 @@ public:
 // ========= behavior ===========
     void serialControl(bool deb);
     void goCircle(float radius, int ptsNum, bool deb, int circles);
-    void goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb, bool followRFID, int idRFID);
+    int goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb, bool followRFID, int idRFID);
     void manualControl(int dt);
 
     void rfidTest(int del);
