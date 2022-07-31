@@ -294,12 +294,12 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
       reachedGoal = true;
     }
 
-    if(!reachedGoal) {
-      if(abs(pos.x) > abs(xGoal+posThreshold*cos(pos.thetaGoal)) || abs(pos.y) > abs(yGoal+posThreshold*sin(pos.thetaGoal))) {
-        Serial.println("MISSED");
-        break;
-      }
-    }
+    // if(!reachedGoal) {
+    //   if((abs(pos.x) > abs(xGoal+posThreshold*cos(pos.thetaGoal))) || (abs(pos.y) > abs(yGoal+posThreshold*sin(pos.thetaGoal)))) {
+    //     Serial.println("MISSED");
+    //     break;
+    //   }
+    // }
 
     rfidFound = rfidReader->checkReaderData();
     switch (rfidFound) {
@@ -433,7 +433,6 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
 
     delay(del);
   }
-
   return 0;
 }
 
