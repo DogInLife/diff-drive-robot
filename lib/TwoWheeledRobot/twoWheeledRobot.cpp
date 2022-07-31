@@ -166,9 +166,9 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
       }
       if(rfidFound > 0) {
         if(rfidFound <= 3)
-          i = ptsNum/2 + 1;
+          i = ptsNum/2;
         else if(rfidFound == 4)
-          i = 1;
+          i = ptsNum;
       }
     }
     isFinish = false;
