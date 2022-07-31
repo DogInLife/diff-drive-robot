@@ -288,8 +288,6 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
     //   pos.corrected = false;
     // }
 
-    if(atan2(xGoal-pos.x))
-
     if((abs(xGoal-pos.x) < 0.03) && (abs(yGoal-pos.y) < 0.03)) {
       //Serial.println("PT REACHED");
       //Serial.println("X_e: " + String(xGoal-pos.x, 3) + " Y_e: " + String(yGoal-pos.y, 3) + " Theta: " + String(pos.theta, 3));
