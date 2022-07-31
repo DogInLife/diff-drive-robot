@@ -279,8 +279,8 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
     distWheelC = (distWheelR + distWheelL) / 2;
 
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
-    // String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
-    // Serial.println(msg_pos);
+    String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    Serial.println(msg_pos);
 
     // pos.correctPosEst(distWheelC);
     // if(pos.corrected) {
@@ -294,12 +294,12 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
       reachedGoal = true;
     }
 
-    // if(!reachedGoal) {
-    //   if((abs(pos.x) > abs(xGoal+posThreshold*cos(pos.thetaGoal))) || (abs(pos.y) > abs(yGoal+posThreshold*sin(pos.thetaGoal)))) {
-    //     Serial.println("MISSED");
-    //     break;
-    //   }
-    // }
+    if(!reachedGoal) {
+      if((abs(pos.x) > abs(xGoal+posThreshold*cos(pos.thetaGoal))) || (abs(pos.y) > abs(yGoal+posThreshold*sin(pos.thetaGoal)))) {
+        Serial.println("MISSED");
+        break;
+      }
+    }
 
     rfidFound = rfidReader->checkReaderData();
     switch (rfidFound) {
