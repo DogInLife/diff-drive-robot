@@ -295,9 +295,10 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
     }
 
     if(!reachedGoal) {
-      if(abs(pos.x) > abs(xGoal+posThreshold*cos(pos.thetaGoal)) || abs(pos.y) > abs(yGoal+posThreshold*sin(pos.thetaGoal)))
+      if(abs(pos.x) > abs(xGoal+posThreshold*cos(pos.thetaGoal)) || abs(pos.y) > abs(yGoal+posThreshold*sin(pos.thetaGoal))) {
         Serial.println("MISSED");
         break;
+      }
     }
 
     rfidFound = rfidReader->checkReaderData();
