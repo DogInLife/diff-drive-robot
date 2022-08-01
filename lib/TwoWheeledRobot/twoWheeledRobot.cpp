@@ -220,7 +220,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
   float velL;
   float velR;
 
-  float posThreshold = 0.05;
+  float posThreshold = 0.025;
 
   //Расчет угла, на котором расположена целевая точка
   pos.thetaGoal = atan2(yGoal-pos.y, xGoal-pos.x);
