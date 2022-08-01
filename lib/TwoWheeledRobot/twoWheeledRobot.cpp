@@ -713,13 +713,13 @@ void TwoWheeledRobot::manualControl(int del)
 
     pos.estCurrentPosition(deltaAngL, deltaAngR, r, L);
 
-    Serial.println(distWheelC);
+    // Serial.println(distWheelC);
 
-    if(distWheelC >= 1.0) {
-      Serial.println("1 m traveled, distance: " + String(distWheelC, 3));
-      stopMoving();
-      break;
-    }
+    // if(distWheelC >= 1.0) {
+    //   Serial.println("1 m traveled, distance: " + String(distWheelC, 3));
+    //   stopMoving();
+    //   break;
+    // }
 
     String msg_enc = String(pos.x, 3) + " " + String(pos.y, 3) + " " + String(pos.theta);
     Serial.println(msg_enc);
