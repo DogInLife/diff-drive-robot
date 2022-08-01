@@ -13,7 +13,9 @@ import cv2
 sys.path.append('/opt/ros/kinetic/lib/python2.7/dist-packages')
 '''
 
-HOST = '192.168.0.114'  # IP address
+# HOST = '192.168.0.114'  # 340
+HOST = '192.168.100.125'
+
 # HOST = '127.0.0.1'
 PORT = 1500
 
