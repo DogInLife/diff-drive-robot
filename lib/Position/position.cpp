@@ -59,7 +59,7 @@ void Position::estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, f
     float dXR;
     float dYR;
 
-    float fric = 0.97;
+    float fric = 0.99;
 
     // перемещения вдоль осей в глобольной СК
     float deltaX;
