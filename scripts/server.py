@@ -11,9 +11,9 @@ sys.path.append('/opt/ros/kinetic/lib/python2.7/dist-packages')
 '''
 
 ser = serial.Serial()
-ser.baudrate = 38400
+ser.baudrate = 9600
 ser.port = '/dev/ttyUSB0'   # for Raspberry
-# s.port = '/dev/ttyACM0'     # for Linux
+#ser.port = '/dev/ttyACM0'     # for Linux
 ser.timeout = 0.5
 ser.open()
 
@@ -24,7 +24,8 @@ ser.open()
 # ========================
 
 # HOST = '192.168.0.114' # 340
-HOST = '192.168.100.125' # 501
+#HOST = '192.168.100.125' # 501
+HOST = '192.168.0.161'
 # HOST = '127.0.0.1'
 PORT = 1500
 
@@ -36,20 +37,20 @@ sck.listen(1)
 conn, addr = sck.accept()
 print("Connected to: ", addr)
 
-
 while True:
-    data = conn.recv(1) # data from socket client
-    if not data == b'~':
-        print(data)
-        if (data == b'\x18'): # Ctrl + x
-            ser.write(b's')
-            break
-        ser.write(data) # send to serial (arduino)
     if(ser.in_waiting > 0):
         ser_recv = ser.readline().decode('ascii') # what is received from serial
-    # if ser_recv:
+        # if ser_recv:
         print(ser_recv)
-
+            
+    data = conn.recv(1) # data from socket client
+    if not data == b'~' and not data == b'':
+        print(data)
+        if (data == b'\x18'): # Ctrl + x
+            ser.write(b'z')
+            break
+        ser.write(data) # send to serial (arduino)
+        
 conn.close()
 
 

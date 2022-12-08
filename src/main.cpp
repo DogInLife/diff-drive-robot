@@ -4,7 +4,7 @@
 #include "RFIDReader.h"
 
 
-byte del = 50; // задержка
+byte del = 1; // задержка [ms]
 int whl_vel_des = 60; // скорость колеса [об/мин]
 bool deb = false; // флаг типа дебаггинга
 
@@ -21,7 +21,7 @@ float KdR = 0.0;
 
 void setup() {
 
-  Serial.begin(38400);
+  Serial.begin(9600);
   TwoWheeledRobot robot;
   robot.createWheels(WHEEL_RADIUS, BASE_LENGTH, MAX_VELOCITY);
   robot.setEncoderPins(ENCODER_PIN_L, ENCODER_PIN_R);
@@ -29,8 +29,9 @@ void setup() {
   //robot.tunePID(5.3, 4.8, 0);
   //robot.tunePID(20.0, 2.8, 0.5); // работает для движения в положение x y (без учёта угла, скорость - квадрат омеги в знаменателе) minrange 0
   //robot.tunePID(20.0, 2.8, 0.5); // ОНО САМОЕ ПРИЕЗЖАЕТ НА БАЗУ ДОПУСТИМОЕ ОТКЛОНЕНИЕ ОТ ТОЧКИ 0.03 скорость 3/10 от макс
-  robot.tunePID(12.0, 5.0, 0.3);
-
+  //robot.tunePID(12.0, 5.0, 0.3);
+  robot.tunePID(30.0, 0.05, 0.01); 
+  robot.serialControl(del, deb);
 
   //robot.tunePID(3.4, 1.2, 0.9);
 // ====== Д Л Я  120 ОБ/МИН ======
@@ -43,7 +44,7 @@ void setup() {
 //   KpR = 600.0;
 //   KiR = 12000.0;
 //   KdR = 0.5;
-
+/*
 // ====== Д Л Я 60  ОБ/МИН =====
   KpL = 250.0;
   KiL = 5000.0;
@@ -55,10 +56,7 @@ void setup() {
   KiR = 5000.0;
   KdR = 0.5;
   robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
-
-  robot.serialControl(deb);
-  //robot.goCircle(1.0, 8);
-  //robot.manualControl(del);
+*/
   //robot.rot_test(whl_vel_des, del, deb); // ########################
 }
 

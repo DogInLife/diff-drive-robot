@@ -5,7 +5,7 @@
 #define SS_PIN          53         // Configurable, see typical pin layout above
 
 TwoWheeledRobot::TwoWheeledRobot()
-  :reachedGoal(false), globalStop(false),
+  :reachedGoal(false), globalStop(true),
   PIN_CURRENT_SENSOR(A12),
   inByte(0), newMinRange(0)
 {
@@ -85,45 +85,262 @@ byte TwoWheeledRobot::getSerialData()
   return Serial.read();
 }
 
-void TwoWheeledRobot::serialControl(bool deb) {
-  Serial.println(" ===== Choose mode ===== ");
+void TwoWheeledRobot::serialControl(int del, bool deb) {
   while (true)
   {
+    if (globalStop)
+    {
+      stopMoving();
+      Serial.println(" ===== Choose mode ===== ");
+      Serial.println(" 1 = Manual control ");
+      Serial.println(" 2 = Turn to left 90 deg");
+      Serial.println(" 3 = CW trajectory ");
+      Serial.println(" 4 = CCW trajectory ");
+      Serial.println(" 5 = GO ");
+      Serial.println(" 6 = Circle trajectory ");
+      Serial.println(" 7 = Rotation test ");
+      Serial.println(" 8 = RFID reader test ");
+      Serial.println(" press \"z\" to stop ");
+      globalStop = false;
+    }
+
     inByte = getSerialData();
+    globalSerialControl(inByte);
     switch (inByte)
       {
-        case ('m'):
+        case ('1'):
           Serial.println("=== You are using manual control ===");
           manualControl(10);
           break;
+        
+        case ('2'):
+          Serial.println("========= Turn to left 90 deg =========");
+          turnAngle(pos.theta + PI/2, del, false);
+          break;
 
-        case ('g'):
-          Serial.println("========= GO GO GO =========");
-          goToGoal(1.0, 0.0, true, 50, deb, false, 3);
+        /*case ('2'):
+          Serial.println("========= Go to position =========");
+          goToPosition();
+          break;*/
+
+        case ('3'):
+          Serial.println("====== CW trajectory ======");
+          goCWtest(1.0, del, deb);
           break;
         
-        case ('c'):
+        case ('4'):
+          Serial.println("====== CCW trajectory ======");
+          goCCWtest(0.8, del, deb);
+          break;
+
+        case ('5'):
+          Serial.println("========= GO GO GO =========");
+          goToGoal(1.0, 0.0, true, del, deb, false, 3);
+          break;
+        
+        case ('6'):
           Serial.println("====== Circle trajectory ======");
-          goCircle(0.75, 32, deb, 2);
+          goCircle(0.75, del, deb, 2);
           break;
 
-        case ('t'):
+        case ('7'):
           Serial.println(" ===== Rotation test ===== ");
-          rot_test(60, 50, deb, 0.61, 0.61);
+          rot_test(60, del, deb, 0.61, 0.61);
           break;
 
-        case ('r'):
+        case ('8'):
           Serial.println(" ===== RFID reader test ===== ");
-          rfidTest(50);
+          rfidTest(del);
           break;
       }
   }
+}
+
+void TwoWheeledRobot::globalSerialControl()
+{
+  globalSerialControl(getSerialData());
+}
+
+void TwoWheeledRobot::globalSerialControl(byte inB)
+{
+  switch(inB)
+  {
+    case('z'):
+      stopMoving();
+      globalStop = true;
+    break;
+  }
+}
+
+
+// ====================== robot behavior ===================== //
+// del - частота обновления
+void TwoWheeledRobot::goToPosition(float x, float y, int del, bool deb) {
+  
+  bool isFinish = false;
+
+  // поворот колёс за время между оценкой положения робота
+  float deltaAngL = 0.0;
+  float deltaAngR = 0.0;
+  // расстояние пройденное колесом
+  float distWheelL = 0.0;
+  float distWheelR = 0.0;
+  float distWheelC = 0.0;             // общее
+  // скорректированные скорости колёс
+  float velL;
+  float velR;
+  // допуск по достижению конченой точки
+  float posThreshold = 0.025;
+
+  float r = getRadiusWheels();
+  float l = baseLength;
+  float err = 0.0;
+  // измерительный промежуток 
+  //float dt = del / 1000.0;
+  float dt = del;
+
+  while(!isFinish && !globalStop) {
+    globalSerialControl();
+    
+    // расчет угла, на котором расположена целевая точка
+    pos.thetaGoal = atan2(y-pos.y, x-pos.x);
+
+    err = pid->computeAngleError(pos.thetaGoal, pos.theta);
+    
+    vel.ang = pid->computeControl(err, dt);
+    vel.lin = vel.computeLinearSpeed(err);
+    Serial.println("err " + String(err) + "ang " + String(vel.ang) + " | lin " + String(vel.lin));
+
+    velL = (2.0 * vel.lin - vel.ang * l) / (2.0 * r);
+    velR = (2.0 * vel.lin + vel.ang * l) / (2.0 * r);
+    
+    //Serial.println("velL: " + String(velL, 3) + " velR " + String(velR, 3));
+
+    if(!deb)
+      goForward(velL, velR);
+
+    deltaAngL = motorBlockL->getDeltaAngle();
+    deltaAngR = motorBlockR->getDeltaAngle();
+
+    distWheelL = distWheelL + deltaAngL*r;
+    distWheelR = distWheelR + deltaAngR*r;
+    distWheelC = (distWheelR + distWheelL) / 2;
+
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, l);
+    //String msg_pos = "X: " + String(pos.x, 3) + " Y: " + String(pos.y, 3) + " Th: " + String(pos.theta, 3);
+    //Serial.println(msg_pos);
+
+    if((abs(x-pos.x) < posThreshold) && (abs(y-pos.y) < posThreshold)) {
+      stopMoving();
+      Serial.println("TARGET POINT REACHED");
+      Serial.println("X: " + String(pos.x) + " Y: " + String(pos.y));
+      break;
+    }
+  
+    delay(del);
+  }
+}
+
+void TwoWheeledRobot::turnAngle(float theta, int del, bool deb) {
+  
+  // поворот колёс за время между оценкой положения робота
+  float deltaAngL = 0.0;
+  float deltaAngR = 0.0;
+  // скорректированные скорости колёс
+  float velL;
+  float velR;
+  // допуск по достижению конченого угла
+  float anglThreshold = 0.025;
+
+  float r = getRadiusWheels();
+  float l = baseLength;
+  float err = 0.0;
+
+  // измерительный промежуток 
+  //float dt = del / 1000.0;
+  float dt = del;
+
+  while(!globalStop) {
+    globalSerialControl();
+    
+    // расчет угла, на котором расположена целевая точка
+    pos.thetaGoal = theta;
+
+    err = pid->computeAngleError(pos.thetaGoal, pos.theta);
+    
+    vel.ang = pid->computeControl(err, dt);
+    vel.lin = vel.computeLinearSpeed(err);
+
+    velL = (2.0 * vel.lin - vel.ang * l) / (2.0 * r);
+    velR = (2.0 * vel.lin + vel.ang * l) / (2.0 * r);
+     
+    if(!deb)
+      goForward(velL, velR);
+
+    deltaAngL = motorBlockL->getDeltaAngle();
+    deltaAngR = motorBlockR->getDeltaAngle();
+
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, l);
+    Serial.println(" Th: " + String(pos.theta));
+
+    if((abs(err) < anglThreshold)) {
+      stopMoving();
+      Serial.println("ANGLE REACHED");
+      Serial.println("X: " + String(pos.x) + " Y: " + String(pos.y) + + " Th: " + String(pos.theta));
+      break;
+    }
+  
+    delay(del);
+  }
+}
+
+void TwoWheeledRobot::resertPosition() {
+  pos.x = 0.0;
+  pos.y = 0.0;
+  pos.theta = 0.0;
+  pid->resetErr();
+}
+/*
+void TwoWheeledRobot::goTrack(Position points[], int del, bool deb) {
+  size_t size  = sizeof points / sizeof(Position);
+  for (int i = 0; i < size; i++)
+  {
+    if (!globalStop)
+      goToPosition(points[i].x, points[i].y);
+  }
+}
+*/
+// ======= CW ======== //
+// L - сторона квадратной траектории
+void TwoWheeledRobot::goCWtest(float L, int del, bool deb) {
+  resertPosition();
+  goToPosition(L,   0.0, del, false);
+  goToPosition(L,   -L,  del, false);
+  goToPosition(0.0, -L,  del, false);
+  goToPosition(0.0, 0.0, del, false);
+  turnAngle(0.0, del, false);
+  Serial.println("CW track finish");
+  Serial.println("X: " + String(pos.x) + " Y: " + String(pos.y) + " Th: " + String(pos.theta));
+}
+
+// ======= CCW ======== //
+// L - сторона квадратной траектории
+void TwoWheeledRobot::goCCWtest(float L, int del, bool deb) {  
+  resertPosition();
+  goToPosition(L,   0.0, del, false);
+  goToPosition(L,   L,   del, false);
+  goToPosition(0.0, L,   del, false);
+  goToPosition(0.0, 0.0, del, false);
+  turnAngle(0.0, del, false);
+  Serial.println("CCW track finish");
+  Serial.println("X: " + String(pos.x) + " Y: " + String(pos.y) + " Th: " + String(pos.theta));
 }
 
 void TwoWheeledRobot::rfidTest(int del) {
   int rfidFound;
 
   while(true) {
+    globalSerialControl();
     rfidFound = rfidReader->checkReaderData();
     if(rfidFound > 0)
       Serial.println(rfidFound);
@@ -154,6 +371,7 @@ void TwoWheeledRobot::goCircle(float radius, int ptsNum, bool deb, int circles)
     Serial.println(" CIRCLE " + String(c));
     for(int i=1; i <= ptsNum; i++)
     {
+      globalSerialControl();
       //if(i % 2 == 0) followRFID = true;
       if(c == circles && i == ptsNum) { isFinish = true; }
       x = x0 + radius * sin(dPhi*i);
@@ -245,7 +463,8 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
     err = pid->computeAngleError(pos.thetaGoal, pos.theta);
     //Serial.println("Err theta: " + String(err, 3));
 
-    vel.ang = pid->computeControl(err, dt, rfidFound);
+    vel.ang = pid->computeControl(err, dt);
+    //vel.ang = pid->computeControl(err, dt, rfidFound);
     vel.lin = vel.computeLinearSpeed(err);
 
     // velL_meas = (deltaAngL * 60000.0) / (2.0 * 3.141593 * del);
@@ -410,18 +629,7 @@ int TwoWheeledRobot::goToGoal(float xGoal, float yGoal, bool isFinish, int del, 
       else { break; }
     }
   
-    switch(getSerialData())
-    {
-      case('s'):
-        stopMoving();
-        globalStop = true;
-      break;
-
-      case('r'):
-        stopMoving();
-        break;
-      break;
-    }
+    globalSerialControl();
 
     delay(del);
   }
@@ -489,17 +697,7 @@ void TwoWheeledRobot::rot_test(int whl_vel_des, byte del, bool deb, float xGoal,
         break;
       }
 
-      switch(getSerialData()) {
-        case('s'):
-          stopMoving();
-          globalStop = true;
-        break;
-
-        case('r'):
-          stopMoving();
-          break;
-        break;
-      }
+      globalSerialControl();
 
       delay(del);
     }
@@ -674,17 +872,22 @@ void TwoWheeledRobot::manualControl(int del)
   float distWheelR = 0.0;
   float distWheelC = 0.0;
 
-  while(true)
+  while(!globalStop)
   {
     switch (getSerialData())
     {
+      case ('z'):
+        globalStop = true;
+        stopMoving();
+        return;
+      break;
       case ('w'):
         goForward(vel, vel);
       break;
-      case ('x'):
+      case ('s'):
         goForward(-vel, -vel);
       break;
-      case ('s'):
+      case (' '):
         stopMoving();
       break;
       case ('d'):
@@ -696,7 +899,6 @@ void TwoWheeledRobot::manualControl(int del)
       case ('e'):
         vel += 5;
         (vel >= 150) ? 150 : vel;
-
       break;
       case ('q'):
         vel -= 5;
@@ -727,7 +929,6 @@ void TwoWheeledRobot::manualControl(int del)
     delay(del);
   }
 }
-
 
 void TwoWheeledRobot::stopMoving()
 {

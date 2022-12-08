@@ -18,6 +18,11 @@ float Velocity::computeLinearSpeed(float err)
    //return 0.5*maxRobot/(fabs(ang) + 1);
    //return ang*0.61;
    return maxRobot*1.5/5.0;
+   /*float speed = maxRobot/(square(fabs(ang) + 1));
+   if (maxRobot <= speed)
+      return maxRobot;
+   else
+      return speed;*/
 
 
 

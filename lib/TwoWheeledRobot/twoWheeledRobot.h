@@ -1,7 +1,6 @@
 #ifndef TWO_WHEELED_ROBOT_H
 #define TWO_WHEELED_ROBOT_H
 
-
 #include "motorBlock.h"
 #include "pid.h"
 #include "velocity.h"
@@ -51,12 +50,22 @@ public:
     void tuneWhlPID(float KpL, float KiL, float KdL, float KpR, float KiR, float KdR);
     void tunePID(float Kp, float Ki, float Kd);
     
+// ========= control ===========
+    void serialControl(int del, bool deb);
+    void globalSerialControl();
+    void globalSerialControl(byte inB);
+    
 // ========= behavior ===========
-    void serialControl(bool deb);
+    void manualControl(int dt);
+    void resertPosition();
+    void goToPosition(float x, float y, int del, bool deb);
+    void turnAngle(float theta, int del, bool deb);
+    void goTrack(Position points[], int del, bool deb);
+    void goCWtest(float L, int del, bool deb);
+    void goCCWtest(float L, int del, bool deb);
     void goCircle(float radius, int ptsNum, bool deb, int circles);
     int goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb, bool followRFID, int idRFID);
-    void manualControl(int dt);
-
+    
     void rfidTest(int del);
     void rot_test(int whl_vel_des, byte del, bool deb, float xGoal, float yGoal); // ####################################
 

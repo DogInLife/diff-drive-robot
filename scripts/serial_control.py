@@ -1,24 +1,11 @@
-import socket
-
-# import serial
+import serial
 import os
 import sys, select, termios, tty
-# from PIL import Image
-
-'''
-ros_path = '/opt/ros/kinetic/lib/python2.7/dist-packages'
-if ros_path in sys.path:
-    sys.path.remove(ros_path)
-import cv2
-sys.path.append('/opt/ros/kinetic/lib/python2.7/dist-packages')
-'''
-
-# HOST = '192.168.0.114'  # 340
-#HOST = '192.168.100.125'
-HOST = '192.168.0.161'
-
-# HOST = '127.0.0.1'
-PORT = 1500
+ser = serial.Serial()
+ser.baudrate = 9600
+ser.port = '/dev/ttyUSB0'   # for Raspberry
+ser.timeout = 0.5
+ser.open()
 
 vel = 30
 
@@ -32,22 +19,27 @@ def getKey():
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
-
 if __name__=="__main__":
     print("Current speed: ", vel)
     settings = termios.tcgetattr(sys.stdin)
 
-    sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sck.connect((HOST, PORT))
-    print('Connected to host', HOST)
-
     try:
         while True:
+            if(ser.in_waiting > 0):
+                ser_recv = ser.readline().decode('ascii') # what is received from serial
+                print(ser_recv)
+        
             key = getKey()
-            #print(key)
+            
             if key:
-                # print(key)
-                sck.sendall(str.encode(key))
+                data = str.encode(key)
+                if not data == b'~':
+                    print(data)
+                    if (data == b'\x18'): # Ctrl + x
+                        ser.write(b's')
+                        break
+                    ser.write(data) 
+            
             if(key == '\x03'): # ctrl+c
                 break
 
@@ -64,6 +56,11 @@ if __name__=="__main__":
         print(e)
     finally:
         termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+
+
+
+
+
 
 
 
