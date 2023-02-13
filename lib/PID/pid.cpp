@@ -25,6 +25,12 @@ float PID::computeAngleError(float thetaGoal, float theta)
     else return err;
 }
 
+float PID::computeLineError(float sens_1, float sens_2)
+{
+    float err = (sens_1 - sens_2)*3.141593;
+    return err;
+}
+
 void PID::setCoefficient(float Kp, float Ki, float Kd)
 {
     this->Kp = Kp;

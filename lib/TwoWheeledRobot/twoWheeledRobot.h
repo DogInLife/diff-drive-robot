@@ -7,15 +7,19 @@
 #include "position.h"
 #include "math.h"
 
+#include "GracefulMotionControler.h"
 #include "RFIDReader.h"
 //#include <MFRC522.h>
-
+#include "hallSensor.h"
+#include "magneticLineSensor.h"
 
 class TwoWheeledRobot
 {
 private:
     //MFRC522* rfidReader;
     RFIDReader* rfidReader;
+
+    MagneticLineReader* magneticLineReader;
 
     MotorBlock* motorBlockL;
     MotorBlock* motorBlockR;
@@ -24,6 +28,8 @@ private:
     PID* pid;
     Velocity vel;
     Position pos;
+
+    MotionControler* motionControler;
 
     float baseLength;
     byte PIN_CURRENT_SENSOR;
@@ -60,11 +66,16 @@ public:
     void resertPosition();
     void goToPosition(float x, float y, int del, bool deb);
     void turnAngle(float theta, int del, bool deb);
+    void goToNULL(int del, bool deb);
     void goTrack(Position points[], int del, bool deb);
     void goCWtest(float L, int del, bool deb);
     void goCCWtest(float L, int del, bool deb);
     void goCircle(float radius, int ptsNum, bool deb, int circles);
     int goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb, bool followRFID, int idRFID);
+
+    void goMagneticLine(int del, bool deb);
+    void goMagneticLine2Point(float _x, float _y, int del, bool deb);
+    int moveDecision(float _x, float _y, int crossroadsCounter);
     
     void rfidTest(int del);
     void rot_test(int whl_vel_des, byte del, bool deb, float xGoal, float yGoal); // ####################################
@@ -74,6 +85,8 @@ public:
     void turnRight(int velL, int velR);
     void stopMoving();
     int checkCurrent(byte PIN_CURRENT_SENSOR);
+    // m/s to об/min
+    int linear2angular(int vel);                
 };
 
 #endif // TWO_WHEELED_ROBOT_H

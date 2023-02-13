@@ -1,4 +1,5 @@
 import socket, select
+import struct
 import serial
 import sys
 
@@ -40,9 +41,9 @@ print("Connected to: ", addr)
 while True:
     if(ser.in_waiting > 0):
         ser_recv = ser.readline().decode('ascii') # what is received from serial
-        # if ser_recv:
-        print(ser_recv)
-            
+        if ser_recv:
+            print(ser_recv)                
+
     data = conn.recv(1) # data from socket client
     if not data == b'~' and not data == b'':
         print(data)
@@ -50,6 +51,20 @@ while True:
             ser.write(b'z')
             break
         ser.write(data) # send to serial (arduino)
+        if (data == b'5'):
+            while True:
+                if(ser.in_waiting > 0):
+                    ser_recv = ser.readline().decode('ascii') # what is received from serial
+                    if ser_recv:
+                        print(ser_recv)
+                        if (str(ser_recv) == "finish"):
+                            print("real finish")
+                            break
+                data_bytes = conn.recv(4)
+                print("to arduino")
+                print(data_bytes)
+                ser.write(data_bytes)
+
         
 conn.close()
 

@@ -16,12 +16,16 @@ TwoWheeledRobot::TwoWheeledRobot()
   rfidReader = new RFIDReader(SS_PIN, RST_PIN);
   rfidReader->readerStart();
 
+  magneticLineReader = new MagneticLineReader();
+
   motorBlockL = new MotorBlock();
   motorBlockR = new MotorBlock();
   pidL = new PID();
   pidR = new PID();
   pid = new PID();
   pinMode(PIN_CURRENT_SENSOR, LOW);
+  
+  motionControler = new MotionControler();
 }
 
 TwoWheeledRobot::~TwoWheeledRobot()
@@ -42,13 +46,15 @@ void TwoWheeledRobot::createWheels(float wheelRadius, float baseLength, float ma
   this->baseLength = baseLength;
   // vel.max = 6.28/60*wheelRadius*maxVel;
   vel.maxWheel = maxVel; // макс. скорость вращения колёс [об/мин]
-  //vel.maxRobot = maxVel * 2.0 * 3.141593 * wheelRadius / 60.0; // макс. линейная скорость робота [м/с]
-  vel.maxRobot = maxVel * wheelRadius;
-  // if (DEBUG){
-  //   Serial.print("vel.max: "); Serial.println(vel.maxWheel);
-  // }
-}
+  //vel.maxRobot = maxVel * 2.0 * 3.141593 * wheelRadius / 60.0; 
+  vel.maxRobot = 2 * PI * wheelRadius * maxVel / 60; // макс. линейная скорость робота [м/с]
 
+  Serial.print("max wheel speed: " + String(vel.maxWheel) + "max robot speed: " + String(vel.maxRobot));
+  // if (DEBUG){
+  //   
+  // }
+  motionControler->setSpeed(vel.maxRobot);
+}
 
 // === SET ===
 void TwoWheeledRobot::setEncoderPins(byte encPinL, byte encPinR)
@@ -96,10 +102,9 @@ void TwoWheeledRobot::serialControl(int del, bool deb) {
       Serial.println(" 2 = Turn to left 90 deg");
       Serial.println(" 3 = CW trajectory ");
       Serial.println(" 4 = CCW trajectory ");
-      Serial.println(" 5 = GO ");
-      Serial.println(" 6 = Circle trajectory ");
-      Serial.println(" 7 = Rotation test ");
-      Serial.println(" 8 = RFID reader test ");
+      Serial.println(" 5 = Go to NULL position (not yet)");
+      Serial.println(" 6 = Go by magnetic line. Debug");
+      Serial.println(" 7 = Go by magnetic line. Go to point");
       Serial.println(" press \"z\" to stop ");
       globalStop = false;
     }
@@ -107,52 +112,69 @@ void TwoWheeledRobot::serialControl(int del, bool deb) {
     inByte = getSerialData();
     globalSerialControl(inByte);
     switch (inByte)
-      {
-        case ('1'):
-          Serial.println("=== You are using manual control ===");
-          manualControl(10);
-          break;
-        
-        case ('2'):
-          Serial.println("========= Turn to left 90 deg =========");
-          turnAngle(pos.theta + PI/2, del, false);
-          break;
+    {
+      case ('1'):
+        Serial.println("=== You are using manual control ===");
+        manualControl(10);
+        break;
+      
+      case ('2'):
+        Serial.println("========= Turn to left 90 deg =========");
+        turnAngle(pos.theta + PI/2, del, deb);
+        break;
 
-        /*case ('2'):
-          Serial.println("========= Go to position =========");
-          goToPosition();
-          break;*/
+      case ('3'):
+        Serial.println("====== CW trajectory ======");
+        goCWtest(1.0, del, deb);
+        break;
+      
+      case ('4'):
+        Serial.println("====== CCW trajectory ======");
+        goCCWtest(0.8, del, deb);
+        break;
 
-        case ('3'):
-          Serial.println("====== CW trajectory ======");
-          goCWtest(1.0, del, deb);
-          break;
-        
-        case ('4'):
-          Serial.println("====== CCW trajectory ======");
-          goCCWtest(0.8, del, deb);
-          break;
+      case ('5'):
+        Serial.println("========= Go to NULL position =========");
+        //goToNULL(del, deb);
+        break;
 
-        case ('5'):
-          Serial.println("========= GO GO GO =========");
-          goToGoal(1.0, 0.0, true, del, deb, false, 3);
-          break;
-        
-        case ('6'):
-          Serial.println("====== Circle trajectory ======");
-          goCircle(0.75, del, deb, 2);
-          break;
+      case ('6'):
+        Serial.println("========= Go by magnetic line. Debug =========");
+        resertPosition();
+        goMagneticLine(del, true);
+        break;
 
-        case ('7'):
-          Serial.println(" ===== Rotation test ===== ");
-          rot_test(60, del, deb, 0.61, 0.61);
-          break;
+      case ('7'):
+        Serial.println("========= Go by magnetic line. Go to point =========");
+        resertPosition();
+        goMagneticLine2Point(3, -1, del, deb);
+        if (!globalStop) {
+          stopMoving();
+          globalStop = true;
+          Serial.println("Fatal error");
+        }
+        break;
 
-        case ('8'):
-          Serial.println(" ===== RFID reader test ===== ");
-          rfidTest(del);
-          break;
-      }
+      // case ('5'):
+      //   Serial.println("========= GO GO GO =========");
+      //   goToGoal(1.0, 0.0, true, del, deb, false, 3);
+      //   break;
+      
+      // case ('6'):
+      //   Serial.println("====== Circle trajectory ======");
+      //   goCircle(0.75, del, deb, 2);
+      //   break;
+
+      // case ('7'):
+      //   Serial.println(" ===== Rotation test ===== ");
+      //   rot_test(60, del, deb, 0.61, 0.61);
+      //   break;
+
+      // case ('8'):
+      //   Serial.println(" ===== RFID reader test ===== ");
+      //   rfidTest(del);
+      //   break;
+    }
   }
 }
 
@@ -171,7 +193,6 @@ void TwoWheeledRobot::globalSerialControl(byte inB)
     break;
   }
 }
-
 
 // ====================== robot behavior ===================== //
 // del - частота обновления
@@ -300,6 +321,40 @@ void TwoWheeledRobot::resertPosition() {
   pos.theta = 0.0;
   pid->resetErr();
 }
+
+void TwoWheeledRobot::goToNULL(int del, bool deb) {
+  float x, y, theta;
+  int get_numbers = 0;
+  while(get_numbers < 3)
+  {
+    //getSerialData()
+    if (Serial.available()) {
+      int data = Serial.read();
+      if (data) {
+        Serial.println(data);
+        switch (get_numbers)
+        {
+          case 0:
+            x = data;
+            break;
+          case 1:
+            y = data;
+            break;
+          case 2:
+            theta = data;
+            break;
+        }
+        get_numbers++;
+      }
+    }
+  }
+  Serial.print("finish");
+  Serial.println("x " + String(x) + " | y " + String(y) + " | theta " + String(theta));
+  // goToPosition(x, y, del, deb);
+  // turnAngle(theta, del, deb);
+  resertPosition();
+}
+
 /*
 void TwoWheeledRobot::goTrack(Position points[], int del, bool deb) {
   size_t size  = sizeof points / sizeof(Position);
@@ -334,6 +389,325 @@ void TwoWheeledRobot::goCCWtest(float L, int del, bool deb) {
   turnAngle(0.0, del, false);
   Serial.println("CCW track finish");
   Serial.println("X: " + String(pos.x) + " Y: " + String(pos.y) + " Th: " + String(pos.theta));
+}
+
+void TwoWheeledRobot::goMagneticLine(int del, bool deb) {
+    // поворот колёс за время между оценкой положения робота
+  float deltaAngL = 0.0;
+  float deltaAngR = 0.0;
+  // скорректированные скорости колёс
+  float velL;
+  float velR;
+
+  float r = getRadiusWheels();
+  float l = baseLength;
+  float err = 0.0;
+
+  // измерительный промежуток 
+  //float dt = del / 1000.0;
+  float dt = del;
+
+  // Направление. Угол, расстояние до точки
+  float delta, distance;
+
+  magneticLineReader->updateAverageSignal();
+  size_t count = magneticLineReader->getSensorCount();
+  size_t middle_sen_i = count / 2 - 1;
+
+  String message = "";
+
+  while(!globalStop) {
+    globalSerialControl();
+
+    byte* checkResult = magneticLineReader->checkMagneticField();
+    
+    byte leftDetect = 0;
+    for (size_t i = 0; i <= middle_sen_i; i++) {
+      leftDetect += checkResult[i];
+    }
+    byte rightDetect = 0;
+    for (size_t i = middle_sen_i+1; i < count; i++) {
+      rightDetect += checkResult[i];
+    }
+  
+    // Движение прямо
+    delta = 0;
+    distance = magneticLineReader->hallSensors[middle_sen_i]->x;
+    if (leftDetect && rightDetect &&
+        ((leftDetect > rightDetect && leftDetect/rightDetect < 1.5) ||
+         (leftDetect < rightDetect && rightDetect/leftDetect < 1.5))) {
+      if (leftDetect+rightDetect < 4 && checkResult[middle_sen_i] && checkResult[middle_sen_i+1]) {
+        message = "Forward";
+      } else {
+        message = "Crossroads";
+        //stopMoving();
+        //globalStop = true;
+      }
+    }
+    else if (leftDetect && leftDetect > rightDetect) {
+      if (leftDetect == 1 && checkResult[middle_sen_i]) {
+        message = "Forward";
+      } else {
+        message = "Left to ";
+        for (size_t i = 0; i <= middle_sen_i; i++) {
+          if (checkResult[i]) {
+            message += String(i);
+            delta = atan(magneticLineReader->hallSensors[i]->y/magneticLineReader->hallSensors[i]->x);
+            distance = sqrt(pow(magneticLineReader->hallSensors[i]->x, 2) + pow(magneticLineReader->hallSensors[i]->y, 2));
+            break;
+          }
+        }
+      }
+    }
+    else if (rightDetect && rightDetect > leftDetect) {
+      if (rightDetect == 1 && checkResult[middle_sen_i+1]) {
+        message = "Forward";
+      } else {
+        message = "Right to ";
+        for (size_t i = count-1; i > middle_sen_i; i--) {
+          if (checkResult[i]) {
+            message += String(i);
+            delta = atan(magneticLineReader->hallSensors[i]->y/magneticLineReader->hallSensors[i]->x);
+            distance = sqrt(pow(magneticLineReader->hallSensors[i]->x, 2) + pow(magneticLineReader->hallSensors[i]->y, 2));
+            break;
+          }
+        }
+      }      
+    }
+    else {
+      message = "NoLine";
+    }
+    
+    motionControler->calculate(delta, distance, 0);
+    
+    velL = (motionControler->get_v() - l*motionControler->get_w()/2)/r;
+    velR = (motionControler->get_v() + l*motionControler->get_w()/2)/r;
+    //Serial.println("get_v: " + String(motionControler->get_v()) + ". get_w: " + String(l*motionControler->get_w()/2));
+    
+    if (deb)
+      Serial.println(message);
+    else
+      goForward(velL*20, velR*20);
+      //goForward(velL, velR);
+
+    deltaAngL = motorBlockL->getDeltaAngle();
+    deltaAngR = motorBlockR->getDeltaAngle();
+
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, l);
+
+    delay(del);
+  }
+  magneticLineReader->takeOffLed();
+}
+
+void TwoWheeledRobot::goMagneticLine2Point(float _x, float _y, int del, bool deb) {
+  // поворот колёс за время между оценкой положения робота
+  float deltaAngL = 0.0;
+  float deltaAngR = 0.0;
+  // скорректированные скорости колёс
+  float velL;
+  float velR;
+
+  float r = getRadiusWheels();
+  float l = baseLength;
+  float err = 0.0;
+
+  // измерительный промежуток 
+  float dt = del;
+
+  // Направление. delta - угол, distance - расстояние до точки
+  float delta, distance;
+
+  size_t count = magneticLineReader->getSensorCount();
+  size_t middle_sen_i = count / 2 - 1;
+
+  String message = "";
+
+  int crossroadsCounter = 0;                          // Счётчик перекрёстков
+  float actualDistance = 0, coverDistance = 0, admissionDistance = 0.005;  // Дистанции для пересечения перекрёстка, mm
+  float actualAngle = 0, coverAngle = 0, admissionAngle = 0.06;  // Дистанции для пересечения перекрёстка, mm
+  bool isManeuvering = false;                         // Робот в процессе выполнения манёвра
+  int decision;                                       // Указание к действию
+
+  while(!globalStop) {
+    globalSerialControl();
+    
+    if (isManeuvering) {  // Если выполняется манёвр
+      if (crossroadsCounter <= _x)
+        actualDistance = pos.x;
+      else 
+        actualDistance = -pos.y;
+      if (coverDistance - actualDistance < admissionDistance) { // Если доехали до центра перекрёстка
+        if (decision == 1) {                          // Если манёвр "Движение вперёд"
+          isManeuvering = false;    // Движение вперёд окончено
+          message = "Finish crossroad: " + String(crossroadsCounter);
+        } else if (decision == 2 || decision == 3) {  // Если манёвр "Поворот"
+          actualAngle = pos.theta;
+          if (abs(coverAngle - actualAngle) < admissionAngle) { // Если повернули
+            isManeuvering = false;  // Поворот окончен
+            message = "Finish crossroad: " + String(crossroadsCounter);
+          }
+          else {                                                // Иначе продолжаем поворачиваться
+            delta = coverAngle - actualAngle;
+            distance = 0;
+            message = "actualAngle " + String(actualAngle) + " | coverAngle " + String(coverAngle)  + " | delta " + String(delta);
+          }
+        } else {                                      // Иначе остановка        
+          isManeuvering = false;         
+          stopMoving();
+          globalStop = true;
+          message = "Finish. Last crossroad: " + String(crossroadsCounter);
+        }
+      }
+      else {                                                    // Иначе продолжаем движение прямо
+        delta = 0;
+        distance = coverDistance - actualDistance;
+        message = "actualDistance " + String(actualDistance) + " | coverDistance " + String(coverDistance);
+      }
+    }
+    else {                // Иначе обычное следование линии     
+      // Опрос датчика магнитной линии 
+      byte* checkResult = magneticLineReader->checkMagneticField(); 
+      byte leftDetect = 0;
+      for (size_t i = 0; i <= middle_sen_i; i++) {
+        leftDetect += checkResult[i];
+      }
+      byte rightDetect = 0;
+      for (size_t i = middle_sen_i+1; i < count; i++) {
+        rightDetect += checkResult[i];
+      }
+      
+      /*  Если засекли линию слева и права
+          И линия не сильно смещена от центра,
+          то движемся по середине линии или засекли перекрёсток */
+      if (leftDetect && rightDetect &&      
+          ((leftDetect > rightDetect && leftDetect/rightDetect < 2) ||
+          (leftDetect < rightDetect && rightDetect/leftDetect < 2))) {    
+        if (leftDetect+rightDetect > 3) {   // Если площадь детектирования большая, то засекли перекрёсток 
+          message = "Crossroad";
+          decision = moveDecision(_x, _y, ++crossroadsCounter);
+          // Дистанция до пересечения центра перекрёстка и центра робота
+          //actualDistance = sqrt(pos.x*pos.x + pos.y*pos.y);
+          if (crossroadsCounter <= _x)
+            actualDistance = pos.x;
+          else 
+            actualDistance = -pos.y;
+          coverDistance = actualDistance + magneticLineReader->hallSensors[middle_sen_i]->x;
+          // Угол поворота на перекрёстке
+          if (decision == 0)
+            message += ". Finish";
+          else if (decision == 1)
+            message += ". Forward";
+          else if (decision == 2) {
+            actualAngle = pos.theta;
+            coverAngle = actualAngle + PI/2;
+            message += ". Left";
+          } else if (decision == 3) {
+            actualAngle = pos.theta;
+            coverAngle = actualAngle - PI/2;
+            message += ". Right";
+          }
+          // Начало манёвра
+          isManeuvering = true;
+          Serial.println(message);
+          continue;
+        }        
+        else {                              // Продолжаем движение по центру линии
+          message = "Forward";
+          delta = 0.;
+          distance = magneticLineReader->hallSensors[middle_sen_i]->x;
+        }
+      } else if (leftDetect && leftDetect > rightDetect) {      // Если преобладает левое направление
+        if (leftDetect == 1 && checkResult[middle_sen_i]) {     // Если линия находится по центру, движемся прямо
+          message = "Forward";
+          delta = 0.;
+          distance = magneticLineReader->hallSensors[middle_sen_i]->x;
+        } else {                                                // Иначе поворот налево
+          message = "Left";
+          for (size_t i = 0; i <= middle_sen_i; i++) {
+            if (checkResult[i]) {
+              delta = atan(magneticLineReader->hallSensors[i]->y/magneticLineReader->hallSensors[i]->x);
+              distance = sqrt(pow(magneticLineReader->hallSensors[i]->x, 2) + pow(magneticLineReader->hallSensors[i]->y, 2));
+              break;
+            }
+          }
+        }
+      }
+      else if (rightDetect && rightDetect > leftDetect) {       // Если преобладает правое направление
+        if (rightDetect == 1 && checkResult[middle_sen_i+1]) {  // Если линия находится по центру, движемся прямо
+          message = "Forward";
+          delta = 0.;
+          distance = magneticLineReader->hallSensors[middle_sen_i]->x;
+        } else {                                                // Иначе поворот направо
+          message = "Right";
+          for (size_t i = count-1; i > middle_sen_i; i--) {     
+            if (checkResult[i]) {
+              delta = atan(magneticLineReader->hallSensors[i]->y/magneticLineReader->hallSensors[i]->x);
+              distance = sqrt(pow(magneticLineReader->hallSensors[i]->x, 2) + pow(magneticLineReader->hallSensors[i]->y, 2));
+              break;
+            }
+          }
+        }
+      }
+      else {
+        message = "NoLine";
+        delta = 0.;
+        distance = magneticLineReader->hallSensors[middle_sen_i]->x;
+      }
+    }
+
+    motionControler->calculate(delta, distance, 0);
+    
+    if (isManeuvering && distance == 0 && (decision == 2 || decision == 3)) {
+      velL = (motionControler->get_v() + l*motionControler->get_w()/2/r) * (decision == 2 ? -2 : 2);
+      velR = -velL;
+      Serial.println(String(motionControler->get_v()) + " " + String(l*motionControler->get_w()/2/r));
+    }
+    else {
+      velL = (motionControler->get_v() - l*motionControler->get_w()/2)/r;
+      velR = (motionControler->get_v() + l*motionControler->get_w()/2)/r;
+    }
+    //Serial.println("get_v: " + String(motionControler->get_v()) + ". get_w: " + String(l*motionControler->get_w()/2));
+    
+    velL = linear2angular(velL);
+    velR = linear2angular(velR);
+    
+    if (message.compareTo("NoLine")) {
+      //Serial.println(message);
+      Serial.println("velL: " + String(velL) + " | velR: " + String(velR) + (" (rpm)") );
+    }
+
+    if (!deb)
+      goForward(velL, velR);
+
+    deltaAngL = motorBlockL->getDeltaAngle();
+    deltaAngR = motorBlockR->getDeltaAngle();
+
+    pos.estCurrentPosition(deltaAngL, deltaAngR, r, l);
+
+    delay(del);
+  }
+  magneticLineReader->takeOffLed();
+}
+
+int TwoWheeledRobot::moveDecision(float _x, float _y, int count) {
+  if (count == _x) {
+    if (_y > 0)
+      return 2;
+    else if (_y < 0)
+      return 3;
+    else
+      return 0;
+  }
+  else if (count > _x) {
+    if (count < _y)
+      return 1;
+    else
+      return 0;
+  }
+  else {
+    return 1;
+  }
 }
 
 void TwoWheeledRobot::rfidTest(int del) {
@@ -957,4 +1331,9 @@ void TwoWheeledRobot::turnRight(int velL, int velR)
 int TwoWheeledRobot::checkCurrent(byte PIN_CURRENT_SENSOR)
 {
   return analogRead(PIN_CURRENT_SENSOR);
+}
+
+int TwoWheeledRobot::linear2angular(int vel)
+{
+  return vel / (2.0*PI*WHEEL_RADIUS);
 }

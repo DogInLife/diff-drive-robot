@@ -1,16 +1,22 @@
-#ifndef RFID_READER_H
-#define RFID_READER_H
-#include <hallSensor.h>
+#ifndef HALL_SENSOR_READER_H
+#define HALL_SENSOR_READER_H
+#include <Arduino.h>
+#include "SPI.h"
 
 class HallSensorReader {
     private:
-        byte DIG_PIN;
+        int senPin;
+        int ledPin;
+        int averageSignal;
+        int sensitivity;
 
     public:
-        HallSensorReader(byte DIG_PIN);
+        HallSensorReader(int SEN_PIN, int LED_PIN, int averageSignal, int sensitivity, float shift_X, float shift_Y);
 
-        void readerStart();
-        int checkReaderData();
+        byte checkMagneticField();
+        void updateAverageSignal();
+        void takeOffLed();
+        float x, y;
 };
 
 #endif

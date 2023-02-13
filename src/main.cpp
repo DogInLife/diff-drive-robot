@@ -30,6 +30,7 @@ void setup() {
   //robot.tunePID(20.0, 2.8, 0.5); // работает для движения в положение x y (без учёта угла, скорость - квадрат омеги в знаменателе) minrange 0
   //robot.tunePID(20.0, 2.8, 0.5); // ОНО САМОЕ ПРИЕЗЖАЕТ НА БАЗУ ДОПУСТИМОЕ ОТКЛОНЕНИЕ ОТ ТОЧКИ 0.03 скорость 3/10 от макс
   //robot.tunePID(12.0, 5.0, 0.3);
+  
   robot.tunePID(30.0, 0.05, 0.01); 
   robot.serialControl(del, deb);
 
@@ -62,5 +63,7 @@ void setup() {
 
 
 void loop() {
-
+  /*int analogValue = analogRead(A0);     // Считываем аналоговое значение
+  Serial.println((String)analogValue); 
+  delay(100);*/ 
 }
