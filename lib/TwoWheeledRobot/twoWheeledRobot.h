@@ -1,13 +1,16 @@
 #ifndef TWO_WHEELED_ROBOT_H
 #define TWO_WHEELED_ROBOT_H
 
-#include "motorBlock.h"
-#include "pid.h"
+#include <math.h>
+
+#include "constants.h"
+
 #include "velocity.h"
 #include "position.h"
-#include "math.h"
+#include "motorBlock.h"
+#include "pid.h"
+#include "motionController.h"
 
-#include "GracefulMotionControler.h"
 #include "RFIDReader.h"
 //#include <MFRC522.h>
 #include "hallSensor.h"
@@ -15,78 +18,97 @@
 
 class TwoWheeledRobot
 {
-private:
-    //MFRC522* rfidReader;
-    RFIDReader* rfidReader;
+    private:    
+        float wheelRadius;          // Средний радиус колёс [m]
+        float baseLength;           // Ширина базы между колёсами [m]
 
-    MagneticLineReader* magneticLineReader;
+        Velocity* vel;              // Скорость робота [m/s]
+        Position* pos;              // Местоположение робота [m]
 
-    MotorBlock* motorBlockL;
-    MotorBlock* motorBlockR;
-    PID* pidL;
-    PID* pidR;
-    PID* pid;
-    Velocity vel;
-    Position pos;
+        MotorBlock* motorBlockL;    // Управление мотором левого колеса
+        MotorBlock* motorBlockR;    // Управление мотором правого колеса
+        PID* pidL;                  // PID для управления скоростью левого колеса
+        PID* pidR;                  // PID для управления скоростью правого колеса
 
-    MotionControler* motionControler;
+        MotionController* motionControler;   // Контроллер движения робота
 
-    float baseLength;
-    byte PIN_CURRENT_SENSOR;
+        bool globalStop = true;     // Преждевременная остановка цикла. True - остановка необходима, иначе False
+        int newMinRange = 0;        // Для функции map в setVelocity
+        byte inByte = 0;            // Входящий с консоли символ
 
-    bool reachedGoal;
-    bool globalStop;
-    int newMinRange; // Для функции map в setVelocity
-    byte inByte;
+        /* Движение в заданную на контроллере координату */ 
+        void goToPosition(int del, bool deb);
 
-public:
-    TwoWheeledRobot();
-    ~TwoWheeledRobot();
+    public:
+        TwoWheeledRobot();
+        ~TwoWheeledRobot();
 
-    void createWheels(float wheelRadius, float baseLength, float maxVel);
-    //void createRFIDReader();
+        //================= CONTROL =================//
+        /* Управление с консоли */ 
+        void serialControl(int del, bool deb);  
+        /* Проверка вводимых символов в консоль в глобальной системе контроля */ 
+        void globalSerialControl();           
+        /* Проверка символа inB в глобальной системе контроля */ 
+        void globalSerialControl(byte inB);
+        /* Запуск ручного отправления */ 
+        void manualControl(int dt);
+        
 
-    // SET
-    void setEncoderPins(byte encPinL, byte encPinR);
-    void setDriverPins(byte driverPinPWM_R, byte driverPin_R2, byte driverPin_R1, byte driverPin_L1, byte driverPin_L2, byte driverPinPWM_L);
-    // GET
-    float getRadiusWheels();
-    byte getSerialData();
-    
-    void tuneWhlPID(float KpL, float KiL, float KdL, float KpR, float KiR, float KdR);
-    void tunePID(float Kp, float Ki, float Kd);
-    
-// ========= control ===========
-    void serialControl(int del, bool deb);
-    void globalSerialControl();
-    void globalSerialControl(byte inB);
-    
-// ========= behavior ===========
-    void manualControl(int dt);
-    void resertPosition();
-    void goToPosition(float x, float y, int del, bool deb);
-    void turnAngle(float theta, int del, bool deb);
-    void goToNULL(int del, bool deb);
-    void goTrack(Position points[], int del, bool deb);
-    void goCWtest(float L, int del, bool deb);
-    void goCCWtest(float L, int del, bool deb);
-    void goCircle(float radius, int ptsNum, bool deb, int circles);
-    int goToGoal(float x_d, float y_d, bool isFinish, int del, bool deb, bool followRFID, int idRFID);
+        // ========= FUNCTIONS ===========
+        /* Обнуление позиции и ошибок регулятора */ 
+        void resertPosition();
+        /* Запуск движения в заданную координату.
+        _x, _y - координты точки [m] 
+        beta - конечный угол после достижения точки [rad] 
+        del - частота [ms]
+        deb - true, если нужен дебаг */ 
+        void startGoToPosition(float _x, float _y, int del, bool deb);
+        /* Запуск движения в заданную координату. Конечный угол не учитывается.
+        _x, _y - координты точки [m] 
+        del - частота [ms]
+        deb - true, если нужен дебаг */ 
+        void startGoToPosition(float _x, float _y, float beta, int del, bool deb);
+        /* Запуск движения по маршруту заданному точками.
+        points - массив точек
+        del - частота [ms]
+        deb - true, если нужен дебаг */ 
+        void goTrack(Position points[], int del, bool deb);
+        /* Запуск движения по квадратной траектории по часовой стрелке [CW]
+        L – сторона квадрата [m]
+        del - частота [ms]
+        deb - true, если нужен дебаг */ 
+        void goCWtest(float L, int del, bool deb);
+        /* Запуск движения по квадратной траектории против часовой стрелке [CCW]
+        L – сторона квадрата [m]
+        del - частота [ms]
+        deb - true, если нужен дебаг */ 
+        void goCCWtest(float L, int del, bool deb);
+        /* Запуск движения по кругу 
+        ... */ 
+        void goCircle(float radius, int ptsNum, bool deb, int circles);
+        /* Запуск движения по магнитной линии
+        del - частота [ms]
+        deb - true, если нужен дебаг */ 
 
-    void goMagneticLine(int del, bool deb);
-    void goMagneticLine2Point(float _x, float _y, int del, bool deb);
-    int moveDecision(float _x, float _y, int crossroadsCounter);
-    
-    void rfidTest(int del);
-    void rot_test(int whl_vel_des, byte del, bool deb, float xGoal, float yGoal); // ####################################
+        //void goMagneticLine(int del, bool deb);
+        /* Запуск движения в заданную координату сетки, образуемой магнитными линиями
+        _x, _y - координты перекрёстка
+        del - частота [ms]
+        deb - true, если нужен дебаг */ 
+        //void goMagneticLine2Point(float _x, float _y, int del, bool deb);
 
-    void goForward(int velL, int velR);
-    void turnLeft(int velL, int velR);
-    void turnRight(int velL, int velR);
-    void stopMoving();
-    int checkCurrent(byte PIN_CURRENT_SENSOR);
-    // m/s to об/min
-    int linear2angular(int vel);                
+        /* Двигаться прямо */ 
+        void goForward(int velL, int velR);
+        /* Двигаться влево */ 
+        void turnLeft(int velL, int velR);
+        /* Двигаться вправо */ 
+        void turnRight(int velL, int velR);
+        /* Остановиться */ 
+        void stopMoving();
+
+        //================= GET =================//
+        /* Возвращает байт информации из буфера последовательного порта */
+        byte getSerialData();                    
 };
 
 #endif // TWO_WHEELED_ROBOT_H

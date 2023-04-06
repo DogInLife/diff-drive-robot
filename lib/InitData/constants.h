@@ -4,24 +4,36 @@
 #define DEBUG  0
 #define DEBUG_PLOT 0
 
-#define WHEEL_RADIUS 0.04465  //m
-#define BASE_LENGTH 0.285   //m
+const float WHEEL_RADIUS_LEFT = 0.04465;    // Радиус колеса левого [m]
+const float WHEEL_RADIUS_RIGHT = 0.04465;   // Радиус колеса правого [m]
+const float BASE_LENGTH = 0.285;            // Ширина базы между колёсами [m]
 
-#define MAX_VELOCITY 150  // об/мин у двигателей
+const float MAX_MOTOR_VELOCITY = 150.0;     // Максимальная скорость вращения двигателей [об/мин]
+
+// Коэффициенты PID регулятора для левого и правого колёс
+const float KpL = 30.0;
+const float KiL = 0.05;
+const float KdL = 0.01;
+const float KpR = 30.0;
+const float KiR = 0.05;
+const float KdR = 0.01;
 
 // Номера пинов на I2С мультиплексоре для энкодеров
-#define ENCODER_PIN_R 2
-#define ENCODER_PIN_L 7
+const int ENCODER_PIN_R = 2;
+const int ENCODER_PIN_L = 7;
 
 // ====================================
 // ==== Пины на драйвере | Пины на МК =
 // ====================================
-#define DRIVER_PWM_PIN_A    7
-#define DRIVER_IN_A2        6
-#define DRIVER_IN_A1        5
-#define DRIVER_IN_B1        4
-#define DRIVER_IN_B2        3 
-#define DRIVER_PWM_PIN_B    2
+const int DRIVER_PWM_PIN_A = 7;
+const int DRIVER_IN_A2 = 6;
+const int DRIVER_IN_A1 = 5;
+const int DRIVER_IN_B1 = 4;
+const int DRIVER_IN_B2 = 3;
+const int DRIVER_PWM_PIN_B = 2;
 // ====================================
+
+const int RST_PIN = 8;          // Configurable, see typical pin layout above
+const int SS_PIN = 53;
 
 #endif // CONST_H

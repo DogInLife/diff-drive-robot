@@ -14,13 +14,14 @@ private:
     float errDot;
 
 public: 
-    PID();
+    PID(float Kp, float Ki, float Kd);
     ~PID();
+
+    void setCoefficient(float Kp, float Ki, float Kd);
     
     float computeControl(float err, float dt);
     float computeAngleError(float thetaGoal, float theta);
     float computeLineError(float sens_1, float sens_2);
-    void setCoefficient(float Kp, float Ki, float Kd);
     void resetErr();
 };
 

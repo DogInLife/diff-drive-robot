@@ -6,18 +6,15 @@ class Position{
 private:
     
 public:
-    float x;
-    float y;
-    float theta;
+    float x = 0;
+    float y = 0;
+    float alpha = 0;
 
-    float xGoal;
-    float yGoal;
-    float thetaGoal;
-
-    float distWheelPrev;
-    bool corrected;
+    float distWheelPrev = 0;
+    bool corrected = false;
 
     Position();
+    
     void computeCurentPose(float D_L, float D_R, float D_C, float L);
     void estCurrentPosition(float deltaAng_L, float deltaAng_R, float r, float L); // оценка текущей позиции робота по данным с энкодеров
     void correctPosEst(float distWheelC);

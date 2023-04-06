@@ -8,7 +8,9 @@ class MotorBlock
 {
 
 private:
-    Encoder* encoder;
+    float wheelRadius;          // Радиус колeса [m]
+
+    Encoder* encoder;           // Энкодер
 
     float distanceTraveled_k1;
     float distanceTraveled_k0;
@@ -16,29 +18,61 @@ private:
     byte PWM_PIN;
     float pwm;
     
-    float wheelRadius;
-
     byte IN_DRIVER_PIN_1;
     byte IN_DRIVER_PIN_2;
 
 public:
-    MotorBlock();
+    /*
+        wheelRadius - радиус колеса [m]
+        encPin - подключение энкодера
+        driverPin1, driverPin2, driverPinPWM - подключение драйвера
+    */
+    MotorBlock(float wheelRadius, byte encPin, byte driverPin1, byte driverPin2, byte driverPinPWM);
     ~MotorBlock();
 
 
-    void createWheel(float wheelRadius);
-    void stopMoving();
-
-    // SET
+    //================= SET =================//
+    /*
+        Устанавливает радиус колеса.
+        wheelRadius - радиус колеса [m]
+    */
+    void setWheelRadius(float wheelRadius);
+    /*
+        Устанавливает пины энкодера.
+    */
     void setEncorerPin(byte encPin);
-    void setVelocity(float vel, float maxVel, int newMinRange);
+    /*
+        Устанавливает пины драйвера.
+    */
     void setDriverPin(byte driverPin1, byte driverPin2, byte driverPinPWM);
 
-    // GET
-    float getRadiusWheels();
+    //================= FUNCTIONS =================//
+    /*
+        Останавливает движение.
+    */
+    void stopMoving();
+    /*
+        Обновляет скорость.
+    */
+    void updateVelocity(float vel, float maxVel, int newMinRange);
+
+    //================= GET =================//
+    /*
+        Возвращает радиус колеса
+    */
+    float getWheelRadius();
+    /*
+        Возвращает пройденную дистанцию
+    */
     float getTraveledDistance();
-    float getRotAngle(); // #############
-    float getDeltaAngle(); // ############
+    /*
+        Возвращает угол на который повернулось колесо
+    */
+    float getRotAngle();
+    /*
+        Возвращает угол поворота колеса за время между определением позиции робота
+    */
+    float getDeltaAngle();
     
 };
 #endif // MOTOR_H

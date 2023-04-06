@@ -1,31 +1,23 @@
 #include "velocity.h"
-#include "math.h"
 
-Velocity::Velocity()
-: ang(0), lin(0), maxRobot(0), maxWheel(0)
-{}
+Velocity::Velocity(float maxWheelRpm, float wheelR) {
+   this->maxWheelRpm = maxWheelRpm;
+   maxWheel = rmp2rads(maxWheelRpm);
+   maxVelocity = angular2linear(maxWheel, wheelR);
+}
+Velocity::~Velocity() {}
 
-
-float Velocity::computeLinearSpeed(float err)
-{
-   // if(fabs(err) < 0.25)
-   //    return 1.5*maxRobot*(0.25 - fabs(err))/0.25;
-   // else 
-   //    return 0;
-
-   //return 0.6*(0.5*maxRobot*(1 + cos(err)));
-   //return 0.5*maxRobot/(square(fabs(ang)) + 1); // =======  А ЭТУ ШТУКУ МОЖНО ИСПОЛЬЗОВАТЬ КАК-ТО ПРИ УГЛОВАТЫХ ТРАЕКТОРИЯХ
-   //return 0.5*maxRobot/(fabs(ang) + 1);
-   //return ang*0.61;
-   return maxRobot*1.5/5.0;
-   /*float speed = maxRobot/(square(fabs(ang) + 1));
-   if (maxRobot <= speed)
-      return maxRobot;
-   else
-      return speed;*/
-
-
-
-   //return ang*0.61;
+void Velocity::setMaxWheelRpm(float maxWheelRpm, float wheelR) {
+   this->maxWheelRpm = maxWheelRpm;
+   maxWheel = rmp2rads(maxWheelRpm);
+   maxVelocity = angular2linear(maxWheel, wheelR);
 }
 
+float Velocity::rmp2rads(float rmp) { return rmp * M_PI / 30; }   // 1 об/мин = π/30 рад/с
+float Velocity::rads2rmp(float rads) { return rads * 30 / M_PI; }
+float Velocity::angular2linear(float ang, float wheelR) { return ang * wheelR; }
+float Velocity::linear2angular(float vel, float wheelR) { return vel / wheelR; }
+
+float Velocity::getMaxWheelRpm() { return maxWheelRpm; }
+float Velocity::getMaxWheel() { return maxWheel; }
+float Velocity::getMaxVelocity() { return maxVelocity; }

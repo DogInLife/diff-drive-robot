@@ -1,13 +1,10 @@
 #include "motorBlock.h"
 
-MotorBlock::MotorBlock()
-    : distanceTraveled_k1(0), distanceTraveled_k0(0), 
-    PWM_PIN(0), pwm(0),
-    wheelRadius(0)
-{
+MotorBlock::MotorBlock(float wheelRadius, byte encPin, byte driverPin1, byte driverPin2, byte driverPinPWM) {
+    setWheelRadius(wheelRadius);
     encoder = new Encoder();
-    pinMode (IN_DRIVER_PIN_1,  OUTPUT);
-    pinMode (IN_DRIVER_PIN_2,  OUTPUT);
+    setEncorerPin(encPin);
+    setDriverPin(driverPin1, driverPin2, driverPinPWM);
 }
 
 MotorBlock::~MotorBlock()
@@ -15,9 +12,21 @@ MotorBlock::~MotorBlock()
     delete encoder;
 }
 
-void MotorBlock::createWheel(float wheelRadius)
+void MotorBlock::setWheelRadius(float wheelRadius)
 {
     this->wheelRadius = wheelRadius;
+}
+void MotorBlock::setEncorerPin(byte encPin)
+{
+    encoder->setPin(encPin);
+}
+void MotorBlock::setDriverPin(byte driverPin1, byte driverPin2, byte driverPinPWM)
+{
+    IN_DRIVER_PIN_1 = driverPin1;
+    IN_DRIVER_PIN_2 = driverPin2;
+    PWM_PIN = driverPinPWM;
+    pinMode(IN_DRIVER_PIN_1,  OUTPUT);
+    pinMode(IN_DRIVER_PIN_2,  OUTPUT);
 }
 
 void MotorBlock::stopMoving()
@@ -29,21 +38,7 @@ void MotorBlock::stopMoving()
         analogWrite(PWM_PIN, i);
     }
 }
-
-// === SET ===
-void MotorBlock::setEncorerPin(byte encPin)
-{
-    encoder->setPin(encPin);
-}
-
-void MotorBlock::setDriverPin(byte driverPin1, byte driverPin2, byte driverPinPWM)
-{
-    IN_DRIVER_PIN_1 = driverPin1;
-    IN_DRIVER_PIN_2 = driverPin2;
-    PWM_PIN = driverPinPWM;
-}
-
-void MotorBlock::setVelocity(float vel, float maxVel, int newMinRange)
+void MotorBlock::updateVelocity(float vel, float maxVel, int newMinRange)
 {
     pwm = map(abs(vel), 0, maxVel, newMinRange, 255);
 
@@ -60,43 +55,15 @@ void MotorBlock::setVelocity(float vel, float maxVel, int newMinRange)
     analogWrite(PWM_PIN, pwm);
 }
 
-
-// === GET ===
-float MotorBlock::getRadiusWheels()
+float MotorBlock::getWheelRadius()
 {
     return wheelRadius;
 }
-
-
-// ############ Угол, на который повернулось колесо ###############
-float MotorBlock::getRotAngle()
-{
-    float ovTurn_curr = encoder->getOverallTurn(); // число пройденных делений
-
-    // return ovTurn_curr * 360.0 / 4095.0; // градусы
-    // return ovTurn_curr * 2 * 3.141593 / 4095.0 // радианы
-    return ovTurn_curr / 4095.0; // [об]
-}
-// ################################################################
-
-float MotorBlock::getDeltaAngle() // угол поворота колеса за время между определением позиции робота
-{
-    float ovAng_prev = encoder->overallTurnEnc_k0; // число пройденных делений в предыдущий момент
-    float ovAng_curr = encoder->getOverallTurn(); // число пройденных делений в текущий момент
-    float deltaTurn = (ovAng_curr - ovAng_prev) / 4095.0; // переход от делений к оборотам
-
-    encoder->overallTurnEnc_k0 = ovAng_curr;
-
-    return 2.0*3.141593*deltaTurn; // радианы
-}
-
-
 float MotorBlock::getTraveledDistance()
 {   
     float ovTurn_k0 = encoder->overallTurnEnc_k0;
     float ovTurn_k1 = encoder->getOverallTurn();
-    float R = getRadiusWheels();
-
+    float R = getWheelRadius();
 
     // Расчет пройденного расстояния колесом
     distanceTraveled_k1 = distanceTraveled_k0 + 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
@@ -108,7 +75,6 @@ float MotorBlock::getTraveledDistance()
 
     return distanceTraveled_k1;
 }
-
 // float MotorBlock::getTraveledDistance()
 // {   
 //     float ovTurn_k0 = encoder->overallTurnEnc_k0;
@@ -126,5 +92,22 @@ float MotorBlock::getTraveledDistance()
 
 //     return deltaDist;
 // }
+float MotorBlock::getRotAngle()
+{
+    float ovTurn_curr = encoder->getOverallTurn(); // число пройденных делений
 
+    // return ovTurn_curr * 360.0 / 4095.0; // градусы
+    // return ovTurn_curr * 2 * 3.141593 / 4095.0 // радианы
+    return ovTurn_curr / 4095.0; // [об]
+}
 
+float MotorBlock::getDeltaAngle()
+{
+    float ovAng_prev = encoder->overallTurnEnc_k0; // число пройденных делений в предыдущий момент
+    float ovAng_curr = encoder->getOverallTurn(); // число пройденных делений в текущий момент
+    float deltaTurn = (ovAng_curr - ovAng_prev) / 4095.0; // переход от делений к оборотам
+
+    encoder->overallTurnEnc_k0 = ovAng_curr;
+
+    return 2.0*3.141593*deltaTurn; // радианы
+}

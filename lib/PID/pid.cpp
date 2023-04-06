@@ -1,11 +1,17 @@
 #include "pid.h"
 
-PID::PID() 
-: Kp(0.0), Ki(0.0), Kd(0.0),
-  errOld(0.0), errSum(0.0), errDot(0.0)
-{}
-
+PID::PID(float Kp, float Ki, float Kd) : errOld(0.0), errSum(0.0), errDot(0.0)
+{
+    setCoefficient(Kp, Ki, Kd);
+}
 PID::~PID(){}
+
+void PID::setCoefficient(float Kp, float Ki, float Kd)
+{
+    this->Kp = Kp;
+    this->Ki = Ki;
+    this->Kd = Kd;
+}
 
 float PID::computeControl(float err, float dt)
 {
@@ -29,13 +35,6 @@ float PID::computeLineError(float sens_1, float sens_2)
 {
     float err = (sens_1 - sens_2)*3.141593;
     return err;
-}
-
-void PID::setCoefficient(float Kp, float Ki, float Kd)
-{
-    this->Kp = Kp;
-    this->Ki = Ki;
-    this->Kd = Kd;
 }
 
 void PID::resetErr()
