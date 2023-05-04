@@ -1,41 +1,46 @@
-#include "motionController.h"
+#include "motionControllerByPID.h"
 
-MotionController::MotionController() {
-    driveController = new DiffDriveController(); 
+MotionControllerByPID::MotionControllerByPID() {
+    driveController = new DiffDriveControllerByPID();
 }
-MotionController::MotionController(float d, float rL, float rR, float v_max) {
-    driveController = new DiffDriveController(d, rL, rR, v_max);
+MotionControllerByPID::MotionControllerByPID(float d, float rL, float rR, float v_max) {
+    driveController = new DiffDriveControllerByPID(d, rL, rR, v_max);
 }
-MotionController::~MotionController() {
+MotionControllerByPID::~MotionControllerByPID() {
     delete driveController;
 }
 
-void MotionController::setRobotConstant(float d, float rL, float rR, float v_max) {
+void MotionControllerByPID::setRobotConstant(float d, float rL, float rR, float v_max) {
     driveController->setRobotConstant(d, rL, rR, v_max);
 }
-void MotionController::setCoefficient(float k1, float k2, float k3, float k4, float K_max) {
-    driveController->setCoefficient(k1, k2, k3, k4, K_max);
+void MotionControllerByPID::setCoefficient(float Kp, float Ki, float Kd) {
+    driveController->setCoefficient(Kp, Ki, Kd);
+}
+void MotionControllerByPID::setDelay(float del) {
+    this->del = del;
 }
 
-void MotionController::setActualPosition(float x, float y, float alpha) {
+void MotionControllerByPID::setActualPosition(float x, float y, float alpha) {
     this->x = x;
     this->y = y;
     this->alpha = alpha;
 }
-void MotionController::setTargetPosition(float _x, float _y) {
+void MotionControllerByPID::setTargetPosition(float _x, float _y) {
     this->_x = _x;
     this->_y = _y;
+    setBetaIsUsed(false);
 }
-void MotionController::setTargetPosition(float _x, float _y, float beta) {
+void MotionControllerByPID::setTargetPosition(float _x, float _y, float beta) {
     this->_x = _x;
     this->_y = _y;
     this->beta = beta;
+    setBetaIsUsed(true);
 }
-void MotionController::setBetaIsUsed(bool isUsedBeta) {
+void MotionControllerByPID::setBetaIsUsed(bool isUsedBeta) {
     this->isUsedBeta = isUsedBeta;
 }
 
-void MotionController::updateVelocity() {
+void MotionControllerByPID::updateVelocity() {
     // vec_act - текущий вектор направления робота
     float vec_act_x = cos(alpha);
     float vec_act_y = sin(alpha);
@@ -46,19 +51,17 @@ void MotionController::updateVelocity() {
 
     delta = angleBetweenVectorsWithSign(vec_act_x, vec_act_y, vec_delta_x, vec_delta_y);
     distance = sqrt(vec_delta_x*vec_delta_x + vec_delta_y*vec_delta_y);
-    if (isUsedBeta)
-        theta = delta;      // !!! Исправить позже с учётом направления после окончания движения
-    else
-        theta = delta;      
-
-    driveController->updateVelocity(delta, distance, theta);
+    
+    //if (isUsedBeta)     // !!! Исправить позже
+    driveController->updateVelocity(delta, distance, del);
+    
     v = driveController->get_v();
     w = driveController->get_w();
     wheelL = driveController->get_wheelL();
     wheelR = driveController->get_wheelR();
 }
 
-float MotionController::angleBetweenVectorsWithSign(float a_x, float a_y, float b_x, float b_y) {
+float MotionControllerByPID::angleBetweenVectorsWithSign(float a_x, float a_y, float b_x, float b_y) {
     float a_hyp = sqrt(a_x*a_x + a_y*a_y);
     float b_hyp = sqrt(b_x*b_x + b_y*b_y);
     a_x /= a_hyp;
@@ -98,19 +101,15 @@ float MotionController::angleBetweenVectorsWithSign(float a_x, float a_y, float 
     return angle;
 }
 
-bool MotionController::isReachPosition() {
+bool MotionControllerByPID::isReachPosition() {
     float shift_x = x - _x;
     float shift_y = y - _y;
     return sqrt(shift_x*shift_x + shift_y*shift_y) < available_pos_err;
-    //return (abs(sqrt(shift_x*shift_x + shift_y*shift_y)) / available_pos_err + 
-    //        abs(theta - delta) / available_ang_err) / 2 < available_reach_err;
 }
 
-float MotionController::get_K() { return driveController->get_K(); }
-float MotionController::get_delta() { return delta; }
-float MotionController::get_distance() { return distance; }
-float MotionController::get_theta() { return theta; }
-float MotionController::get_v() { return v; }
-float MotionController::get_w() { return w; }
-float MotionController::get_wheelL() { return wheelL; }
-float MotionController::get_wheelR() { return wheelR; }
+float MotionControllerByPID::get_delta() { return delta; }
+float MotionControllerByPID::get_distance() { return distance; }
+float MotionControllerByPID::get_v() { return v; }
+float MotionControllerByPID::get_w() { return w; }
+float MotionControllerByPID::get_wheelL() { return wheelL; }
+float MotionControllerByPID::get_wheelR() { return wheelR; }

@@ -3,23 +3,17 @@
 #include "constants.h"
 #include "RFIDReader.h"
 
-byte del = 1;     // задержка [ms]
-bool deb = false; // флаг типа дебаггинга
-
-// TwoWheeledRobot robot;
-
 void setup()
 {
     Serial.begin(9600);
     TwoWheeledRobot robot;
+    robot.serialControl(DELAY, DELAY_MSG, false);
+
+    // *старые комментарии
     // robot.tunePID(5.3, 4.8, 0);
     // robot.tunePID(20.0, 2.8, 0.5); // работает для движения в положение x y (без учёта угла, скорость - квадрат омеги в знаменателе) minrange 0
     // robot.tunePID(20.0, 2.8, 0.5); // ОНО САМОЕ ПРИЕЗЖАЕТ НА БАЗУ ДОПУСТИМОЕ ОТКЛОНЕНИЕ ОТ ТОЧКИ 0.03 скорость 3/10 от макс
     // robot.tunePID(12.0, 5.0, 0.3);
-
-    robot.serialControl(del, deb);
-
-    // robot.tunePID(3.4, 1.2, 0.9);
     // ====== Д Л Я  120 ОБ/МИН ======
     //   KpL = 600.0;
     //   KiL = 12000.0;
@@ -43,7 +37,6 @@ void setup()
       KdR = 0.5;
       robot.tuneWhlPID(KpL, KiL, KdL, KpR, KiR, KdR);
     */
-    // robot.rot_test(whl_vel_des, del, deb); // ########################
 }
 
 void loop()

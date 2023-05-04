@@ -13,28 +13,18 @@ void PID::setCoefficient(float Kp, float Ki, float Kd)
     this->Kd = Kd;
 }
 
-float PID::computeControl(float err, float dt)
+float PID::updateErr(float err, float dt)
 {
     errDot = err - errOld; // дельта соседних измерений
     errSum = errSum + err; // суммарная ошибка за всё время
 
-    float u = Kp*err + Ki*errSum*dt + Kd*errDot/dt;
+    errResult = Kp*err + Ki*errSum*dt + Kd*errDot/dt;
     errOld = err;
-    return u;
+    return errResult;
 }
 
-float PID::computeAngleError(float thetaGoal, float theta)
-{
-    float err = thetaGoal - theta;
-    if(err > 3.141593) return err - 2*3.141593;
-    else if(err < -3.141593) return err + 2*3.141593;
-    else return err;
-}
-
-float PID::computeLineError(float sens_1, float sens_2)
-{
-    float err = (sens_1 - sens_2)*3.141593;
-    return err;
+float PID::getErr() {
+    return errResult;
 }
 
 void PID::resetErr()

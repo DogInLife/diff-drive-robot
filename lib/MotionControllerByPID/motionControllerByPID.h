@@ -1,12 +1,25 @@
+/*
+    Многофункциональный программный таймер на системном таймере millis() для Arduino
+    Документация: 
+    GitHub: https://github.com/GyverLibs/TimerMs
+    Возможности:
+    - Режим таймера и периодичного выполнения
+    - Подключение функции-обработчика
+    - Сброс/запуск/перезапуск/остановка/пауза/продолжение отсчёта
+    - Возможность форсировать переполнение таймера
+    - Возврат оставшегося времени в мс, а также условных единицах 8 и 16 бит
+    - Несколько функций получения текущего статуса таймера
+    - Алгоритм держит стабильный период и не боится переполнения millis()
+*/
 #ifndef MOTION_CONTROLLER_H
 #define MOTION_CONTROLLER_H
 #include <Arduino.h>
 #include <math.h>
 #include <SPI.h>
 #include "constants.h"
-#include "diffDriveController.h"
+#include "diffDriveControllerByPID.h"
 /*
-    Контроллер управления движением. Для расчёта желаемых скоростей используется контроллер дифферинциального привода на основе кривизны траектории (diffDriveController).
+    Контроллер управления движением. Для расчёта желаемых скоростей используется контроллер дифферинциального привода на основе PID регулятора (diffDriveControllerByPID).
 
     Возможности:
     - Расчёт угола между направлением на целевую точку и текущим направлением движения робота
@@ -15,22 +28,22 @@
     - Расчёт желаемых скоростей робота (линейная и угловая)
     - Расчёт желаемых скоростей колёс дифферинциального привода
 */
-class MotionController {
+class MotionControllerByPID {
     private:
-        DiffDriveController* driveController;
+        DiffDriveControllerByPID* driveController;
         
-        float available_pos_err = ALLOW_POS_ERR;        // Доступная погрешность расстояния [m]
-        //float available_ang_err = ALLOW_ANG_ERR;      // Доступная погрешность угла [rad]
-        //float available_reach_err = ALLOW_FIN_ERR;    // Итоговая доступная погрешность
+        float available_pos_err = ALLOW_POS_ERR;    // Доступная погрешность расстояния [m]
 
         float delta = 0;        // Угол между направлением на целевую точку и текущим направлением движения робота [rad] 
         float distance = 0;     // Расстояние между текущим положением робота и целевой позицией [m]
-        float theta = 0;        // Угол между направлением на целевую точку и вектором скорости робота в целевой точке [rad]
+        //float theta = 0;        // Угол  между направлением на целевую точку и вектором скорости робота в целевой точке [rad]
 
         float v = 0;            // Линейная скорость [m/s]
         float w = 0;            // Угловая скорость [rad/s]
         float wheelL = 0;       // Скорость левого колеса [rad/s]
         float wheelR = 0;       // Скорость правого колеса [rad/s]
+
+        float del = DELAY;      // Частота [ms]
 
     public:
         float x = 0, y = 0;     // Текущие координаты робота [m]
@@ -39,14 +52,14 @@ class MotionController {
         float beta = 0;         // Конечное направление робота [m]
         bool isUsedBeta = false;    // true, если учитывается угол Beta
 
-        MotionController();
+        MotionControllerByPID();
         /*
             d - ширина базы между колёсами [m]
             rL, rR - радиусы колёс [m]
             v_max - максимальная линейная скорость [m/s]
         */
-        MotionController(float d, float rL, float rR, float v_max);
-        ~MotionController();
+        MotionControllerByPID(float d, float rL, float rR, float v_max);
+        ~MotionControllerByPID();
 
         //================= SET PARAMETERS =================//
         /*
@@ -58,10 +71,14 @@ class MotionController {
         void setRobotConstant(float d, float rL, float rR, float v_max);
         /*
             Устанавливает коэффициенты.
-            k1, k2, k3, k4 - настроечные коэффициенты
-            K_max - пороговая величина кривизны траектории
+            Kp, Ki, Kd - коэффициенты PID регулятора
         */
-        void setCoefficient(float k1, float k2, float k3, float k4, float K_max);
+        void setCoefficient(float Kp, float Ki, float Kd);
+        /*
+            Устанавливает задержку
+            del - задержка [ms]
+        */
+        void setDelay(float del);
 
         //================= SET USING VALUES =================//
         /*
@@ -92,7 +109,7 @@ class MotionController {
         */
         void updateVelocity();
         /*
-            Возвращает наименьший угол со знаком между двумя векторами. Знак определяется тем, в какую сторону открывается второй вектор относительно первого. Например, при открытии по часовой стрелке знак будет положительным.
+            Возвращает наименьший угол со знаком между двумя векторами. Знак определяется тем, в какую сторону открывается второй вектор относительно первого.
             a_x, a_y - проекции первого вектора A на оси координат [m]
             b_x, b_y - проекции второго вектора B на оси координат [m]
         */
@@ -103,10 +120,6 @@ class MotionController {
         bool isReachPosition();
         
         //================= GET =================//
-        /* 
-            Возвращает кривизну траектории движения робота
-        */
-        float get_K();
         /* 
             Возвращает угол между направлением на целевую точку и текущим направлением движения робота [rad] 
         */

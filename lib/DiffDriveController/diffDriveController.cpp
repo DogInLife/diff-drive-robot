@@ -21,9 +21,9 @@ void DiffDriveController::setCoefficient(float k1, float k2, float k3, float k4,
 }
 
 void DiffDriveController::updateVelocity(float delta, float distance, float theta) {
-    this->delta = delta;
+    this->delta = -delta;
     this->distance = distance;
-    this->theta = theta;
+    this->theta = -theta;
     calculateTrajectoryCurvature();
     calculateVelocity();
     calculateWheelSpeed();
@@ -34,7 +34,6 @@ void DiffDriveController::calculateTrajectoryCurvature() {
 }
 void DiffDriveController::calculateVelocity() {
     int sign_K = (K >= 0 ? 1 : -1); // знак K
-    
     if (abs(K) >= K_max) {
         v = 0;
         w = k4 * v_max * sign_K;
@@ -43,15 +42,13 @@ void DiffDriveController::calculateVelocity() {
         w = K * v_max / (1+pow(k3*K,2));
     } else {
         v = v_max / (2*k3*K) * sign_K;
-        w = K * v * sign_K;
+        w = v_max / (2*k3) * sign_K;
     }    
 }
 void DiffDriveController::calculateWheelSpeed() {
     wheelL = (v - w*d/2) / rL;
     wheelR = (v + w*d/2) / rR; 
 }
-
-
 
 float DiffDriveController::get_K() { return K; }
 float DiffDriveController::get_v() { return v; }

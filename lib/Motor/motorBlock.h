@@ -2,15 +2,16 @@
 #define MOTOR_H
 
 #include "encoder.h"
-
-
+/*
+    Класс для управления мотором по скорости с обратной связью по энкодеру.
+*/
 class MotorBlock
 {
-
 private:
-    float wheelRadius;          // Радиус колeса [m]
+    float wheelRadius;              // Радиус колeса [m]
+    float maxVel;                   // Максимальная скорость вращения [rad/s]
 
-    Encoder* encoder;           // Энкодер
+    Encoder* encoder;               // Энкодер
 
     float distanceTraveled_k1;
     float distanceTraveled_k0;
@@ -27,9 +28,8 @@ public:
         encPin - подключение энкодера
         driverPin1, driverPin2, driverPinPWM - подключение драйвера
     */
-    MotorBlock(float wheelRadius, byte encPin, byte driverPin1, byte driverPin2, byte driverPinPWM);
+    MotorBlock(float wheelRadius, float maxVel, byte encPin, byte driverPin1, byte driverPin2, byte driverPinPWM);
     ~MotorBlock();
-
 
     //================= SET =================//
     /*
@@ -37,6 +37,11 @@ public:
         wheelRadius - радиус колеса [m]
     */
     void setWheelRadius(float wheelRadius);
+    /*
+        Устанавливает максимальную скорость вращения
+        maxVel - скорость вращения [rad/s]
+    */
+    void setMaxVel(float maxVel);
     /*
         Устанавливает пины энкодера.
     */
@@ -53,14 +58,11 @@ public:
     void stopMoving();
     /*
         Обновляет скорость.
+        vel - скорость вращения [rad/s]
     */
-    void updateVelocity(float vel, float maxVel, int newMinRange);
+    void updateVelocity(float vel);
 
     //================= GET =================//
-    /*
-        Возвращает радиус колеса
-    */
-    float getWheelRadius();
     /*
         Возвращает пройденную дистанцию
     */

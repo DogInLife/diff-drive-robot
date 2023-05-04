@@ -3,30 +3,25 @@
 #include <Arduino.h>
 #include <math.h>
 #include <SPI.h>
+#include "pid.h"
 #include "constants.h"
 /*
-    Контроллер управления дифферинциальным приводом. Основан на расчёте кривизны траектории.
+    Контроллер управления дифферинциальным приводом. Основан на PID регуляторе, на вход которого подаётся ошибка направления движения.
 
     Возможности:
-    - Расчёт кривизны траектории движения робота
-    - Расчёт желаемых скоростей робота (линейная и угловая) исходя из кривизны траектории и расстояния до целевого положения
+    - Расчёт желаемых скоростей робота (линейная и угловая)
     - Расчёт желаемых скоростей колёс дифферинциального привода
-
-    Алгоритм основан на следующей статье: 
-    О. И. Давыдов, А. К. Платонов, “Алгоритм управления дифференциальным приводом мобильного робота РБ-2”, Препринты ИПМ им. М. В. Келдыша, 2015, 025, 16 с.
 */
-class DiffDriveController {
+class DiffDriveControllerByPID {
     private:
-        float d = BASE_LENGTH;          // Ширина базы между колёсами [m]
-        float rL = WHEEL_RADIUS_LEFT;   // Радиус левого колeса [m]
-        float rR = WHEEL_RADIUS_RIGHT;  // Радиус правого колёса [m]
-        float v_max = MAX_LIN_SPEED;    // Максимальная линейная скорость [m/s]
-        float k1 = DIFF_K1, k2 = DIFF_K2, k3 = DIFF_K3, k4 = DIFF_K4;   // Настроечные коэффициенты
-        float K_max =DIFF_K_MAX;        // Пороговая величина кривизны траектории
-        //float k1 = 3, k2 = 10, k3 = 0.35, k4 = 1.45;   // Настроечные коэффициенты
-        //float K_max = 3;       // Пороговая величина кривизны траектории
+        float d = 0.285;        // Ширина базы между колёсами [m]
+        float rL = 0.04465;     // Радиус левого колeса [m]
+        float rR = rL;          // Радиус правого колёса [m]
+        float v_max = 0.7014;   // Максимальная линейная скорость [m/s]
 
-        float K = 0;            // Кривизна траектории движения робота в данной точке
+        PID* angularPID;
+        float Kp = PID_Kp, Ki = PID_Ki, Kd = PID_Kd;   // PID коэффициенты        
+
         float delta = 0;        // Угол между направлением на целевую точку и текущим направлением движения робота [rad] 
         float distance = 0;     // Расстояние между текущим положением робота и целевой позицией [m]
         float theta = 0;        // Угол  между направлением на целевую точку и вектором скорости робота в целевой точке [rad]
@@ -43,14 +38,14 @@ class DiffDriveController {
     public:
         float _x = 0, _y = 0;   // Конечные координаты робота [m]
 
-        DiffDriveController();
+        DiffDriveControllerByPID();
         /*
             d - ширина базы между колёсами [m]
             rL, rR - радиусы колёс [m]
             v_max - максимальная линейная скорость [m/s]
         */
-        DiffDriveController(float d, float rL, float rR, float v_max);
-        ~DiffDriveController();
+        DiffDriveControllerByPID(float d, float rL, float rR, float v_max);
+        ~DiffDriveControllerByPID();
 
         //================= SET =================//
         /*
@@ -62,25 +57,20 @@ class DiffDriveController {
         void setRobotConstant(float d, float rL, float rR, float v_max);
         /*
             Устанавливает коэффициенты.
-            k1, k2, k3, k4 - настроечные коэффициенты
-            K_max - пороговая величина кривизны траектории
+            k1, k2, k3, k4 - коэффициенты PID регулятора
         */
-        void setCoefficient(float k1, float k2, float k3, float k4, float K_max);
+        void setCoefficient(float Kp, float Ki, float Kd);
         
         //================= FUNCTIONS =================//
         /*
             Обновляет значения скоростей для достижения целевой координаты.
             delta - угол между направлением на целевую точку и текущим направлением движения робота [rad] 
             distance - расстояние между текущим положением робота и целевой позицией [m]
-            theta - угол  между направлением на целевую точку и вектором скорости робота в целевой точке [rad]
+            del - задержка [ms]
         */
-        void updateVelocity(float delta, float distance, float theta);
+        void updateVelocity(float delta, float distance, float del);
         
         //================= GET =================//
-        /* 
-            Возвращает кривизну траектории движения робота
-        */
-        float get_K();
         /* 
             Возвращает рассчитанную линейную скорость [m/s]
         */
@@ -97,5 +87,9 @@ class DiffDriveController {
             Возвращает рассчитанную скорость правого колеса [rad/s]
         */
         float get_wheelR();
+        /* 
+            Возвращает ошибку с PID регулятора
+        */
+        float get_error();
 };
 #endif

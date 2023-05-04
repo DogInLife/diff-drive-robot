@@ -1,7 +1,8 @@
 #include "motorBlock.h"
 
-MotorBlock::MotorBlock(float wheelRadius, byte encPin, byte driverPin1, byte driverPin2, byte driverPinPWM) {
+MotorBlock::MotorBlock(float wheelRadius, float maxVel, byte encPin, byte driverPin1, byte driverPin2, byte driverPinPWM) {
     setWheelRadius(wheelRadius);
+    setMaxVel(maxVel);
     encoder = new Encoder();
     setEncorerPin(encPin);
     setDriverPin(driverPin1, driverPin2, driverPinPWM);
@@ -12,14 +13,9 @@ MotorBlock::~MotorBlock()
     delete encoder;
 }
 
-void MotorBlock::setWheelRadius(float wheelRadius)
-{
-    this->wheelRadius = wheelRadius;
-}
-void MotorBlock::setEncorerPin(byte encPin)
-{
-    encoder->setPin(encPin);
-}
+void MotorBlock::setWheelRadius(float wheelRadius)  { this->wheelRadius = wheelRadius; }
+void MotorBlock::setMaxVel(float maxVel)            { this->maxVel = maxVel; }
+void MotorBlock::setEncorerPin(byte encPin)         { encoder->setPin(encPin); }
 void MotorBlock::setDriverPin(byte driverPin1, byte driverPin2, byte driverPinPWM)
 {
     IN_DRIVER_PIN_1 = driverPin1;
@@ -38,9 +34,9 @@ void MotorBlock::stopMoving()
         analogWrite(PWM_PIN, i);
     }
 }
-void MotorBlock::updateVelocity(float vel, float maxVel, int newMinRange)
+void MotorBlock::updateVelocity(float vel)
 {
-    pwm = map(abs(vel), 0, maxVel, newMinRange, 255);
+    pwm = map(abs(vel), 0, maxVel, 0, 255);
 
     if (vel > 0)
     {
@@ -55,18 +51,13 @@ void MotorBlock::updateVelocity(float vel, float maxVel, int newMinRange)
     analogWrite(PWM_PIN, pwm);
 }
 
-float MotorBlock::getWheelRadius()
-{
-    return wheelRadius;
-}
 float MotorBlock::getTraveledDistance()
 {   
     float ovTurn_k0 = encoder->overallTurnEnc_k0;
     float ovTurn_k1 = encoder->getOverallTurn();
-    float R = getWheelRadius();
 
     // Расчет пройденного расстояния колесом
-    distanceTraveled_k1 = distanceTraveled_k0 + 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
+    distanceTraveled_k1 = distanceTraveled_k0 + 2 * PI * wheelRadius * (ovTurn_k1 - ovTurn_k0) / 4095.0;
     // distanceTraveled_k1 = 2 * PI * R * (ovTurn_k1 - ovTurn_k0) / 4095.0;
 
     // Обновление значений

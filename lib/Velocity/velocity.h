@@ -1,7 +1,9 @@
 #ifndef VELOCITY_H
 #define VELOCITY_H
 #include <math.h>
-
+/*
+    Класс для хранения и конвертации скоростей робота и колёс дифферинциального привода.
+*/
 class Velocity
 {
 private:
@@ -43,7 +45,7 @@ public:
     /* Возвращает угловую скорость.
        IN: vel - линейная скорость [m/s]
            wheelR - радиус колеса [m]
-       OUT: угловая скорость [m/s] */
+       OUT: угловая скорость [rad/s] */
     float linear2angular(float vel, float wheelR);    
     
     //================= GET =================//

@@ -1,14 +1,27 @@
 #ifndef CONST_H
 #define CONST_H
 
-#define DEBUG  0
-#define DEBUG_PLOT 0
-
 const float WHEEL_RADIUS_LEFT = 0.04465;    // Радиус колеса левого [m]
 const float WHEEL_RADIUS_RIGHT = 0.04465;   // Радиус колеса правого [m]
 const float BASE_LENGTH = 0.285;            // Ширина базы между колёсами [m]
 
-const float MAX_MOTOR_VELOCITY = 150.0;     // Максимальная скорость вращения двигателей [об/мин]
+const float MAX_MOTOR_VELOCITY = 150.0;     // Максимальная скорость вращения двигателей [rmp]
+const float MAX_LIN_SPEED = 0.5;            // Максимальная скорость робота [m/s]
+
+const int DELAY = 1;                              // частота работы алгоритма управления движением [ms]
+const int DELAY_MSG = 1000;                       // частота отправки сообщений [ms]
+
+// Коэффициенты для контроллера управления дифферинциальным приводом по кривизне траеткории
+const float DIFF_K1 = 1;            // Настроечный коэффициент для расчёта K
+const float DIFF_K2 = 2;            // Настроечный коэффициент для расчёта K
+const float DIFF_K3 = 0.6;          // Настроечный коэффициент для расчёта v и w
+const float DIFF_K4 = 0.835;        // Настроечный коэффициент для расчёта w при вращении на месте
+const float DIFF_K_MAX = 2.5;       // Пороговая величина кривизны траектории
+
+// Коэффициенты PID регулятора для контроллера управления движением по PID
+const float PID_Kp = 2;
+const float PID_Ki = 0.01;
+const float PID_Kd = 0.000001; 
 
 // Коэффициенты PID регулятора для левого и правого колёс
 const float KpL = 30.0;
@@ -17,6 +30,10 @@ const float KdL = 0.01;
 const float KpR = 30.0;
 const float KiR = 0.05;
 const float KdR = 0.01;
+
+const float ALLOW_POS_ERR = 0.03;    // Доступная погрешность расстояния [m]
+const float ALLOW_ANG_ERR = 0.0175;   // Доступная погрешность угла [rad]
+const float ALLOW_FIN_ERR = 30;     // Итоговая доступная погрешность
 
 // Номера пинов на I2С мультиплексоре для энкодеров
 const int ENCODER_PIN_R = 2;

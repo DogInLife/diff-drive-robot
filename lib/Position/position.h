@@ -1,7 +1,10 @@
 #ifndef POSITION_H
 #define POSITION_H
 #include "math.h"
-
+/*
+    Класс для хранения положения и направления робота в пространстве.
+    Включает в себя оценку локализации по колёсной одометрии.
+*/
 class Position{
 private:
     

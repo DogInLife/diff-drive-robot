@@ -2,15 +2,14 @@
 #define TWO_WHEELED_ROBOT_H
 
 #include <math.h>
-
+#include "TimerMs.h"
 #include "constants.h"
-
-#include "velocity.h"
-#include "position.h"
-#include "motorBlock.h"
 #include "pid.h"
+#include "position.h"
+#include "velocity.h"
+#include "motorBlock.h"
 #include "motionController.h"
-
+//#include "motionControllerByPID.h"
 #include "RFIDReader.h"
 //#include <MFRC522.h>
 #include "hallSensor.h"
@@ -30,30 +29,38 @@ class TwoWheeledRobot
         PID* pidL;                  // PID для управления скоростью левого колеса
         PID* pidR;                  // PID для управления скоростью правого колеса
 
-        MotionController* motionControler;   // Контроллер движения робота
+        MotionController* motionControler;   // Контроллер движения робота на основе кривизны траектории
+        //MotionControllerByPID* motionControler;   // Контроллер движения робота на основе PID регулятора
 
         bool globalStop = true;     // Преждевременная остановка цикла. True - остановка необходима, иначе False
-        int newMinRange = 0;        // Для функции map в setVelocity
         byte inByte = 0;            // Входящий с консоли символ
 
-        /* Движение в заданную на контроллере координату */ 
-        void goToPosition(int del, bool deb);
+        TimerMs* discretTimer;      // Время дискретизации
+        TimerMs* msgTimer;          // Период отправки сообщений через Serial
+
+        /* Движение в заданную заранее на контроллере координату */ 
+        void moveToTargetPosition(int del, bool deb);
 
     public:
         TwoWheeledRobot();
         ~TwoWheeledRobot();
 
         //================= CONTROL =================//
-        /* Управление с консоли */ 
-        void serialControl(int del, bool deb);  
+        /* Управление с консоли 
+        del - частота дискретизации [ms] 
+        msg_del - частота отправки сообщений через Serial [ms] 
+        deb - true, если нужен дебаг
+        */ 
+        void serialControl(int del, int msg_del, bool deb);  
         /* Проверка вводимых символов в консоль в глобальной системе контроля */ 
         void globalSerialControl();           
-        /* Проверка символа inB в глобальной системе контроля */ 
+        /* Проверка входящего символа в глобальной системе контроля 
+        inB - входящий символ
+        */ 
         void globalSerialControl(byte inB);
         /* Запуск ручного отправления */ 
         void manualControl(int dt);
         
-
         // ========= FUNCTIONS ===========
         /* Обнуление позиции и ошибок регулятора */ 
         void resertPosition();
@@ -62,33 +69,22 @@ class TwoWheeledRobot
         beta - конечный угол после достижения точки [rad] 
         del - частота [ms]
         deb - true, если нужен дебаг */ 
-        void startGoToPosition(float _x, float _y, int del, bool deb);
+        void setPositionAndStartMove(float _x, float _y, int del, bool deb);
         /* Запуск движения в заданную координату. Конечный угол не учитывается.
         _x, _y - координты точки [m] 
         del - частота [ms]
         deb - true, если нужен дебаг */ 
-        void startGoToPosition(float _x, float _y, float beta, int del, bool deb);
-        /* Запуск движения по маршруту заданному точками.
+        void setPositionAndStartMove(float _x, float _y, float beta, int del, bool deb);
+        /* Запуск движения по квадратной траектории по часовой стрелке [CW]
         points - массив точек
         del - частота [ms]
         deb - true, если нужен дебаг */ 
-        void goTrack(Position points[], int del, bool deb);
-        /* Запуск движения по квадратной траектории по часовой стрелке [CW]
-        L – сторона квадрата [m]
-        del - частота [ms]
-        deb - true, если нужен дебаг */ 
         void goCWtest(float L, int del, bool deb);
-        /* Запуск движения по квадратной траектории против часовой стрелке [CCW]
+        /* Запуск движения по квадратной траектории против часовой стрелки [CCW]
         L – сторона квадрата [m]
         del - частота [ms]
         deb - true, если нужен дебаг */ 
         void goCCWtest(float L, int del, bool deb);
-        /* Запуск движения по кругу 
-        ... */ 
-        void goCircle(float radius, int ptsNum, bool deb, int circles);
-        /* Запуск движения по магнитной линии
-        del - частота [ms]
-        deb - true, если нужен дебаг */ 
 
         //void goMagneticLine(int del, bool deb);
         /* Запуск движения в заданную координату сетки, образуемой магнитными линиями
@@ -97,14 +93,22 @@ class TwoWheeledRobot
         deb - true, если нужен дебаг */ 
         //void goMagneticLine2Point(float _x, float _y, int del, bool deb);
 
-        /* Двигаться прямо */ 
-        void goForward(int velL, int velR);
-        /* Двигаться влево */ 
-        void turnLeft(int velL, int velR);
-        /* Двигаться вправо */ 
-        void turnRight(int velL, int velR);
+        /* Запустить моторы 
+        velL - скорость левого колеса [rad/s]
+        velR - скорость правого колеса [rad/s]
+        */ 
+        void drive(float velL, float velR);
+        /* Запустить моторы c PID регулятором
+        velL - скорость левого колеса [rad/s]
+        velR - скорость правого колеса [rad/s]
+        */ 
+        void driveWithPID(float velL, float velR);
         /* Остановиться */ 
         void stopMoving();
+
+        /* Управление всеми таймерами */ 
+        void timersStart();
+        void timersTick();
 
         //================= GET =================//
         /* Возвращает байт информации из буфера последовательного порта */
