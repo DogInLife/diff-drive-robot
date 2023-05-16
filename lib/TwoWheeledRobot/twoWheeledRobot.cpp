@@ -11,15 +11,19 @@ TwoWheeledRobot::TwoWheeledRobot()
     pos = new Position();
 
     discretTimer = new TimerMs();
+    motorTimer = new TimerMs();
     msgTimer = new TimerMs();
-
-    motorBlockL = new MotorBlock(WHEEL_RADIUS_LEFT, vel->linear2angular(MAX_LIN_SPEED, WHEEL_RADIUS_LEFT), ENCODER_PIN_L, DRIVER_IN_B1, DRIVER_IN_B2, DRIVER_PWM_PIN_B);
-    motorBlockR = new MotorBlock(WHEEL_RADIUS_RIGHT, vel->linear2angular(MAX_LIN_SPEED, WHEEL_RADIUS_RIGHT), ENCODER_PIN_R, DRIVER_IN_A1, DRIVER_IN_A2, DRIVER_PWM_PIN_A);
-
-    pidL = new PID(KpL, KiL, KdL);
-    pidR = new PID(KpR, KiR, KdR);
-
-    motionControler = new MotionController(baseLength, WHEEL_RADIUS_LEFT, WHEEL_RADIUS_RIGHT, vel->getMaxWheel());
+    
+    // motorBlockL = new MotorBlock(WHEEL_RADIUS_LEFT, vel->linear2angular(MAX_LIN_SPEED, WHEEL_RADIUS_LEFT), ENCODER_PIN_L, DRIVER_IN_B1, DRIVER_IN_B2, DRIVER_PWM_PIN_B);
+    // motorBlockR = new MotorBlock(WHEEL_RADIUS_RIGHT, vel->linear2angular(MAX_LIN_SPEED, WHEEL_RADIUS_RIGHT), ENCODER_PIN_R, DRIVER_IN_A1, DRIVER_IN_A2, DRIVER_PWM_PIN_A);
+    // maxVel = MAX_MOTOR_VELOCITY - ограничение скорости вращения мотора (обусловлено характеристиками мотора)
+    motorBlockL = new MotorBlock(WHEEL_RADIUS_LEFT, vel->getMaxWheel(), ENCODER_PIN_L, DRIVER_IN_B1, DRIVER_IN_B2, DRIVER_PWM_PIN_B);
+    motorBlockR = new MotorBlock(WHEEL_RADIUS_RIGHT, vel->getMaxWheel(), ENCODER_PIN_R, DRIVER_IN_A1, DRIVER_IN_A2, DRIVER_PWM_PIN_A);
+    motorBlockL->setCoefficientPID(KpL, KiL, KdL);
+    motorBlockR->setCoefficientPID(KpR, KiR, KdR);
+    // v_max вычисляется из MAX_LIN_SPEED - ограничение скорости движения робота (ниже чем возможная максимальная скорость вращения моторов)
+    motionControler = new MotionController(baseLength, WHEEL_RADIUS_LEFT, WHEEL_RADIUS_RIGHT, vel->linear2angular(MAX_LIN_SPEED, WHEEL_RADIUS_LEFT));
+    //motionControler = new MotionController(baseLength, WHEEL_RADIUS_LEFT, WHEEL_RADIUS_RIGHT, vel->getMaxWheel());
     //motionControler = new MotionControllerByPID(baseLength, WHEEL_RADIUS_LEFT, WHEEL_RADIUS_RIGHT, vel->getMaxWheel());
 }
 
@@ -31,8 +35,6 @@ TwoWheeledRobot::~TwoWheeledRobot()
     delete msgTimer;
     delete motorBlockL;
     delete motorBlockR;
-    delete pidL;
-    delete pidR;
     delete motionControler;
 }
 
@@ -43,11 +45,14 @@ byte TwoWheeledRobot::getSerialData()
 }
 
 // === Control ===
-void TwoWheeledRobot::serialControl(int del, int msg_del, bool deb)
+void TwoWheeledRobot::serialControl(int del, int del_motor, int del_msg, bool deb)
 {
     //motionControler->setDelay(del);     // Раскомменитровать при использовании MotionControllerByPID !!!
     discretTimer->setTime(del);
-    msgTimer->setTime(msg_del);
+    motorTimer->setTime(del_motor);
+    motorBlockL->setDeltaPID(del_motor);
+    motorBlockR->setDeltaPID(del_motor);
+    msgTimer->setTime(del_msg);
 
     while (true)
     {
@@ -55,14 +60,15 @@ void TwoWheeledRobot::serialControl(int del, int msg_del, bool deb)
         {
             stopMoving();
             Serial.println("========= Choose mode =========");
-            Serial.println(" 0 = Reset position ");
-            Serial.println(" 1 = Manual control ");
+            Serial.println(" 0 = Reset position");
+            Serial.println(" 1 = Manual control");
             Serial.println(" 2 = Simple move");
-            Serial.println(" 3 = CW trajectory ");
-            Serial.println(" 4 = CCW trajectory ");
-            Serial.println(" 5 = Go by magnetic line. Debug");
-            Serial.println(" 6 = Go by magnetic line. Go to point");
-            Serial.println(" press \"z\" to stop ");
+            Serial.println(" 3 = CW trajectory");
+            Serial.println(" 4 = CCW trajectory");
+            Serial.println(" 5 = Motor test");
+            //Serial.println(" 5 = Go by magnetic line. Debug");
+            //Serial.println(" 6 = Go by magnetic line. Go to point");
+            Serial.println(" press \"z\" to stop");
             globalStop = false;
         }
 
@@ -125,27 +131,66 @@ void TwoWheeledRobot::serialControl(int del, int msg_del, bool deb)
             }
             case ('5'):
             {
-                Serial.println("========= Go by magnetic line. Debug =========");
-                // resertPosition();
-                // goMagneticLine(del, true);
-                Serial.println("Coming soon");
-                globalStop = true;
+                timersStart();
+                resertMotorsPID();
+                driveMoving(11, 11);
+
+                float leftAngle = 0;
+                float rightAngle = 0;
+                float leftSpeed = 0;
+                float rightSpeed = 0;
+
+                while (!globalStop)
+                {
+                    timersTick();
+
+                    // прерывание на консоль
+                    globalSerialControl();
+
+                    if (discretTimer->ready()) 
+                    {
+                    }
+                    
+                    if (msgTimer->ready()) 
+                    {
+                        leftSpeed = motorBlockL->getLastSpeed();
+                        rightSpeed = motorBlockR->getLastSpeed();
+                        leftAngle = motorBlockL->getAngleOffset();
+                        rightAngle = motorBlockR->getAngleOffset();
+                        // Serial.println("Angle: L " + String(leftAngle, 3) + 
+                        //             " | R " + String(rightAngle, 3));
+                        Serial.println("Angular [rad/s]: L " + String(leftSpeed, 3) + 
+                                    " | R " + String(rightSpeed, 3));
+                        // Serial.println("Linear [m/s]: L " + String(vel->angular2linear(leftSpeed, WHEEL_RADIUS_LEFT), 3) + 
+                        //             " | R " + String(vel->angular2linear(rightSpeed, WHEEL_RADIUS_RIGHT), 3) );
+                    }
+
+                }
                 break;
             }
-            case ('6'):
-            {
-                Serial.println("========= Go by magnetic line. Go to point =========");
-                // resertPosition();
-                // goMagneticLine2Point(3, -1, del, deb);
-                // if (!globalStop) {
-                //   stopMoving();
-                //   globalStop = true;
-                //   Serial.println("Fatal error");
-                // }
-                Serial.println("Coming soon");
-                globalStop = true;
-                break;
-            }
+            // case ('5'):
+            // {
+            //     Serial.println("========= Go by magnetic line. Debug =========");
+            //     // resertPosition();
+            //     // goMagneticLine(del, true);
+            //     Serial.println("Coming soon");
+            //     globalStop = true;
+            //     break;
+            // }
+            // case ('6'):
+            // {
+            //     Serial.println("========= Go by magnetic line. Go to point =========");
+            //     // resertPosition();
+            //     // goMagneticLine2Point(3, -1, del, deb);
+            //     // if (!globalStop) {
+            //     //   stopMoving();
+            //     //   globalStop = true;
+            //     //   Serial.println("Fatal error");
+            //     // }
+            //     Serial.println("Coming soon");
+            //     globalStop = true;
+            //     break;
+            // }
         }
     }
 }
@@ -170,8 +215,8 @@ void TwoWheeledRobot::globalSerialControl(byte inB)
 
 void TwoWheeledRobot::manualControl(int del)
 {
-    int speed = 80;
-
+    float speed = vel->linear2angular(MAX_LIN_SPEED, wheelRadius);
+    Serial.println("set speed " + String(speed));
     float deltaAngL;
     float deltaAngR;
 
@@ -188,19 +233,19 @@ void TwoWheeledRobot::manualControl(int del)
         switch (inByte)
         {
         case ('w'):
-            drive(speed, speed);
+            driveMoving(speed, speed);
             break;
         case ('s'):
-            drive(-speed, -speed);
+            driveMoving(-speed, -speed);
             break;
         case (' '):
             stopMoving();
             break;
         case ('d'):
-            drive(speed, -speed);
+            driveMoving(speed, -speed);
             break;
         case ('a'):
-            drive(-speed, speed);
+            driveMoving(-speed, speed);
             break;
         case ('e'):
             if (speed <= vel->getMaxWheel() - 5)
@@ -212,8 +257,8 @@ void TwoWheeledRobot::manualControl(int del)
             break;
         }
 
-        deltaAngL = motorBlockL->getDeltaAngle();
-        deltaAngR = motorBlockR->getDeltaAngle();
+        deltaAngL = motorBlockL->getAngleOffset();
+        deltaAngR = motorBlockR->getAngleOffset();
 
         //distWheelL = distWheelL + deltaAngL * wheelRadius;
         //distWheelR = distWheelR + deltaAngR * wheelRadius;
@@ -232,8 +277,13 @@ void TwoWheeledRobot::resertPosition()
     pos->x = 0.0;
     pos->y = 0.0;
     pos->alpha = 0.0;
-    pidL->resetErr();
-    pidR->resetErr();
+    resertMotorsPID();
+}
+
+void TwoWheeledRobot::resertMotorsPID()
+{
+    motorBlockL->resetErrPID();
+    motorBlockR->resetErrPID();
 }
 
 void TwoWheeledRobot::setPositionAndStartMove(float _x, float _y, int del, bool deb)
@@ -277,11 +327,11 @@ void TwoWheeledRobot::moveToTargetPosition(int del, bool deb)
             // вычисляем новую скорость для достижения точки
             motionControler->updateVelocity();
             if (!deb)
-                drive(motionControler->get_wheelL(), motionControler->get_wheelR());
+                driveMoving(motionControler->get_wheelL(), motionControler->get_wheelR());
             
             // обновляем текущую позицию по колёсной одометрии
-            deltaAngL = motorBlockL->getDeltaAngle();
-            deltaAngR = motorBlockR->getDeltaAngle();
+            deltaAngL = motorBlockL->getAngleOffset();
+            deltaAngR = motorBlockR->getAngleOffset();
             pos->estCurrentPosition(deltaAngL, deltaAngR, wheelRadius, baseLength);
             // обновляем текущую позицию в контроллере
             motionControler->setActualPosition(pos->x, pos->y, pos->alpha);
@@ -425,8 +475,8 @@ void TwoWheeledRobot::goCCWtest(float L, int del, bool deb)
 //       goForward(velL*20, velR*20);
 //       //goForward(velL, velR);
 
-//     deltaAngL = motorBlockL->getDeltaAngle();
-//     deltaAngR = motorBlockR->getDeltaAngle();
+//     deltaAngL = motorBlockL->getAngleOffset();
+//     deltaAngR = motorBlockR->getAngleOffset();
 
 //     pos.estCurrentPosition(deltaAngL, deltaAngR, r, l);
 
@@ -614,8 +664,8 @@ void TwoWheeledRobot::goCCWtest(float L, int del, bool deb)
 //     if (!deb)
 //       goForward(velL, velR);
 
-//     deltaAngL = motorBlockL->getDeltaAngle();
-//     deltaAngR = motorBlockR->getDeltaAngle();
+//     deltaAngL = motorBlockL->getAngleOffset();
+//     deltaAngR = motorBlockR->getAngleOffset();
 
 //     pos.estCurrentPosition(deltaAngL, deltaAngR, r, l);
 
@@ -630,25 +680,31 @@ void TwoWheeledRobot::stopMoving()
     motorBlockR->stopMoving();
 }
 
-void TwoWheeledRobot::drive(float velL, float velR)
+void TwoWheeledRobot::driveMoving(float velL, float velR)
 {
-    motorBlockL->updateVelocity(velL);
-    motorBlockR->updateVelocity(velR);
-}
-
-void TwoWheeledRobot::driveWithPID(float velL, float velR)
-{
-    // Для реализации добавить в motorBlock расчёт текущей скорости!
     motorBlockL->updateVelocity(velL);
     motorBlockR->updateVelocity(velR);
 }
 
 void TwoWheeledRobot::timersStart() {
     discretTimer->start();
-    msgTimer->start();    
+    motorTimer->start();
+    msgTimer->start();  
+    
+    motorBlockL->tickPrepare();
+    motorBlockR->tickPrepare();  
 }
 
 void TwoWheeledRobot::timersTick() {
     discretTimer->tick();
+    motorTimer->tick();
     msgTimer->tick();
+    motorBlockL->tick();
+    motorBlockR->tick();
+
+    if (motorTimer->ready())
+    {
+        motorBlockL->updatePWM();
+        motorBlockR->updatePWM();
+    }
 }

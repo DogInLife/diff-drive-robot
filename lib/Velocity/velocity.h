@@ -38,7 +38,7 @@ public:
     /* Конвертирует угловую скорость из [rad/s] в [rmp]. */
     float rads2rmp(float rads);
     /* Возвращает линейную скорость.
-       IN: vel - угловая скорость [m/s]
+       IN: vel - угловая скорость [rad/s]
            wheelR - радиус колеса [m]
        OUT: линейная скорость [m/s] */
     float angular2linear(float ang, float wheelR);

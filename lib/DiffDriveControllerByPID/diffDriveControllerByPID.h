@@ -57,7 +57,7 @@ class DiffDriveControllerByPID {
         void setRobotConstant(float d, float rL, float rR, float v_max);
         /*
             Устанавливает коэффициенты.
-            k1, k2, k3, k4 - коэффициенты PID регулятора
+            Kp, Ki, Kd - коэффициенты PID регулятора
         */
         void setCoefficient(float Kp, float Ki, float Kd);
         

@@ -7,7 +7,7 @@ void setup()
 {
     Serial.begin(9600);
     TwoWheeledRobot robot;
-    robot.serialControl(DELAY, DELAY_MSG, false);
+    robot.serialControl(DELAY, DELAY_MOTOR, DELAY_MSG, false);
 
     // *старые комментарии
     // robot.tunePID(5.3, 4.8, 0);

@@ -26,8 +26,6 @@ class TwoWheeledRobot
 
         MotorBlock* motorBlockL;    // Управление мотором левого колеса
         MotorBlock* motorBlockR;    // Управление мотором правого колеса
-        PID* pidL;                  // PID для управления скоростью левого колеса
-        PID* pidR;                  // PID для управления скоростью правого колеса
 
         MotionController* motionControler;   // Контроллер движения робота на основе кривизны траектории
         //MotionControllerByPID* motionControler;   // Контроллер движения робота на основе PID регулятора
@@ -36,6 +34,7 @@ class TwoWheeledRobot
         byte inByte = 0;            // Входящий с консоли символ
 
         TimerMs* discretTimer;      // Время дискретизации
+        TimerMs* motorTimer;      // Время дискретизации
         TimerMs* msgTimer;          // Период отправки сообщений через Serial
 
         /* Движение в заданную заранее на контроллере координату */ 
@@ -51,7 +50,7 @@ class TwoWheeledRobot
         msg_del - частота отправки сообщений через Serial [ms] 
         deb - true, если нужен дебаг
         */ 
-        void serialControl(int del, int msg_del, bool deb);  
+        void serialControl(int del, int del_motor, int del_msg, bool deb);  
         /* Проверка вводимых символов в консоль в глобальной системе контроля */ 
         void globalSerialControl();           
         /* Проверка входящего символа в глобальной системе контроля 
@@ -62,8 +61,10 @@ class TwoWheeledRobot
         void manualControl(int dt);
         
         // ========= FUNCTIONS ===========
-        /* Обнуление позиции и ошибок регулятора */ 
+        /* Обнуление позиции и ошибок PID регулятора */ 
         void resertPosition();
+        /* Обнуление ошибок PID регулятора регулятора */ 
+        void resertMotorsPID();        
         /* Запуск движения в заданную координату.
         _x, _y - координты точки [m] 
         beta - конечный угол после достижения точки [rad] 
@@ -97,12 +98,7 @@ class TwoWheeledRobot
         velL - скорость левого колеса [rad/s]
         velR - скорость правого колеса [rad/s]
         */ 
-        void drive(float velL, float velR);
-        /* Запустить моторы c PID регулятором
-        velL - скорость левого колеса [rad/s]
-        velR - скорость правого колеса [rad/s]
-        */ 
-        void driveWithPID(float velL, float velR);
+        void driveMoving(float velL, float velR);
         /* Остановиться */ 
         void stopMoving();
 

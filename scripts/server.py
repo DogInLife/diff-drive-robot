@@ -26,7 +26,7 @@ ser.open()
 
 # HOST = '192.168.0.114' # 340
 #HOST = '192.168.100.125' # 501
-HOST = '192.168.0.161'
+HOST = '192.168.122.97'
 # HOST = '127.0.0.1'
 PORT = 1500
 
@@ -51,20 +51,19 @@ while True:
             ser.write(b'z')
             break
         ser.write(data) # send to serial (arduino)
-        if (data == b'5'):
-            while True:
-                if(ser.in_waiting > 0):
-                    ser_recv = ser.readline().decode('ascii') # what is received from serial
-                    if ser_recv:
-                        print(ser_recv)
-                        if (str(ser_recv) == "finish"):
-                            print("real finish")
-                            break
-                data_bytes = conn.recv(4)
-                print("to arduino")
-                print(data_bytes)
-                ser.write(data_bytes)
-
+        # if (data == b'5'):
+        #     while True:
+        #         if(ser.in_waiting > 0):
+        #             ser_recv = ser.readline().decode('ascii') # what is received from serial
+        #             if ser_recv:
+        #                 print(ser_recv)
+        #                 if (str(ser_recv) == "finish"):
+        #                     print("real finish")
+        #                     break
+        #         data_bytes = conn.recv(4)
+        #         print("to arduino")
+        #         print(data_bytes)
+        #         ser.write(data_bytes)
         
 conn.close()
 
