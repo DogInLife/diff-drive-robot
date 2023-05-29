@@ -133,7 +133,7 @@ void TwoWheeledRobot::serialControl(int del, int del_motor, int del_msg, bool de
             {
                 timersStart();
                 resertMotorsPID();
-                driveMoving(11, 11);
+                driveMoving(17, 17);
 
                 float leftAngle = 0;
                 float rightAngle = 0;
@@ -215,7 +215,7 @@ void TwoWheeledRobot::globalSerialControl(byte inB)
 
 void TwoWheeledRobot::manualControl(int del)
 {
-    float speed = vel->linear2angular(MAX_LIN_SPEED, wheelRadius);
+    float speed = vel->getMaxWheel();      //vel->linear2angular(MAX_LIN_SPEED, wheelRadius);
     Serial.println("set speed " + String(speed));
     float deltaAngL;
     float deltaAngR;
@@ -326,8 +326,36 @@ void TwoWheeledRobot::moveToTargetPosition(int del, bool deb)
         { 
             // вычисляем новую скорость для достижения точки
             motionControler->updateVelocity();
+
+            // Временное решение по ограничению ускорения движения на участках
+            float realLinSpeed = (motorBlockL->getLastSpeed()*WHEEL_RADIUS_LEFT + motorBlockR->getLastSpeed()*WHEEL_RADIUS_RIGHT) / 2;
+            float desiredLinSpeed = motionControler->get_v();
+            float accelerationLin = abs((desiredLinSpeed - realLinSpeed) / ((float)discretTimer->getPrd() / 1000.0f));  // [m/s^2]
+            float realAngSpeed = 2 * (motorBlockR->getLastSpeed() * WHEEL_RADIUS_RIGHT - realLinSpeed) / BASE_LENGTH;
+            float desiredAngSpeed = motionControler->get_w();
+            float accelerationAng = abs((desiredAngSpeed - realAngSpeed) / ((float)discretTimer->getPrd() / 1000.0f));  // [rad/s^2]
+            if (accelerationLin > MAX_LIN_ACCEL)
+            {
+                float correlation = MAX_LIN_ACCEL / accelerationLin;
+                vel->wheelL = motionControler->get_wheelL() * correlation;
+                vel->wheelR = motionControler->get_wheelR() * correlation;
+                //Serial.println("Lin " + String(correlation));
+            }
+            else if (accelerationAng > MAX_ANG_ACCEL)
+            {
+                float correlation = MAX_ANG_ACCEL / accelerationAng;
+                vel->wheelL = motionControler->get_wheelL() * correlation;
+                vel->wheelR = motionControler->get_wheelR() * correlation;
+                //Serial.println("Ang " + String(correlation));
+            }
+            else
+            {
+                vel->wheelL = motionControler->get_wheelL();
+                vel->wheelR = motionControler->get_wheelR();
+            }
+
             if (!deb)
-                driveMoving(motionControler->get_wheelL(), motionControler->get_wheelR());
+                driveMoving(vel->wheelL, vel->wheelR);
             
             // обновляем текущую позицию по колёсной одометрии
             deltaAngL = motorBlockL->getAngleOffset();

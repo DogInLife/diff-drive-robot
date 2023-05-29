@@ -26,6 +26,11 @@ public:
         if (state) start();
         _mode = mode;
     }
+
+    // вернуть период, мс
+    uint32_t getPrd() {
+        return _us ? _prd/1000 : _prd;
+    }
     
     // включить микросекундный режим (true)
     void setMicros(bool mode) {

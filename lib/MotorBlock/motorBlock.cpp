@@ -53,18 +53,24 @@ void MotorBlock::updatePWM() {
 }
 void MotorBlock::updatePWM(float dt) {
     float errSpeed = speedPID->updateErr(targetSpeed - getWheelSpeed(), dt);
-    
-    pwm = map(constrain(abs(errSpeed), 0, maxVel), 0, maxVel, 0, 255);
 
-    if (errSpeed > 0)
+    pwm = map(constrain(abs(errSpeed), 0, maxVel), 0, maxVel, 0, 255);
+    if (abs(pwm) < minPWM) 
     {
-        digitalWrite(IN_DRIVER_PIN_1, LOW);
-        digitalWrite(IN_DRIVER_PIN_2, HIGH);
+        pwm = 0;
     } 
     else 
     {
-        digitalWrite(IN_DRIVER_PIN_1, HIGH);
-        digitalWrite(IN_DRIVER_PIN_2, LOW);
+        if (errSpeed > 0)
+        {
+            digitalWrite(IN_DRIVER_PIN_1, LOW);
+            digitalWrite(IN_DRIVER_PIN_2, HIGH);
+        } 
+        else 
+        {
+            digitalWrite(IN_DRIVER_PIN_1, HIGH);
+            digitalWrite(IN_DRIVER_PIN_2, LOW);
+        }
     }
     analogWrite(PWM_PIN, pwm);
 }

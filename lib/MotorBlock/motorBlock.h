@@ -22,6 +22,7 @@ private:
 
     byte PWM_PIN;
     float pwm;    
+    float minPWM = MIN_PWM;         // Минимальное усилие
     byte IN_DRIVER_PIN_1;
     byte IN_DRIVER_PIN_2;
 
